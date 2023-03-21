@@ -85,6 +85,7 @@ module IMPORT
     committee_name = committee_item['name']
     committee_parent_committee_system_id = committee_item['parentCommittee']['id'] if committee_item['parentCommittee']
     committee_committee_types = committee_item['committeeTypes']
+    committee_scrutinising_departments = committee_item['scrutinisingDepartments']
     
     #committee_show_on_website = committee_item['showOnWebsite']
     #committee_website_legacy_url = committee_item['websiteLegacyUrl']
@@ -127,6 +128,9 @@ module IMPORT
         
         # We associate the committee with its types.
         associate_committee_with_type( committee, committee_committee_types )
+        
+        # We associate the committee with the departments it scrutinises.
+        associate_committee_with_departments( committee, committee_scrutinising_departments )
       end
     end
   end
@@ -202,6 +206,37 @@ module IMPORT
       committee_committee_type.committee = committee
       committee_committee_type.committee_type = committee_type
       committee_committee_type.save
+    end
+  end
+  
+  # A method to associate the committee with the departments it scrutinises.
+  def associate_committee_with_departments( committee, committee_scrutinising_departments )
+    
+    # For each department item in the committee's scrutinising departments ...
+    committee_scrutinising_departments.each do |department_item|
+      
+      # ... we store the variables returned.
+      department_system_id = department_item['departmentId']
+      department_name = department_item['name']
+      
+      # We attempt to find the department.
+      department = Department.find_by_system_id( department_system_id )
+      
+      # Unless we find the department ...
+      unless department
+        
+        # ... we create a new department
+        department = Department.new
+        department.system_id = department_system_id
+        department.name = department_name
+        department.save
+      end
+      
+      # We create the association between the committee and the department it scrutinises.
+      scrutinising = Scrutinising.new
+      scrutinising.committee = committee
+      scrutinising.department = department
+      scrutinising.save
     end
   end
 end
