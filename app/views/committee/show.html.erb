@@ -18,14 +18,16 @@
 				</ul>
 			</td>
 		</tr>
-		<tr>
-			<%= content_tag( 'th', 'Scrutinises' ) %>
-			<td>
-				<ul>
-					<%= render :partial => 'department/department', :collection => @committee.departments %>
-				</ul>
-			</td>
-		</tr>
+		<% unless @committee.departments.empty? -%>
+			<tr>
+				<%= content_tag( 'th', 'Scrutinises' ) %>
+				<td>
+					<ul>
+						<%= render :partial => 'department/department', :collection => @committee.departments %>
+					</ul>
+				</td>
+			</tr>
+		<% end -%>
 	</tbody>
 </table>
 
