@@ -1,8 +1,13 @@
 class CommitteeController < ApplicationController
   
   def index
-    @page_title = 'Committees'
+    @page_title = 'All committees'
     @committees = Committee.all.order( 'name' )
+  end
+  
+  def current
+    @page_title = 'Current committees'
+    @committees = Committee.all.where( "end_on < ?", Date.today ).order( 'name' )
   end
   
   def show
