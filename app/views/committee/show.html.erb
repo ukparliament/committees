@@ -28,6 +28,32 @@
 				</td>
 			</tr>
 		<% end -%>
+		<% if @committee.start_on -%>
+			<tr>
+				<%= content_tag( 'th', 'Start date:' ) %>
+				<%= content_tag( 'td', @committee.start_on.strftime( '%A %-d %B %Y') ) %>
+			</tr>
+		<% end -%>
+		<% if @committee.end_on -%>
+			<tr>
+				<%= content_tag( 'th', 'End date:' ) %>
+				<%= content_tag( 'td', @committee.end_on.strftime( '%A %-d %B %Y') ) %>
+			</tr>
+		<% end -%>
+		<tr>
+			<%= content_tag( 'th', 'Is shown on website:' ) %>
+			<%= content_tag( 'td', @committee.is_shown_on_website ) %>
+		</tr>
+		<% if @committee.legacy_url -%>
+			<tr>
+				<%= content_tag( 'th', 'Legacy URL:' ) %>
+				<%= content_tag( 'td', link_to( @committee.legacy_url, @committee.legacy_url ) ) %>
+			</tr>
+		<% end -%>
+		<tr>
+			<%= content_tag( 'th', 'Is redirect enabled:' ) %>
+			<%= content_tag( 'td', @committee.is_redirect_enabled ) %>
+		</tr>
 	</tbody>
 </table>
 
