@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   
   get 'committees/joint' => 'joint#index', :as => 'joint_list'
   
+  get 'committees/departments' => 'department#index', :as => 'department_list'
+  get 'committees/departments/:department' => 'department#show', :as => 'department_show'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
