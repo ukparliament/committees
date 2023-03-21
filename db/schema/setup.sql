@@ -1,9 +1,18 @@
+drop table if exists scrutinisings;
 drop table if exists committee_committee_types;
 drop table if exists committee_houses;
 drop table if exists committees;
 drop table if exists committee_types;
 drop table if exists categories;
 drop table if exists parliamentary_houses;
+drop table if exists departments;
+
+create table departments (
+	id serial not null,
+	name varchar(255) not null,
+	system_id int not null,
+	primary key (id)
+);
 
 create table parliamentary_houses (
 	id serial not null,
@@ -54,5 +63,14 @@ create table committee_committee_types (
 	committee_type_id int not null,
 	constraint fk_committee foreign key (committee_id) references committees(id),
 	constraint fk_committee_type foreign key (committee_type_id) references committee_types(id),
+	primary key (id)
+);
+
+create table scrutinisings (
+	id serial not null,
+	committee_id int not null,
+	department_id int not null,
+	constraint fk_committee foreign key (committee_id) references committees(id),
+	constraint fk_department foreign key (department_id) references departments(id),
 	primary key (id)
 );
