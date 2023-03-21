@@ -8,6 +8,12 @@ class CommitteeTypeController < ApplicationController
   def show
     committee_type = params[:committee_type]
     @committee_type = CommitteeType.find_by_system_id( committee_type )
-    @page_title = @committee_type.name
+    @page_title = "#{@committee_type.name} - all committees"
+  end
+  
+  def current
+    committee_type = params[:committee_type]
+    @committee_type = CommitteeType.find_by_system_id( committee_type )
+    @page_title = "#{@committee_type.name} - current committees"
   end
 end
