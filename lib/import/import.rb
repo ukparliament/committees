@@ -54,7 +54,7 @@ module IMPORT
     puts "importing committees"
     
     # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/Committees?take=30&skip=#{skip}"
+    url = "https://committees-api.parliament.uk/api/Committees?CommitteeStatus=all&take=30&skip=#{skip}"
     
     # We get the JSON.
     json = JSON.load( URI.open( url ) )
@@ -86,15 +86,15 @@ module IMPORT
     committee_parent_committee_system_id = committee_item['parentCommittee']['id'] if committee_item['parentCommittee']
     committee_committee_types = committee_item['committeeTypes']
     committee_scrutinising_departments = committee_item['scrutinisingDepartments']
-    
-    #committee_show_on_website = committee_item['showOnWebsite']
-    #committee_website_legacy_url = committee_item['websiteLegacyUrl']
-    #committee_website_legacy_redirect_enabled = committee_item['websiteLegacyRedirectEnabled']
-    #committee_start_on = committee_item['startDate']
-    #committee_end_on = committee_item['endDate']
+    committee_house = committee_item['house']
+    committee_show_on_website = committee_item['showOnWebsite']
+    committee_website_legacy_url = committee_item['websiteLegacyUrl']
+    committee_website_legacy_redirect_enabled = committee_item['websiteLegacyRedirectEnabled']
+    committee_start_on = committee_item['startDate']
+    committee_end_on = committee_item['endDate']
     
 
-    committee_house = committee_item['house']
+    
     #committee_lead_house = committee_item['leadHouse']
     
     # If the committee has a parent committee ...
@@ -110,7 +110,7 @@ module IMPORT
       # ... we attempt to find the committee.
       committee = Committee.find_by_system_id( committee_system_id )
       
-      # NOTE: committee 190 - Sub-Committee on Lords' Conduct - declares its parent as committee 189 - Committee for Privileges and Conduct (Lords) - but the latter doesn't exist in the API.
+      # NOTE: committee 352 - Education, Skills and the Economy Sub-Committee - declares its parent as committee 9 - Business, Innovation and Skills Committee - but the latter doesn't exist in the API.
       # Because we don't create a committee with a parent committee until we've created its parent, in this case we can create neither parent nor child.
     
       # If we fail to find the committee ...
@@ -121,7 +121,6 @@ module IMPORT
         committee.name = committee_name
         committee.system_id = committee_system_id
         committee.parent_committee_id = parent_committee.id if parent_committee
-        committee.save
         
         # We associate the committee with a House or Houses.
         associate_committee_with_house( committee, committee_house )
@@ -132,6 +131,14 @@ module IMPORT
         # We associate the committee with the departments it scrutinises.
         associate_committee_with_departments( committee, committee_scrutinising_departments )
       end
+      
+      # Regardless of whether we found the committee or created it, we update its attributes.
+      committee.start_on = committee_start_on
+      committee.end_on = committee_end_on
+      committee.is_shown_on_website = committee_show_on_website
+      committee.legacy_url = committee_website_legacy_url
+      committee.is_redirect_enabled = committee_website_legacy_redirect_enabled
+      committee.save
     end
   end
   
