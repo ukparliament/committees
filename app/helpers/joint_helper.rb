@@ -1,0 +1,2 @@
+module JointHelper
+end
