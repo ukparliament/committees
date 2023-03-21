@@ -3,6 +3,8 @@ class JointController < ApplicationController
   def index
     @page_title = 'Joint committees'
     
+    # NOTE: how do we make this into one query?
+    
     # We get all committees with a count of the Houses they belong to.
     committees = Committee.find_by_sql(
       "
