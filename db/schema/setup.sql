@@ -42,6 +42,11 @@ create table committee_types (
 create table committees (
 	id serial not null,
 	name varchar(255) not null,
+	start_on date,
+	end_on date,
+	is_shown_on_website boolean default false,
+	legacy_url varchar(500),
+	is_redirect_enabled boolean default false,
 	system_id int not null,
 	parent_committee_id int,
 	constraint fk_parent_committee foreign key (parent_committee_id) references committees(id),
