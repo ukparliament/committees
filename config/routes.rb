@@ -6,14 +6,22 @@ Rails.application.routes.draw do
   
   get 'committees' => 'home#index', :as => 'home'
   
-  get 'committees/committee-types' => 'committee_type#index', :as => 'committee_type_list'
-  get 'committees/committee-types/:committee_type' => 'committee_type#show', :as => 'committee_type_show'
-  
   get 'committees/committee-categories' => 'committee_category#index', :as => 'committee_category_list'
   get 'committees/committee-categories/:committee_category' => 'committee_category#show', :as => 'committee_category_show'
   
+  get 'committees/committee-types' => 'committee_type#index', :as => 'committee_type_list'
+  get 'committees/committee-types/:committee_type' => 'committee_type#show', :as => 'committee_type_show'
+  get 'committees/committee-types/:committee_type/current' => 'committee_type#current', :as => 'committee_type_current'
+  
   get 'committees/committees' => 'committee#index', :as => 'committee_list'
+  get 'committees/committees/current' => 'committee#current', :as => 'committee_current'
   get 'committees/committees/:committee' => 'committee#show', :as => 'committee_show'
+  
+  
+  
+  
+  
+  
   
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
