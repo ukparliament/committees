@@ -29,4 +29,15 @@ class Committee < ApplicationRecord
       "
     )
   end
+  
+  def departments
+    Department.find_by_sql(
+      "
+        SELECT d.*
+        FROM departments d, scrutinisings s
+        WHERE d.id = s.department_id
+        AND s.committee_id = #{self.id}
+      "
+    )
+  end
 end
