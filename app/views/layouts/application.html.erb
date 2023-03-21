@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<%= content_tag( 'title', @page_title || 'Committees' ) %>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<style>
+			body {font-family: system-ui,sans-serif;padding:0.25rem 0.75rem;font-size:1.2rem;line-height:1.4;max-width:48rem;margin:0.5rem auto;}
+			cite {font-style: normal;}
+			h1, h2 {font-weight:normal;}
+			main {padding:2rem 0;}
+		</style>
+	</head>
+	<body>
+		<header>
+			<%= content_tag( 'p', link_to( 'Committees', home_url ), :class=> 'site-title' ) %>
+			<nav>
+				<%= link_to( 'Committee categories', committee_category_list_url ) %>
+				&middot;
+  		  		<%= link_to( 'Committee types', committee_type_list_url ) %>
+				&middot;
+  		  		<%= link_to( 'Committees', committee_list_url ) %>
+				&middot;
+  		  		<%= link_to( 'Committees by House', house_list_url ) %>
+			</nav>
+			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
+		</header>
+		<%= yield %>
+		<footer>
+			<p>Made available under the <a href='https://www.parliament.uk/site-information/copyright-parliament/open-parliament-licence/' rel='licence'>Open Parliament Licence</a>.</p>
+			<%= content_tag( 'p', link_to( 'Meta', meta_list_url ) ) %>
+		</footer>
+	</body>
+</html>

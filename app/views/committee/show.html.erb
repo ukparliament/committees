@@ -1,0 +1,29 @@
+<%= content_tag( 'p', "Parent committee: #{link_to( @committee.parent_committee.name, committee_show_url( :committee => @committee.parent_committee.system_id ) )}".html_safe ) if @committee.parent_committee %>
+
+<table>
+	<tbody>
+		<tr>
+			<%= content_tag( 'th', 'Houses' ) %>
+			<td>
+				<ul>
+					<%= render :partial => 'house/house', :collection => @committee.parliamentary_houses %>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Types' ) %>
+			<td>
+				<ul>
+					<%= render :partial => 'committee_type/committee_type', :collection => @committee.committee_types %>
+				</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<% unless @committee.sub_committees.empty? %>
+	<%= content_tag( 'h2', 'Sub-committees' ) %>
+	<ul>
+		<%= render :partial => 'committee', :collection => @committee.sub_committees %>
+	</ul>
+<% end -%>

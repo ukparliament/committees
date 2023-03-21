@@ -1,0 +1,5 @@
+<%= content_tag( 'h2', 'Committees' ) %>
+<%= @house.committees.size %>
+<ul>
+	<%= render :partial => 'committee/committee', :collection => @house.committees %>
+</ul>
