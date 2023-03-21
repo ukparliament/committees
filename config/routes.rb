@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
   
+  get 'committees/joint' => 'joint#index', :as => 'joint_list'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
