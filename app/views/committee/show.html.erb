@@ -58,8 +58,10 @@
 </table>
 
 <% unless @committee.sub_committees.empty? %>
-	<%= content_tag( 'h2', 'Sub-committees' ) %>
-	<ul>
-		<%= render :partial => 'committee', :collection => @committee.sub_committees %>
-	</ul>
+	<div id="sub-committees">
+		<%= content_tag( 'h2', 'Sub-committees' ) %>
+		<ul>
+			<%= render :partial => 'committee', :collection => @committee.sub_committees %>
+		</ul>
+	</div>
 <% end -%>
