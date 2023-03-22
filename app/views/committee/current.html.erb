@@ -1,4 +1,5 @@
 <%= render :partial => 'current_switcher' %>
+<%= @committees.count %>
 <ul>
-	<%= render :partial => 'committee', :collection => @committees %>
+	<%= render :partial => 'committee_with_count', :collection => @committees %>
 </ul>
