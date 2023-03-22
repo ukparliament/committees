@@ -17,19 +17,16 @@ Rails.application.routes.draw do
   get 'committees/committees/current' => 'committee#current', :as => 'committee_current'
   get 'committees/committees/:committee' => 'committee#show', :as => 'committee_show'
   
-  
-  
-  
-  
-  
-  
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
+  get 'committees/houses/:house/current' => 'house#current', :as => 'house_current'
   
   get 'committees/joint' => 'joint#index', :as => 'joint_list'
+  get 'committees/joint/current' => 'joint#current', :as => 'joint_current'
   
   get 'committees/departments' => 'department#index', :as => 'department_list'
   get 'committees/departments/:department' => 'department#show', :as => 'department_show'
+  get 'committees/departments/:department/current' => 'department#current', :as => 'department_current'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
