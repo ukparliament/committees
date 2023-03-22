@@ -18,7 +18,7 @@ class CommitteeController < ApplicationController
           GROUP BY c2.parent_committee_id
         ) sub_committees
         ON c1.id = sub_committees.parent_committee_id
-        WHERE c1.end_on <= '#{Date.today}'
+        WHERE c1.end_on is null
         AND c1.parent_committee_id is null
         ORDER BY c1.name;
       "
