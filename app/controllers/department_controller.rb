@@ -10,4 +10,10 @@ class DepartmentController < ApplicationController
     @department = Department.find_by_system_id( department )
     @page_title = @department.name
   end
+  
+  def current
+    department = params[:department]
+    @department = Department.find_by_system_id( department )
+    @page_title = @department.name
+  end
 end
