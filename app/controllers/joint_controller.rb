@@ -1,27 +1,59 @@
 class JointController < ApplicationController
   
   def index
-    @page_title = 'Joint committees'
+    @page_title = 'All joint committees'
     
-    # NOTE: how do we make this into one query?
-    
-    # We get all committees with a count of the Houses they belong to.
-    committees = Committee.find_by_sql(
+    @committees = Committee.find_by_sql(
       "
-        SELECT c.*, COUNT(ch.id) as committee_house_count
-        FROM committees c, committee_houses ch
-        WHERE c.id = ch.committee_id
-        GROUP BY c.id
-        ORDER BY c.name
+        SELECT c1.*, sub_committees.sub_committee_count
+        FROM committees c1
+        LEFT JOIN (
+          SELECT c2.parent_committee_id, count(c2.id) as sub_committee_count
+          FROM committees c2
+          GROUP BY c2.parent_committee_id
+        ) sub_committees
+        ON c1.id = sub_committees.parent_committee_id
+
+        LEFT JOIN (
+          SELECT ch.committee_id as committee_id, COUNT(ch.id) AS house_count
+          FROM committee_houses ch
+          GROUP BY ch.committee_id
+        ) parliamentary_house_count
+        ON c1.id = parliamentary_house_count.committee_id
+        
+        WHERE c1.parent_committee_id is null
+        AND parliamentary_house_count.house_count > 1
+        ORDER BY c1.name;
       "
     )
-    @committees = []
+  end
+  
+  def current
+    @page_title = 'Current joint committees'
     
-    # For each committee, in the committees array ...
-    committees.each do |committee|
-      
-      # ... we add the committee to the committees array if they're linked to both Houses.
-      @committees << committee if committee.committee_house_count == 2
-    end
+    @committees = Committee.find_by_sql(
+      "
+        SELECT c1.*, sub_committees.sub_committee_count
+        FROM committees c1
+        LEFT JOIN (
+          SELECT c2.parent_committee_id, count(c2.id) as sub_committee_count
+          FROM committees c2
+          GROUP BY c2.parent_committee_id
+        ) sub_committees
+        ON c1.id = sub_committees.parent_committee_id
+
+        LEFT JOIN (
+          SELECT ch.committee_id as committee_id, COUNT(ch.id) AS house_count
+          FROM committee_houses ch
+          GROUP BY ch.committee_id
+        ) parliamentary_house_count
+        ON c1.id = parliamentary_house_count.committee_id
+        
+        WHERE c1.parent_committee_id is null
+        AND parliamentary_house_count.house_count > 1
+        AND c1.end_on is null
+        ORDER BY c1.name;
+      "
+    )
   end
 end
