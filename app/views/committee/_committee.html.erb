@@ -1,1 +1,4 @@
-<%= content_tag( 'li', link_to( committee.name, committee_show_url( :committee => committee.system_id ) ) ) %>
+<li>
+	<%= content_tag( 'h2', link_to( committee.name, committee_show_url( :committee => committee.system_id ) ) ) %>
+	<%= content_tag( 'p', link_to( "#{committee.sub_committee_count} sub-#{'committee'.pluralize( committee.sub_committee_count )}", committee_show_url( :committee => committee.system_id, :anchor => 'sub-committees' ) ), :class => 'sub-committee-number' ) if committee.sub_committee_count %>
+</li>
