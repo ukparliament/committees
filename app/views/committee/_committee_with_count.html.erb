@@ -1,4 +1,4 @@
 <li>
 	<%= content_tag( 'h2', link_to( committee_with_count.name, committee_show_url( :committee => committee_with_count.system_id ) ) ) %>
-	<%= content_tag( 'p', link_to( "#{committee_with_count.sub_committee_count} sub-#{'committee'.pluralize( committee_with_count.sub_committee_count )}", committee_show_url( :committee => committee_with_count.system_id, :anchor => 'sub-committees' ) ) ) if committee_with_count.sub_committee_count %>
+	<%= content_tag( 'p', link_to( "#{committee_with_count.sub_committee_count} sub-#{'committee'.pluralize( committee_with_count.sub_committee_count )}", committee_show_url( :committee => committee_with_count.system_id, :anchor => 'sub-committees' ) ), :class => 'sub-committee-number' ) if committee_with_count.sub_committee_count %>
 </li>
