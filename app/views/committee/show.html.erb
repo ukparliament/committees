@@ -5,15 +5,33 @@
 <table>
 	<tbody>
 		<tr>
-			<%= content_tag( 'th', 'Houses' ) %>
+			<%= content_tag( 'th', 'Houses:' ) %>
 			<td>
 				<ul>
 					<%= render :partial => 'house/house', :collection => @committee.parliamentary_houses %>
 				</ul>
 			</td>
 		</tr>
+		<% if @committee.lead_parliamentary_house -%>
+			<tr>
+				<%= content_tag( 'th', 'Lead House:' ) %>
+				<%= content_tag( 'td', link_to( @committee.lead_parliamentary_house.label, house_show_url( :house => @committee.lead_parliamentary_house ) ) ) %>
+			</tr>
+		<% end -%>
+		<% if @committee.commons_appointed_on -%>
+			<tr>
+				<%= content_tag( 'th', 'Commons Members appointed on:' ) %>
+				<%= content_tag( 'td', @committee.commons_appointed_on.strftime( '%A %-d %B %Y') ) %>
+			</tr>
+		<% end -%>
+		<% if @committee.lords_appointed_on -%>
+			<tr>
+				<%= content_tag( 'th', 'Lords Members appointed on:' ) %>
+				<%= content_tag( 'td', @committee.lords_appointed_on.strftime( '%A %-d %B %Y') ) %>
+			</tr>
+		<% end -%>
 		<tr>
-			<%= content_tag( 'th', 'Types' ) %>
+			<%= content_tag( 'th', 'Types:' ) %>
 			<td>
 				<ul>
 					<%= render :partial => 'committee_type/committee_type', :collection => @committee.committee_types %>
@@ -22,7 +40,7 @@
 		</tr>
 		<% unless @committee.departments.empty? -%>
 			<tr>
-				<%= content_tag( 'th', 'Scrutinises' ) %>
+				<%= content_tag( 'th', 'Scrutinises:' ) %>
 				<td>
 					<ul>
 						<%= render :partial => 'department/department', :collection => @committee.departments %>
@@ -42,16 +60,11 @@
 				<%= content_tag( 'td', @committee.end_on.strftime( '%A %-d %B %Y') ) %>
 			</tr>
 		<% end -%>
-		<% if @committee.commons_appointed_on -%>
+		<!-- NOTE: this is always null in the API -->
+		<% if @committee.is_lead_committee -%>
 			<tr>
-				<%= content_tag( 'th', 'Commons Members appointed on:' ) %>
-				<%= content_tag( 'td', @committee.commons_appointed_on.strftime( '%A %-d %B %Y') ) %>
-			</tr>
-		<% end -%>
-		<% if @committee.lords_appointed_on -%>
-			<tr>
-				<%= content_tag( 'th', 'Lords Members appointed on:' ) %>
-				<%= content_tag( 'td', @committee.lords_appointed_on.strftime( '%A %-d %B %Y') ) %>
+				<%= content_tag( 'th', 'Is lead committee:' ) %>
+				<%= content_tag( 'td', @committee.is_lead_committee ) %>
 			</tr>
 		<% end -%>
 		<tr>
