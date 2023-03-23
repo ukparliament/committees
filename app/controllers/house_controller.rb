@@ -9,11 +9,15 @@ class HouseController < ApplicationController
     house = params[:house]
     @house = ParliamentaryHouse.find( house )
     @page_title = @house.label
+    @all_committees = @house.all_committees
+    @current_committees = @house.current_committees
   end
   
   def current
     house = params[:house]
     @house = ParliamentaryHouse.find( house )
     @page_title = @house.label
+    @all_committees = @house.all_committees
+    @current_committees = @house.current_committees
   end
 end
