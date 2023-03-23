@@ -96,10 +96,8 @@ module IMPORT
     committee_phone = committee_item['contact']['phone']
     committee_email = committee_item['contact']['email']
     committee_contact_disclaimer = committee_item['contact']['contactDisclaimer']
-    
-
-    
-    #committee_lead_house = committee_item['leadHouse']
+    committee_commons_appointed_on = committee_item['dateCommonsAppointed']
+    committee_lords_appointed_on = committee_item['dateLordsAppointed']
     
     # If the committee has a parent committee ...
     if committee_parent_committee_system_id
@@ -139,6 +137,8 @@ module IMPORT
       # Regardless of whether we found the committee or created it, we update its attributes.
       committee.start_on = committee_start_on
       committee.end_on = committee_end_on
+      committee.commons_appointed_on = committee_commons_appointed_on if committee_commons_appointed_on
+      committee.lords_appointed_on = committee_lords_appointed_on if committee_lords_appointed_on
       committee.is_shown_on_website = committee_show_on_website
       committee.legacy_url = committee_website_legacy_url
       committee.is_redirect_enabled = committee_website_legacy_redirect_enabled
@@ -154,8 +154,6 @@ module IMPORT
 				#"isCommons": true,
 				#"isLords": false
         #},
-        #"dateCommonsAppointed": "2014-06-11T00:00:00",
-			#"dateLordsAppointed": "2014-06-09T00:00:00",
       #"isLeadCommittee": null
     end
   end
