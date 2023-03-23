@@ -46,6 +46,7 @@ create table committees (
 	end_on date,
 	commons_appointed_on date,
 	lords_appointed_on date,
+	lead_parliamentary_house_id int,
 	address varchar(500),
 	phone varchar(500),
 	email varchar(500),
@@ -53,9 +54,11 @@ create table committees (
 	is_shown_on_website boolean default false,
 	legacy_url varchar(500),
 	is_redirect_enabled boolean default false,
+	is_lead_committee boolean default false,
 	system_id int not null,
 	parent_committee_id int,
 	constraint fk_parent_committee foreign key (parent_committee_id) references committees(id),
+	constraint fk_lead_parliamentary_house foreign key (lead_parliamentary_house_id) references parliamentary_houses(id),
 	primary key (id)
 );
 
