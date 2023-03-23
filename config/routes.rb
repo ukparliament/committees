@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'committees/committees' => 'committee#index', :as => 'committee_list'
   get 'committees/committees/current' => 'committee#current', :as => 'committee_current'
   get 'committees/committees/:committee' => 'committee#show', :as => 'committee_show'
+  get 'committees/committees/:committee/contact' => 'committee#contact', :as => 'committee_contact'
   
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
