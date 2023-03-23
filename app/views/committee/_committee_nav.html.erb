@@ -1,0 +1,7 @@
+<p>
+	<%= link_to( "Details", committee_show_url ) %>
+	<% if committee_nav.contactable? -%>
+		&middot;
+		<%= link_to( "Contact", committee_contact_url ) %>
+	<% end -%>
+</p>
