@@ -1,7 +1,7 @@
 <%= render :partial => 'current_switcher' %>
 <%= content_tag( 'h2', 'Current committees' ) %>
-<% unless @department.current_committees.empty? -%>
+<% unless @current_committees.empty? -%>
 	<ul>
-		<%= render :partial => 'committee/committee', :collection => @department.current_committees %>
+		<%= render :partial => 'committee/committee', :collection => @current_committees %>
 	</ul>
 <% end -%>
