@@ -98,6 +98,8 @@ module IMPORT
     committee_contact_disclaimer = committee_item['contact']['contactDisclaimer']
     committee_commons_appointed_on = committee_item['dateCommonsAppointed']
     committee_lords_appointed_on = committee_item['dateLordsAppointed']
+    committee_is_lead_committee = committee_item['isLeadCommittee']
+    committee_lead_house = committee_item['leadHouse']
     
     # If the committee has a parent committee ...
     if committee_parent_committee_system_id
@@ -146,21 +148,34 @@ module IMPORT
       committee.phone = committee_phone
       committee.email = committee_email
       committee.contact_disclaimer = committee_contact_disclaimer
+      committee.is_lead_committee = committee_is_lead_committee
+      
+      # If the committee is a joint committee it should have a lead house.
+      # ... if there's a lead House.
+      if committee_lead_house
+        
+        # ... if the Commons is marked as the lead House ...
+        if committee_lead_house['isCommons']
+          
+          # ... we find the Commons.
+          house = ParliamentaryHouse.find_by_short_label( 'Commons' )
+          
+        # If the Lords is the lead House ...
+        elsif committee_lead_house['isLords']
+          
+          # ... we find the Lords.
+          house = ParliamentaryHouse.find_by_short_label( 'Lords' )
+        end
+        
+        # We associate the committee with the lead House.
+        committee.lead_parliamentary_house_id = house.id
+      end
       committee.save
-      
-      
-      
-			#"leadHouse": {
-				#"isCommons": true,
-				#"isLords": false
-        #},
-      #"isLeadCommittee": null
     end
   end
   
   # A method to associate a committee with a House or Houses.
   def associate_committee_with_house( committee, committee_house )
-
     
     # We check which House or Houses the committee belongs to.
     case committee_house
