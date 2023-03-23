@@ -1,5 +1,5 @@
-<%= content_tag( 'h2', 'All committees' ) %>
 <%= render :partial => 'current_switcher' %>
+<%= content_tag( 'h2', 'All committees' ) %>
 <ul>
 	<%= render :partial => 'committee/committee', :collection => @house.committees %>
 </ul>
