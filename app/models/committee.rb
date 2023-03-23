@@ -34,6 +34,10 @@ class Committee < ApplicationRecord
     )
   end
   
+  def lead_parliamentary_house
+    ParliamentaryHouse.find( self.lead_parliamentary_house_id ) if self.lead_parliamentary_house_id
+  end
+  
   def committee_types
     CommitteeType.find_by_sql(
       "
