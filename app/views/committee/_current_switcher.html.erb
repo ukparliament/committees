@@ -1,5 +1,5 @@
 <p>
-	<%= link_to( 'Current committees', committee_current_url ) %>
+	<%= link_to( "Current committees (#{@current_committees.size})", committee_current_url ) %>
 	&middot;
-	<%= link_to( 'All committees', committee_list_url ) %>
+	<%= link_to( "All committees (#{@all_committees.size})", committee_list_url ) %>
 </p>
