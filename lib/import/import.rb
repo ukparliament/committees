@@ -92,6 +92,10 @@ module IMPORT
     committee_website_legacy_redirect_enabled = committee_item['websiteLegacyRedirectEnabled']
     committee_start_on = committee_item['startDate']
     committee_end_on = committee_item['endDate']
+    committee_address = committee_item['contact']['address']
+    committee_phone = committee_item['contact']['phone']
+    committee_email = committee_item['contact']['email']
+    committee_contact_disclaimer = committee_item['contact']['contactDisclaimer']
     
 
     
@@ -138,7 +142,21 @@ module IMPORT
       committee.is_shown_on_website = committee_show_on_website
       committee.legacy_url = committee_website_legacy_url
       committee.is_redirect_enabled = committee_website_legacy_redirect_enabled
+      committee.address = committee_address
+      committee.phone = committee_phone
+      committee.email = committee_email
+      committee.contact_disclaimer = committee_contact_disclaimer
       committee.save
+      
+      
+      
+			#"leadHouse": {
+				#"isCommons": true,
+				#"isLords": false
+        #},
+        #"dateCommonsAppointed": "2014-06-11T00:00:00",
+			#"dateLordsAppointed": "2014-06-09T00:00:00",
+      #"isLeadCommittee": null
     end
   end
   
