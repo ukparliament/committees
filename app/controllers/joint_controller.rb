@@ -1,7 +1,7 @@
 class JointController < ApplicationController
   
   def index
-    @page_title = 'All joint committees'
+    @page_title = 'Joint committees'
     
     @committees = Committee.find_by_sql(
       "
@@ -29,7 +29,7 @@ class JointController < ApplicationController
   end
   
   def current
-    @page_title = 'Current joint committees'
+    @page_title = 'Joint committees'
     
     @committees = Committee.find_by_sql(
       "
