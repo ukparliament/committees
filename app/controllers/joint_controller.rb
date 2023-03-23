@@ -2,8 +2,18 @@ class JointController < ApplicationController
   
   def index
     @page_title = 'Joint committees'
-    
-    @committees = Committee.find_by_sql(
+    @all_committees = all_committees
+    @current_committees = current_committees
+  end
+  
+  def current
+    @page_title = 'Joint committees'
+    @all_committees = all_committees
+    @current_committees = current_committees
+  end
+  
+  def all_committees
+    Committee.find_by_sql(
       "
         SELECT c1.*, sub_committees.sub_committee_count
         FROM committees c1
@@ -20,7 +30,7 @@ class JointController < ApplicationController
           GROUP BY ch.committee_id
         ) parliamentary_house_count
         ON c1.id = parliamentary_house_count.committee_id
-        
+    
         WHERE c1.parent_committee_id is null
         AND parliamentary_house_count.house_count > 1
         ORDER BY c1.name;
@@ -28,10 +38,8 @@ class JointController < ApplicationController
     )
   end
   
-  def current
-    @page_title = 'Joint committees'
-    
-    @committees = Committee.find_by_sql(
+  def current_committees
+    Committee.find_by_sql(
       "
         SELECT c1.*, sub_committees.sub_committee_count
         FROM committees c1
@@ -48,7 +56,7 @@ class JointController < ApplicationController
           GROUP BY ch.committee_id
         ) parliamentary_house_count
         ON c1.id = parliamentary_house_count.committee_id
-        
+    
         WHERE c1.parent_committee_id is null
         AND parliamentary_house_count.house_count > 1
         AND c1.end_on is null
