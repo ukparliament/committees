@@ -12,6 +12,18 @@ class CommitteeController < ApplicationController
     @current_committees = current_committees
   end
   
+  def show
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+  end
+  
+  def contact
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+  end
+  
   def all_committees
     Committee.find_by_sql(
       "
@@ -45,11 +57,5 @@ class CommitteeController < ApplicationController
         ORDER BY c1.name;
       "
     )
-  end
-  
-  def show
-    committee = params[:committee]
-    @committee = Committee.find_by_system_id( committee )
-    @page_title = @committee.name
   end
 end
