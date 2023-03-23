@@ -1,7 +1,7 @@
 class CommitteeController < ApplicationController
   
   def index
-    @page_title = 'All committees'
+    @page_title = 'Committees'
     @committees = Committee.find_by_sql(
       "
         SELECT c1.*, sub_committees.sub_committee_count
@@ -19,7 +19,7 @@ class CommitteeController < ApplicationController
   end
   
   def current
-    @page_title = 'Current committees'
+    @page_title = 'Committees'
     @committees = Committee.find_by_sql(
       "
         SELECT c1.*, sub_committees.sub_committee_count
