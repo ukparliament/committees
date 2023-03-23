@@ -44,6 +44,8 @@ create table committees (
 	name varchar(255) not null,
 	start_on date,
 	end_on date,
+	commons_appointed_on date,
+	lords_appointed_on date,
 	address varchar(500),
 	phone varchar(500),
 	email varchar(500),
