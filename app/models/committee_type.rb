@@ -2,7 +2,7 @@ class CommitteeType < ApplicationRecord
   
   belongs_to :category
   
-  def committees
+  def all_committees
     Committee.find_by_sql(
       "
         SELECT c1.*, sub_committees.sub_committee_count
