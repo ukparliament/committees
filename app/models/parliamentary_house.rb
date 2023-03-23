@@ -1,6 +1,6 @@
 class ParliamentaryHouse < ApplicationRecord
   
-  def committees
+  def all_committees
     Committee.find_by_sql(
       "
         SELECT c1.*, sub_committees.sub_committee_count
