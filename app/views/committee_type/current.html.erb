@@ -1,7 +1,7 @@
 <%= content_tag( 'p', "Committee type: #{link_to( @committee_type.category.name, committee_category_show_url( :committee_category => @committee_type.category.system_id ) ) }".html_safe ) %>
 
-<%= content_tag( 'h2', 'Current committees' ) %>
 <%= render :partial => 'current_switcher' %>
+<%= content_tag( 'h2', 'Current committees' ) %>
 <% unless @committee_type.current_committees.empty? -%>
 	<ul>
 		<%= render :partial => 'committee/committee', :collection => @committee_type.current_committees %>
