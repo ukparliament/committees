@@ -55,4 +55,9 @@ class Committee < ApplicationRecord
       "
     )
   end
+  
+  def contactable?
+    contactable = false
+    contactable = true if self.address || self.email || self.phone
+  end
 end
