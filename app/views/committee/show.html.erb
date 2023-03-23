@@ -1,4 +1,6 @@
-<%= content_tag( 'p', "Parent committee: #{link_to( @committee.parent_committee.name, committee_show_url( :committee => @committee.parent_committee.system_id ) )}".html_safe ) if @committee.parent_committee %>
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', 'Details' ) %>
 
 <table>
 	<tbody>
@@ -56,6 +58,8 @@
 		</tr>
 	</tbody>
 </table>
+
+<%= content_tag( 'p', "Parent committee: #{link_to( @committee.parent_committee.name, committee_show_url( :committee => @committee.parent_committee.system_id ) )}".html_safe ) if @committee.parent_committee %>
 
 <% unless @committee.sub_committees.empty? %>
 	<div id="sub-committees">
