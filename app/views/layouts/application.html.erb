@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 	<head>
 		<%= content_tag( 'title', @page_title || 'Committees' ) %>
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<style>
-			body {font-family: system-ui,sans-serif;padding:0.25rem 0.75rem;font-size:1.2rem;line-height:1.4;max-width:48rem;margin:0.5rem auto;}
+			body {font-family: system-ui;padding:2rem 1rem;font-size:1.2rem;line-height:1.4;max-width:42rem;margin:0.5rem auto;}
 			cite {font-style: normal;}
 			h1, h2 {font-weight:normal;}
 			main {padding:2rem 0;}
@@ -12,30 +12,46 @@
 			li .sub-committee-number {font-size: .8em;}
 			th, td {text-align: left;vertical-align: top;padding: .5em;font-weight:normal;}
 			td ul {list-style:none;margin:0;padding:0;}
+			main {padding:2rem 0;}
 		</style>
 	</head>
 	<body>
 		<header>
-			<%= content_tag( 'p', link_to( 'Committees', home_url ), :class=> 'site-title' ) %>
-			<nav>
-				<%= link_to( 'Committee categories', committee_category_list_url ) %>
-				&middot;
-  		  		<%= link_to( 'Committee types', committee_type_list_url ) %>
-				&middot;
-  		  		<%= link_to( 'Committees', committee_current_url ) %>
-				&middot;
-  		  		<%= link_to( 'Committees by House', house_list_url ) %>
-				&middot;
-  		  		<%= link_to( 'Joint committees', joint_current_url ) %>
-				&middot;
-  		  		<%= link_to( 'Departments', department_list_url ) %>
+			
+			<nav><p>
+				<%= content_tag( 'strong', link_to( 'Committees', home_url ) ) %>
+				 -
+				 <%= link_to( 'Current', committee_current_url ) %>
+				-
+				<%= link_to( 'Joint', joint_current_url ) %>
+				
+				<br>
+				
+				
+				<%= link_to( 'by category', committee_category_list_url ) %>
+				-
+  		  		<%= link_to( 'by type', committee_type_list_url ) %>
+				-
+  		  		
+  		  		<%= link_to( 'by House', house_list_url ) %>
+  		  		</p>
+				<p>
+  		  		
+  		  		<strong><%= link_to( 'Departments', department_list_url ) %></strong>
+  		  		</p>
 			</nav>
 			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
 		</header>
+		<main>
 		<%= yield %>
+		</main>
 		<footer>
-			<p>Made available under the <a href='https://www.parliament.uk/site-information/copyright-parliament/open-parliament-licence/' rel='licence'>Open Parliament Licence</a>.</p>
-			<%= content_tag( 'p', link_to( 'Meta', meta_list_url ) ) %>
+		<nav>
+					<%= content_tag( 'p', link_to( 'Meta', meta_list_url ) ) %>
+
+			<p>This site includes information made available at parliament.uk under the <a href='https://www.parliament.uk/site-information/copyright-parliament/open-parliament-licence/' rel='licence'>Open Parliament Licence</a>.</p>
+			
+			</nav>
 		</footer>
 	</body>
 </html>
