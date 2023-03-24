@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   get 'committees/work-package-types' => 'work_package_type#index', :as => 'work_package_type_list'
   get 'committees/work-package-types/:work_package_type' => 'work_package_type#show', :as => 'work_package_type_show'
   
+  get 'committees/work-packages' => 'work_package#index', :as => 'work_package_list'
+  get 'committees/work-packages/:work_package' => 'work_package#show', :as => 'work_package_show'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
