@@ -6,10 +6,10 @@
 		<style>
 			body {font-family: system-ui,sans-serif;padding:0.25rem 0.75rem;font-size:1.2rem;line-height:1.4;max-width:48rem;margin:0.5rem auto;}
 			cite {font-style: normal;}
-			h1, h2 {font-weight:normal;}
+			h1, h2, h3 {font-weight:normal;}
 			main {padding:2rem 0;}
-			li h2 {font-size: 1em;}
-			li .sub-committee-number {font-size: .8em;}
+			li h2, li h3 {font-size: 1em;}
+			li .sub-committee-number, li .dates {font-size: .8em;}
 			th, td {text-align: left;vertical-align: top;padding: .5em;font-weight:normal;}
 			td ul {list-style:none;margin:0;padding:0;}
 		</style>
@@ -29,6 +29,8 @@
   		  		<%= link_to( 'Joint committees', joint_current_url ) %>
 				&middot;
   		  		<%= link_to( 'Departments', department_list_url ) %>
+				&middot;
+  		  		<%= link_to( 'Work package types', work_package_type_list_url ) %>
 			</nav>
 			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
 		</header>
