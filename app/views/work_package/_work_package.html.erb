@@ -1,4 +1,4 @@
 <li>
-	<%= content_tag( 'h3', work_package.title ) %>
+	<%= content_tag( 'h3', link_to( work_package.title, work_package_show_url( :work_package => work_package.system_id ) ) ) %>
 	<%= content_tag( 'p', work_package.dates, :class => 'dates' ) %>
 </li>
