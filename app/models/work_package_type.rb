@@ -1,4 +1,4 @@
 class WorkPackageType < ApplicationRecord
   
-  has_many :work_packages, -> { order( 'open_on desc' ) }
+  has_many :work_packages, -> { order( 'open_on desc, close_on desc' ) }
 end
