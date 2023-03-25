@@ -1,1 +1,2 @@
 <%= content_tag( 'p', @work_package.dates ) %>
+<%= content_tag( 'p', "Work package type: #{link_to( @work_package.work_package_type.name, work_package_type_current_url( :work_package_type => @work_package.work_package_type.system_id ) )}".html_safe ) %>
