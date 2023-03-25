@@ -1,7 +1,20 @@
 class WorkPackageController < ApplicationController
   
   def index
-    @work_packages = WorkPackage.all.order( 'open_on desc' ).order( 'close_on desc' )
+    @all_work_packages = WorkPackage.all.order( 'open_on desc' ).order( 'close_on desc' )
+    @current_work_packages = WorkPackage.
+      all
+      .order( 'open_on desc' ).order( 'close_on desc' )
+      .where( "close_on is NULL or close_on >= ?", Date.today )
+    @page_title = 'Work packages'
+  end
+  
+  def current
+    @all_work_packages = WorkPackage.all.order( 'open_on desc' ).order( 'close_on desc' )
+    @current_work_packages = WorkPackage.
+      all
+      .order( 'open_on desc' ).order( 'close_on desc' )
+      .where( "close_on is NULL or close_on >= ?", Date.today )
     @page_title = 'Work packages'
   end
   
