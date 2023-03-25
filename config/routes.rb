@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   get 'committees/work-package-types/:work_package_type/current' => 'work_package_type#current', :as => 'work_package_type_current'
   
   get 'committees/work-packages' => 'work_package#index', :as => 'work_package_list'
+  get 'committees/work-packages/current' => 'work_package#current', :as => 'work_package_current'
   get 'committees/work-packages/:work_package' => 'work_package#show', :as => 'work_package_show'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
