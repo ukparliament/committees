@@ -24,6 +24,12 @@ class CommitteeController < ApplicationController
     @page_title = @committee.name
   end
   
+  def work_package_list
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+  end
+  
   def all_committees
     Committee.find_by_sql(
       "
