@@ -1,2 +1,11 @@
 <%= content_tag( 'p', @work_package.dates ) %>
 <%= content_tag( 'p', "Work package type: #{link_to( @work_package.work_package_type.name, work_package_type_current_url( :work_package_type => @work_package.work_package_type.system_id ) )}".html_safe ) %>
+
+<% unless @work_package.committees.empty? -%>
+	<div id="committees">
+		<%= content_tag( 'h2', 'Committees' ) %>
+		<ul>
+			<%= render :partial => 'committee/committee', :collection => @work_package.committees %>
+		</ul>
+	</div>
+</ul>
