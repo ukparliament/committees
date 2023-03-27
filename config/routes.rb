@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'committees/committees/current' => 'committee#current', :as => 'committee_current'
   get 'committees/committees/:committee' => 'committee#show', :as => 'committee_show'
   get 'committees/committees/:committee/contact' => 'committee#contact', :as => 'committee_contact'
+  get 'committees/committees/:committee/work-packages' => 'committee#work_package_list', :as => 'committee_work_package_list'
   
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
@@ -31,6 +32,11 @@ Rails.application.routes.draw do
   
   get 'committees/work-package-types' => 'work_package_type#index', :as => 'work_package_type_list'
   get 'committees/work-package-types/:work_package_type' => 'work_package_type#show', :as => 'work_package_type_show'
+  get 'committees/work-package-types/:work_package_type/current' => 'work_package_type#current', :as => 'work_package_type_current'
+  
+  get 'committees/work-packages' => 'work_package#index', :as => 'work_package_list'
+  get 'committees/work-packages/current' => 'work_package#current', :as => 'work_package_current'
+  get 'committees/work-packages/:work_package' => 'work_package#show', :as => 'work_package_show'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'

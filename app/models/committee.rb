@@ -64,4 +64,22 @@ class Committee < ApplicationRecord
     contactable = false
     contactable = true if self.address || self.email || self.phone
   end
+  
+  def work_packages
+    WorkPackage.find_by_sql(
+      "
+        SELECT wp.*
+        FROM work_packages wp
+      
+        -- We only want work packages associated with this committee, so we inner join to committee_work_packages.
+        INNER JOIN (
+          SELECT cwp.work_package_id AS work_package_id
+          FROM committee_work_packages cwp
+          WHERE cwp.committee_id = #{self.id}
+        ) committee_work_packages
+        ON wp.id = committee_work_packages.work_package_id
+        ORDER BY open_on desc, close_on desc;
+      "
+    )
+  end
 end

@@ -1,13 +1,14 @@
+drop table if exists committee_work_packages;
 drop table if exists work_packages;
 drop table if exists scrutinisings;
 drop table if exists committee_committee_types;
 drop table if exists committee_houses;
-drop table if exists committees;
 drop table if exists committee_types;
 drop table if exists categories;
-drop table if exists parliamentary_houses;
 drop table if exists departments;
 drop table if exists work_package_types;
+drop table if exists committees;
+drop table if exists parliamentary_houses;
 
 create table work_package_types (
 	id serial not null,
@@ -108,5 +109,14 @@ create table work_packages (
 	system_id int not null,
 	work_package_type_id int not null,
 	constraint fk_work_package_type foreign key (work_package_type_id) references work_packages(id),
+	primary key (id)
+);
+
+create table committee_work_packages (
+	id serial not null,
+	committee_id int not null,
+	work_package_id int not null,
+	constraint fk_committee foreign key (committee_id) references committees(id),
+	constraint fk_work_package foreign key (work_package_id) references work_packages(id),
 	primary key (id)
 );

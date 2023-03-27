@@ -1,0 +1,5 @@
+<%= render :partial => 'current_switcher' %>
+<%= content_tag( 'h2', 'Current work packages' ) %>
+<ul>
+	<%= render :partial => 'work_package', :collection => @current_work_packages %>
+</ul>

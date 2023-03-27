@@ -141,12 +141,54 @@ module IMPORT
     end
   end
   
+  # A method to get work packages for committees.
+  def link_committees_to_work_packages
+    puts "importing links between committees and work packages"
+    
+    # We get all the committeees.
+    committees = Committee.all
+    
+    # For each committee ...
+    committees.each do |committee|
+      
+      # ... we get the work packages.
+      get_work_packages_for_committee( committee, 0 )
+    end
+  end
+  
+  # A method to get work packages for a committee.
+  def get_work_packages_for_committee( committee, skip )
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/CommitteeBusiness?CommitteeId=#{committee.system_id}&take=30&skip=#{skip}"
+    
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each work package item in the feed ....
+    json['items'].each do |work_package_item|
+      
+      # ... we associate the work package with the committee.
+      associate_work_package_with_committee( committee, work_package_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      get_work_packages_for_committee( committee, skip + 30 )
+    end
+  end
+  
   
   
   
   # A method to import or update a work package.
   def import_or_update_work_package( work_package )
-    puts work_package
     
     # We store the returned values.
     work_package_system_id = work_package['id']
@@ -176,9 +218,6 @@ module IMPORT
     work_package.work_package_type = work_package_type
     work_package.save
     
-    
-    
-    
 	
 		#	"latestReport": null,
 		#	"openSubmissionPeriods": [
@@ -190,8 +229,6 @@ module IMPORT
 		#	"nextOralEvidenceSession": null,
 		#	"contact": null
 		#},
-    
-    
     
   end
   
@@ -394,5 +431,21 @@ module IMPORT
       scrutinising.department = department
       scrutinising.save
     end
+  end
+  
+  # A methof to associate a committee with a work package.
+  def associate_work_package_with_committee( committee, work_package_item )
+    
+    # We store the variables returned.
+    work_package_system_id = work_package_item['id']
+    
+    # We find the work package.
+    work_package = WorkPackage.find_by_system_id( work_package_system_id )
+    
+    # We create a new committee work package.
+    committee_work_package = CommitteeWorkPackage.new
+    committee_work_package.committee = committee
+    committee_work_package.work_package = work_package
+    committee_work_package.save
   end
 end
