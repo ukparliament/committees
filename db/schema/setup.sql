@@ -35,9 +35,9 @@ create table locations (
 create table events (
 	id serial not null,
 	name varchar(255),
-	start_at date not null,
-	end_at date,
-	cancelled_at date,
+	start_at timestamp not null,
+	end_at timestamp,
+	cancelled_at timestamp,
 	location_name varchar(255),
 	originating_system varchar(255) not null,
 	system_id int not null,
