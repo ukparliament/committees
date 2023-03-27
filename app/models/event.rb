@@ -12,4 +12,14 @@ class Event < ApplicationRecord
     times += self.end_at.strftime( '%A %-d %B %Y @ %H:%M') if self.end_at
     times
   end
+  
+  def location_display
+    location_display = ''
+    if self.normalised_location_name
+      location_display = self.normalised_location_name
+    else
+      location_display = self.location_name
+    end
+    location_display
+  end
 end
