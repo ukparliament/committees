@@ -77,6 +77,124 @@ module IMPORT
     end
   end
   
+  # A method to import all work package types.
+  def import_work_package_types
+    puts "Importing work package types"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/CommitteeBusinessType"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each business type item in the feed ...
+    json.each do |business_type_item|
+      
+      # ... we store the returned values.
+      business_type_item_system_id = business_type_item['id']
+      business_type_item_name = business_type_item['name']
+      business_type_item_is_inquiry = business_type_item['isInquiry']
+      business_type_item_description = business_type_item['description']
+      
+      # We attempt to find the work package type.
+      work_package_type = WorkPackageType.find_by_system_id( business_type_item_system_id )
+      
+      # If we don't find work package type ...
+      unless work_package_type
+        
+        # ... we create it.
+        work_package_type = WorkPackageType.new
+        work_package_type.name = business_type_item_name
+        work_package_type.description = business_type_item_description
+        work_package_type.is_inquiry = business_type_item_is_inquiry
+        work_package_type.system_id = business_type_item_system_id
+        work_package_type.save
+      end
+    end
+  end
+  
+  # A method to import all work packages.
+  def import_work_packages( skip )
+    puts "importing work packages"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/CommitteeBusiness?take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each work package item in the feed ....
+    json['items'].each do |work_package|
+      
+      # ... we import or update the work package.
+      import_or_update_work_package( work_package )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_work_packages( skip + 30 )
+    end
+  end
+  
+  
+  
+  
+  # A method to import or update a work package.
+  def import_or_update_work_package( work_package )
+    puts work_package
+    
+    # We store the returned values.
+    work_package_system_id = work_package['id']
+    work_package_title = work_package['title']
+    work_package_work_package_type_system_id = work_package['type']['id']
+    work_package_open_on = work_package['openDate']
+    work_package_close_on = work_package['closeDate']
+    
+    # We attempt to find the work package.
+    work_package = WorkPackage.find_by_system_id( work_package_system_id )
+    
+    # If we don't find the work package ...
+    unless work_package
+      
+      # ... we create a new work package.
+      work_package = WorkPackage.new
+    end
+    
+    # We find the work package type.
+    work_package_type = WorkPackageType.find_by_system_id( work_package_work_package_type_system_id )
+    
+    # We assign attributes to the work package.
+    work_package.title = work_package_title
+    work_package.open_on = work_package_open_on
+    work_package.close_on = work_package_close_on
+    work_package.system_id = work_package_system_id
+    work_package.work_package_type = work_package_type
+    work_package.save
+    
+    
+    
+    
+	
+		#	"latestReport": null,
+		#	"openSubmissionPeriods": [
+
+		#	],
+		#	"closedSubmissionPeriods": [
+    #
+		#	],
+		#	"nextOralEvidenceSession": null,
+		#	"contact": null
+		#},
+    
+    
+    
+  end
+  
   # A method to import or update a committee.
   def import_or_update_committee( committee_item )
     

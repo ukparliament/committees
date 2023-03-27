@@ -1,0 +1,6 @@
+<%= content_tag( 'p', @work_package_type.description ) %>
+
+<%= content_tag( 'h2', 'Work packages' ) %>
+<ul>
+	<%= render :partial => 'work_package/work_package', :collection => @work_package_type.work_packages %>
+</ul>
