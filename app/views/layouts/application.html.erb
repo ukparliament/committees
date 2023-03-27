@@ -18,7 +18,7 @@
 	<body>
 		<header>			
 			<nav><p>
-				<%= content_tag( 'strong', link_to( 'Committees', home_url ) ) %>
+				<%= content_tag( 'span', link_to( 'COMMITTEES', home_url ) ) %>
 				 -
 				 <%= link_to( 'Current', committee_current_url ) %>
 				-
@@ -36,7 +36,7 @@
 				</p>
 				
 				<p>
-  		  		<strong><%= link_to( 'Work packages', work_package_current_url ) %></strong>
+  		  		<%= link_to( 'WORK PACKAGES', work_package_current_url ) %>
 <br>
   		  		<%= link_to( 'by type', work_package_type_list_url ) %>
 				
@@ -44,7 +44,7 @@
   		  		</p>
 				<p>
   		  		
-  		  		<strong><%= link_to( 'Departments', department_list_url ) %></strong>
+  		  		<%= link_to( 'DEPARTMENTS', department_list_url ) %>
   		  		</p>
 
 			</nav>
