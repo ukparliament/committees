@@ -3,5 +3,6 @@ task :setup => [
   :import_committees,
   :import_work_package_types,
   :import_work_packages,
-  :link_committees_to_work_packages] do
+  :link_committees_to_work_packages,
+  :import_events] do
 end
