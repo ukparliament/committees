@@ -38,6 +38,8 @@ Rails.application.routes.draw do
   get 'committees/work-packages/current' => 'work_package#current', :as => 'work_package_current'
   get 'committees/work-packages/:work_package' => 'work_package#show', :as => 'work_package_show'
   
+  get 'committees/events' => 'event#index', :as => 'event_list'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
