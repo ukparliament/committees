@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   get 'committees/work-packages/:work_package' => 'work_package#show', :as => 'work_package_show'
   
   get 'committees/events' => 'event#index', :as => 'event_list'
+  get 'committees/events/upcoming' => 'event#upcoming', :as => 'event_upcoming'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
