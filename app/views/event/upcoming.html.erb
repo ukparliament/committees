@@ -1,0 +1,5 @@
+<%= render :partial => 'upcoming_switcher' %>
+<%= content_tag( 'h2', 'Upcoming events' ) %>
+<ul>
+	<%= render :partial => 'event', :collection => @upcoming_events %>
+</ul>
