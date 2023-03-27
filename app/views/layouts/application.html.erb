@@ -4,7 +4,7 @@
 		<%= content_tag( 'title', @page_title || 'Committees' ) %>
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<style>
-			body {font-family: system-ui;padding:2rem 1rem;font-size:1.2rem;line-height:1.4;max-width:42rem;margin:0.5rem auto;}
+			body {font-family: system-ui;padding:1rem;font-size:1.2rem;line-height:1.4;max-width:42rem;margin:0.5rem auto;}
 			cite {font-style: normal;}
 			h1, h2, h3 {font-weight:normal;}
 			main {padding:2rem 0;}
@@ -33,12 +33,14 @@
 				-
   		  		
   		  		<%= link_to( 'by House', house_list_url ) %>
-				-
+				</p>
+				
+				<p>
+  		  		<strong><%= link_to( 'Work packages', work_package_current_url ) %></strong>
+<br>
+  		  		<%= link_to( 'by type', work_package_type_list_url ) %>
+				
   		  		
-  		  		<%= link_to( 'Work package types', work_package_type_list_url ) %>
-				-
-  		  		
-  		  		<%= link_to( 'Work packages', work_package_current_url ) %>
   		  		</p>
 				<p>
   		  		
