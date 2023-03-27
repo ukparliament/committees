@@ -16,9 +16,7 @@
 		</style>
 	</head>
 	<body>
-		<header>
-<<<<<<< HEAD
-			
+		<header>			
 			<nav><p>
 				<%= content_tag( 'strong', link_to( 'Committees', home_url ) ) %>
 				 -
@@ -40,25 +38,7 @@
   		  		
   		  		<strong><%= link_to( 'Departments', department_list_url ) %></strong>
   		  		</p>
-=======
-			<%= content_tag( 'p', link_to( 'Committees', home_url ), :class=> 'site-title' ) %>
-			<nav>
-				<%= link_to( 'Committee categories', committee_category_list_url ) %>
-				&middot;
-  		  		<%= link_to( 'Committee types', committee_type_list_url ) %>
-				&middot;
-  		  		<%= link_to( 'Committees', committee_current_url ) %>
-				&middot;
-  		  		<%= link_to( 'Committees by House', house_list_url ) %>
-				&middot;
-  		  		<%= link_to( 'Joint committees', joint_current_url ) %>
-				&middot;
-  		  		<%= link_to( 'Departments', department_list_url ) %>
-				&middot;
-  		  		<%= link_to( 'Work packages', work_package_current_url ) %>
-				&middot;
-  		  		<%= link_to( 'Work package types', work_package_type_list_url ) %>
->>>>>>> ffea7f1e2a429e870227639ea8512bad29d1127b
+
 			</nav>
 			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
 		</header>
