@@ -1,6 +1,10 @@
 <%= render :partial => 'committee_nav', :object => @committee %>
 
 <%= content_tag( 'h2', 'Work packages' ) %>
+
+<%= render :partial => 'committee_work_package_nav', :object => @committee %>
+
+<%= content_tag( 'h3', 'All work packages' ) %>
 <ul>
-	<%= render :partial => 'work_package/work_package', :collection => @committee.work_packages %>
+	<%= render :partial => 'work_package/work_package', :collection => @all_work_packages %>
 </ul>
