@@ -192,7 +192,7 @@ module IMPORT
     puts "importing events"
     
     # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/Events?take=30&skip=#{skip}"
+    url = "https://committees-api.parliament.uk/api/Events/Activities?take=30&skip=#{skip}"
     
     # We get the JSON.
     json = JSON.load( URI.open( url ) )
