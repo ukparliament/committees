@@ -1,0 +1,10 @@
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', 'Events' ) %>
+
+<%= render :partial => 'committee_event_nav', :object => @committee %>
+
+<%= content_tag( 'h3', 'All events' ) %>
+<ul>
+	<%= render :partial => 'event/event', :collection => @all_events %>
+</ul>
