@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   get 'committees/committees/:committee' => 'committee#show', :as => 'committee_show'
   get 'committees/committees/:committee/contact' => 'committee#contact', :as => 'committee_contact'
   get 'committees/committees/:committee/work-packages' => 'committee#work_package_list', :as => 'committee_work_package_list'
+  get 'committees/committees/:committee/events' => 'committee#event_list', :as => 'committee_event_list'
+  get 'committees/committees/:committee/events/upcoming' => 'committee#event_upcoming', :as => 'committee_event_upcoming'
   
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
@@ -40,6 +42,7 @@ Rails.application.routes.draw do
   
   get 'committees/events' => 'event#index', :as => 'event_list'
   get 'committees/events/upcoming' => 'event#upcoming', :as => 'event_upcoming'
+  get 'committees/events/:event' => 'event#show', :as => 'event_show'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
