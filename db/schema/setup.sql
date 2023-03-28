@@ -36,7 +36,7 @@ create table events (
 	id serial not null,
 	name varchar(255),
 	start_at timestamp not null,
-	end_at timestamp,
+	end_at timestamp not null,
 	cancelled_at timestamp,
 	location_name varchar(255),
 	originating_system varchar(255) not null,
