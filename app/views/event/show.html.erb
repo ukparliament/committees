@@ -1,0 +1,38 @@
+<% if @event.cancelled_at -%>
+	<%= content_tag( 'p', 'CANCELLED' ) %>
+<% end -%>
+<table>
+	<tbody>
+		<tr>
+			<%= content_tag( 'th', 'Start time:' ) %>
+			<%= content_tag( 'td', @event.start_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'End time:' ) %>
+			<%= content_tag( 'td', @event.end_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Location:' ) %>
+			<%= content_tag( 'td', @event.location_display ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Event type:' ) %>
+			<%= content_tag( 'td', @event.event_type_name ) %>
+		</tr>
+		<% if @event.cancelled_at -%>
+			<tr>
+				<%= content_tag( 'th', 'Cancelled at:' ) %>
+				<%= content_tag( 'td', @event.cancelled_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
+			</tr>
+		<% end -%>
+		<tr>
+			<%= content_tag( 'th', 'Originating system:' ) %>
+			<%= content_tag( 'td', @event.originating_system ) %>
+		</tr>
+	</tbody>
+</table>
+
+<%= content_tag( 'h2', 'Committees' ) %>
+<ul>
+	<%= render :partial => 'committee/committee', :collection => @event.committees %>
+</ul>
