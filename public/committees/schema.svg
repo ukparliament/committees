@@ -312,9 +312,9 @@
         <title>Class with Attributes</title>
         <g id="Graphic_53">
           <title>Attributes</title>
-          <rect x="1830" y="368" width="307" height="250" fill="#c0ffc0"/>
-          <rect x="1830" y="368" width="307" height="250" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(1836 374)" fill="#515556">
+          <rect x="1830" y="379" width="307" height="228" fill="#c0ffc0"/>
+          <rect x="1830" y="379" width="307" height="228" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(1836 385)" fill="#515556">
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">name</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">start_at</tspan>
@@ -322,17 +322,16 @@
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">cancelled_at</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">location_name</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="145">originating_system</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="167">event_source </tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="189">event_type_id</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="211">location_id</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="233">system_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="167">event_type_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="189">location_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="211">system_id</tspan>
           </text>
         </g>
         <g id="Graphic_52">
           <title>Class Name</title>
-          <rect x="1830" y="342" width="307" height="26" fill="#c0ffc0"/>
-          <rect x="1830" y="342" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(1836 346)" fill="#515556">
+          <rect x="1830" y="353" width="307" height="26" fill="#c0ffc0"/>
+          <rect x="1830" y="353" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(1836 357)" fill="#515556">
             <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="127.519" y="13">events</tspan>
           </text>
         </g>
@@ -412,7 +411,7 @@
         </g>
       </g>
       <g id="Line_66">
-        <line x1="1983.5" y1="690.5" x2="1983.5" y2="637.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="1983.5" y1="690.5" x2="1983.5" y2="626.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
     </g>
   </g>
