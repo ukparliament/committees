@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get 'committees/committees/:committee' => 'committee#show', :as => 'committee_show'
   get 'committees/committees/:committee/contact' => 'committee#contact', :as => 'committee_contact'
   get 'committees/committees/:committee/work-packages' => 'committee#work_package_list', :as => 'committee_work_package_list'
+  get 'committees/committees/:committee/work-packages/current' => 'committee#work_package_current', :as => 'committee_work_package_current'
   get 'committees/committees/:committee/events' => 'committee#event_list', :as => 'committee_event_list'
   get 'committees/committees/:committee/events/upcoming' => 'committee#event_upcoming', :as => 'committee_event_upcoming'
   
