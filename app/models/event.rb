@@ -23,6 +23,13 @@ class Event < ApplicationRecord
     location_display
   end
   
+  # A method to escape commas in locations.
+  # The ICS spec makes no mention of this being necessary: https://www.kanzaki.com/docs/ical/location.html
+  # But locations get trunacted on commas in Apple calendar if you don't.
+  def location_display_escaped_for_ics
+    self.location_display.gsub( ',', '\,')
+  end
+  
   def committees
     Committee.find_by_sql(
       "
