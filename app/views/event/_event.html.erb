@@ -1,5 +1,6 @@
 <li>
-	<%= content_tag( 'h2', event.display_name ) %>
-	<%= content_tag( 'h2', event.times, :class => 'times' ) %>
-	<%= content_tag( 'h2', "Location: #{event.location_display}", :class => 'location' ) %>
+	<%= content_tag( 'h4', link_to( event.display_name, event_show_url( :event => event.system_id ) ) ) %>
+	<%= content_tag( 'p', event.times, :class => 'times' ) %>
+	<%= content_tag( 'p', "Location: #{event.location_display}", :class => 'location' ) %>
+	<%= content_tag( 'p', "CANCELLED", :class => 'cancelled', :class => 'cancelled' ) unless event.cancelled_at.nil? %>
 </li>
