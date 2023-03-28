@@ -45,6 +45,10 @@ Rails.application.routes.draw do
   get 'committees/events/upcoming' => 'event#upcoming', :as => 'event_upcoming'
   get 'committees/events/:event' => 'event#show', :as => 'event_show'
   
+  get 'committees/event-types' => 'event_type#index', :as => 'event_type_list'
+  get 'committees/event-types/:event_type' => 'event_type#show', :as => 'event_type_show'
+  get 'committees/event-types/:event_type/upcoming' => 'event_type#upcoming', :as => 'event_type_upcoming'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
