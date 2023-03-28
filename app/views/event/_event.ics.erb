@@ -4,5 +4,5 @@ DTSTART:<%= event.start_at.strftime( '%Y%m%dT%H%M%S' ) %>
 SUMMARY:<%= event.display_name %>
 LOCATION:<%= event.location_display_escaped_for_ics %>
 URL:<%= event_show_url( :event => event.system_id ) %>
-UUID:<%= event_show_url( :event => event.system_id ) %>
+UID:<%= event_show_url( :event => event.system_id ) %>
 END:VEVENT
