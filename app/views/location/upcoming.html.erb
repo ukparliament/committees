@@ -1,0 +1,8 @@
+<%= render :partial => 'upcoming_switcher' %>
+
+<%= content_tag( 'h2', 'Upcoming events' ) %>
+<%= content_tag( 'p', 'Subscribe to this calendar:' ) %>
+<input type="text" value="<%= url_for( location_upcoming_url( :format => 'ics' ) ) %>"/>
+<ul>
+	<%= render :partial => 'event/event', :collection => @upcoming_events %>
+</ul>
