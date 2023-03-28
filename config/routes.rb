@@ -50,6 +50,8 @@ Rails.application.routes.draw do
   get 'committees/event-types/:event_type/upcoming' => 'event_type#upcoming', :as => 'event_type_upcoming'
   
   get 'committees/locations' => 'location#index', :as => 'location_list'
+  get 'committees/locations/:location' => 'location#show', :as => 'location_show'
+  get 'committees/locations/:location/upcoming' => 'location#upcoming', :as => 'location_upcoming'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
