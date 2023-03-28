@@ -8,4 +8,8 @@
 		&middot;
 		<%= link_to( "Work packages", committee_work_package_list_url ) %>
 	<% end -%>
+	<% unless committee_nav.all_events.empty? -%>
+		&middot;
+		<%= link_to( "Events", committee_event_upcoming_url ) %>
+	<% end -%>
 </p>
