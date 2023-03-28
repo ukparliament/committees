@@ -1,5 +1,7 @@
 <% if @event.cancelled_at -%>
 	<%= content_tag( 'p', 'CANCELLED' ) %>
+<% else -%>
+	<%= content_tag( 'p', link_to( 'Add to calendar', event_show_url( :format => 'ics' ) ) ) %>
 <% end -%>
 <table>
 	<tbody>
