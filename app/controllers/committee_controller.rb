@@ -30,6 +30,22 @@ class CommitteeController < ApplicationController
     @page_title = @committee.name
   end
   
+  def event_list
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+    @all_events = @committee.all_events
+    @upcoming_events = @committee.upcoming_events
+  end
+  
+  def event_upcoming
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+    @all_events = @committee.all_events
+    @upcoming_events = @committee.upcoming_events
+  end
+  
   def all_committees
     Committee.find_by_sql(
       "
