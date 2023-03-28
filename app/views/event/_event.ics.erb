@@ -1,9 +1,9 @@
-BEGIN:VEVENT\r\n
-DTEND:<%= event.end_at.strftime( '%Y%m%dT%H%M%S' ) %>\r\n
-DTSTART:<%= event.start_at.strftime( '%Y%m%dT%H%M%S' ) %>\r\n
-SUMMARY:<%= event.display_name %>\r\n
-LOCATION:<%= event.location_display_escaped_for_ics %>\r\n
-URL:<%= event_show_url( :event => event.system_id ) %>\r\n
-UID:<%= event_show_url( :event => event.system_id ) %>\r\n
-DTSTAMP:19971210T080000Z\r\n
-END:VEVENT\r\n
+BEGIN:VEVENT
+DTEND:<%= event.end_at.strftime( '%Y%m%dT%H%M%S' ) %>
+DTSTART:<%= event.start_at.strftime( '%Y%m%dT%H%M%S' ) %>
+SUMMARY:<%= event.display_name %>
+LOCATION:<%= event.location_display_escaped_for_ics %>
+URL:<%= event_show_url( :event => event.system_id ) %>
+UID:<%= event_show_url( :event => event.system_id ) %>
+DTSTAMP:19971210T080000Z
+END:VEVENT
