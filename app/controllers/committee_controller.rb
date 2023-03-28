@@ -28,6 +28,16 @@ class CommitteeController < ApplicationController
     committee = params[:committee]
     @committee = Committee.find_by_system_id( committee )
     @page_title = @committee.name
+    @all_work_packages = @committee.all_work_packages
+    @current_work_packages = @committee.current_work_packages
+  end
+  
+  def work_package_current
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+    @all_work_packages = @committee.all_work_packages
+    @current_work_packages = @committee.current_work_packages
   end
   
   def event_list
