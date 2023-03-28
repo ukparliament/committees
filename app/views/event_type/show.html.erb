@@ -1,0 +1,9 @@
+<%= content_tag( 'p', @event_type.description ) %>
+<%= content_tag( 'p', "Is visit: #{@event_type.is_visit}" ) %>
+
+<%= render :partial => 'upcoming_switcher' %>
+
+<%= content_tag( 'h2', 'All events' ) %>
+<ul>
+	<%= render :partial => 'event/event', :collection => @all_events %>
+</ul>
