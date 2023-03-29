@@ -236,6 +236,7 @@ module IMPORT
     event_event_type_name = event_item['eventType']['name']
     event_event_type_is_visit = event_item['eventType']['isVisit']
     event_event_type_description = event_item['eventType']['description']
+    event_segment = event_item['activities']
     
     # NOTE: todo
 		#"childEvents": null, < appears to be empty unless it requires some parameter
@@ -315,6 +316,8 @@ module IMPORT
     
     # We save the event.
     event.save
+    
+    puts events_segement unless event_segments.empty?
   end
   
   # A method to import or update a work package.
