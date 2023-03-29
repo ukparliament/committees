@@ -17,44 +17,34 @@
 	</head>
 	<body>
 		<header>			
-			<nav><p>
-				<%= content_tag( 'span', link_to( 'COMMITTEES', home_url ) ) %>
-				 -
-				 <%= link_to( 'Current', committee_current_url ) %>
-				-
-				<%= link_to( 'Joint', joint_current_url ) %>
-				
-				<br>
-				
-				
-				<%= link_to( 'by category', committee_category_list_url ) %>
-				-
-  		  		<%= link_to( 'by type', committee_type_list_url ) %>
-				-
-  		  		
-  		  		<%= link_to( 'by House', house_list_url ) %>
+			<nav>
+				<p>
+					<%= content_tag( 'span', link_to( 'COMMITTEES', home_url ) ) %>
+				 	-
+				 	<%= link_to( 'Current', committee_current_url ) %>
+					-
+					<%= link_to( 'Joint', joint_current_url ) %>
+					<br />
+					<%= link_to( 'by category', committee_category_list_url ) %>
+					-
+  		  			<%= link_to( 'by type', committee_type_list_url ) %>
+					-
+  		  			<%= link_to( 'by House', house_list_url ) %>
+					-
+					<%= link_to( 'by Department scrutinised', department_list_url ) %>
 				</p>
-				
 				<p>
-  		  		<%= link_to( 'WORK PACKAGES', work_package_current_url ) %>
-<br>
-  		  		<%= link_to( 'by type', work_package_type_list_url ) %>
-				
-  		  		
-  		  		</p>
+					<%= link_to( 'WORK PACKAGES', work_package_current_url ) %>
+					<br />
+  		  			<%= link_to( 'by type', work_package_type_list_url ) %>
+				</p>
 				<p>
-  		  		
-  		  		<%= link_to( 'DEPARTMENTS', department_list_url ) %>
+					<%= link_to( 'EVENTS', event_upcoming_url ) %>
+					-
+				 	<%= link_to( 'by type', event_type_list_url ) %>
+					-
+				 	<%= link_to( 'by location', location_list_url ) %>
   		  		</p>
-				<p>
-  		  		
-  		  		<%= link_to( 'EVENTS', event_upcoming_url ) %>
-				-
-				 <%= link_to( 'by type', event_type_list_url ) %>
-				-
-				 <%= link_to( 'by location', location_list_url ) %>
-  		  		</p>
-
 			</nav>
 			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
 		</header>
