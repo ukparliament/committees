@@ -1,3 +1,4 @@
+drop table if exists event_segments;
 drop table if exists committee_events;
 drop table if exists committee_work_packages;
 drop table if exists work_packages;
@@ -13,8 +14,15 @@ drop table if exists parliamentary_houses;
 drop table if exists events;
 drop table if exists locations;
 drop table if exists event_types;
+drop table if exists activity_types;
 
 
+
+create table activity_types (
+	id serial not null,
+	name varchar(255),
+	primary key (id)
+);
 
 create table event_types (
 	id serial not null,
@@ -165,5 +173,19 @@ create table committee_events (
 	event_id int not null,
 	constraint fk_committee foreign key (committee_id) references committees(id),
 	constraint fk_event foreign key (event_id) references events(id),
+	primary key (id)
+);
+
+create table event_segments (
+	id serial not null,
+	name varchar(255),
+	start_at timestamp not null,
+	end_at timestamp not null,
+	is_private boolean default false,
+	system_id int not null,
+	event_id int not null,
+	activity_type_id int not null,
+	constraint fk_event foreign key (event_id) references events(id),
+	constraint fk_activity_type foreign key (activity_type_id) references activity_types(id),
 	primary key (id)
 );
