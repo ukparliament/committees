@@ -236,7 +236,7 @@ module IMPORT
     event_event_type_name = event_item['eventType']['name']
     event_event_type_is_visit = event_item['eventType']['isVisit']
     event_event_type_description = event_item['eventType']['description']
-    event_segment = event_item['activities']
+    event_segments = event_item['activities']
     
     # NOTE: todo
 		#"childEvents": null, < appears to be empty unless it requires some parameter
@@ -265,6 +265,7 @@ module IMPORT
       
       # ... we create the event.
       event = Event.new
+      event.system_id = event_system_id
     end
     
     # We assign or update attributes.
@@ -272,7 +273,6 @@ module IMPORT
     event.start_at = event_start_at
     event.end_at = event_end_at
     event.cancelled_at = event_cancelled_at
-    event.system_id = event_system_id
     event.location_name = event_location_name if event_location_name
     event.originating_system = event_originating_system
     event.event_type = event_type
@@ -317,7 +317,53 @@ module IMPORT
     # We save the event.
     event.save
     
-    puts events_segement unless event_segments.empty?
+    # If the event has segments ...
+    unless event_segments.empty?
+    
+      # ... for each event segment item ...
+      event_segments.each do |event_segment_item|
+        
+        # ... we store the returned values.
+        event_segment_item_system_id = event_segment_item['id']
+        event_segment_item_name = event_segment_item['name']
+        event_segment_item_start_at = event_segment_item['startDate']
+        event_segment_item_end_at = event_segment_item['endDate']
+        event_segment_item_is_private = event_segment_item['isPrivate']
+        event_segment_item_activity_type = event_segment_item['activity_type']
+        
+        # We try to find the activity type.
+        activity_type = ActivityType.find_by_name( event_segment_item_activity_type )
+        
+        # If we don't find the activity type ...
+        unless activity_type
+          
+          # ... we create a new activity type.
+          activity_type = ActivityType.new
+          activity_type.name = event_segment_item_activity_type
+          activity_type.save
+        end
+        
+        # We try to find the event segment.
+        event_segment = EventSegment.find_by_system_id( event_segment_item_system_id )
+        
+        # Unless we find the event segment ...
+        unless event_segment
+          
+          # ... we create a new event segment.
+          event_segment = EventSegment.new
+          event_segment.system_id = event_segment_item_system_id
+        end
+        
+        # We assign or update attributes.
+        event_segment.name = event_segment_item_name
+        event_segment.start_at = event_segment_item_start_at
+        event_segment.end_at = event_segment_item_end_at
+        event_segment.is_private = event_segment_item_is_private
+        event_segment.event = event
+        event_segment.activity_type = activity_type
+        event_segment.save
+      end
+    end
   end
   
   # A method to import or update a work package.
