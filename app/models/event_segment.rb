@@ -1,0 +1,2 @@
+class EventSegment < ApplicationRecord
+end
