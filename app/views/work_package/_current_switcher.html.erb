@@ -1,5 +1,9 @@
+<nav>
 <p>
-	<%= link_to( "Current work packages (#{@current_work_packages.size})", work_package_current_url ) %>
-	&middot;
-	<%= link_to( "All work packages (#{@all_work_packages.size})", work_package_list_url ) %>
+	Work packages
+	-
+	<%= link_to( "current (#{@current_work_packages.size})", work_package_current_url ) %>
+	-
+	<%= link_to( "all (#{@all_work_packages.size})", work_package_list_url ) %>
 </p>
+</nav>
