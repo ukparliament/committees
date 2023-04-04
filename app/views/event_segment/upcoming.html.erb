@@ -1,0 +1,7 @@
+<%= render :partial => 'upcoming_switcher' %>
+<%= content_tag( 'h2', 'Current event segments' ) %>
+<%= content_tag( 'p', 'Subscribe to this calendar:' ) %>
+<input type="text" value="<%= url_for( event_segment_upcoming_url( :format => 'ics' ) ) %>"/>
+<ul>
+	<%= render :partial => 'event_segment', :collection => @upcoming_event_segments %>
+</ul>

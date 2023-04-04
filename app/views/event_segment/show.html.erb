@@ -1,0 +1,39 @@
+<div class="details">
+	<% if @event_segment.event.cancelled_at -%>
+		<%= content_tag( 'p', 'CANCELLED' ) %>
+	<% else -%>
+		<%= content_tag( 'p', link_to( 'Add to calendar', event_segment_show_url( :format => 'ics' ) ) ) %>
+	<% end -%>
+
+	<%= content_tag( 'p', @event_segment.times ) %>
+
+	<table>
+		<tbody>
+			<tr>
+				<%= content_tag( 'th', 'Location:' ) %>
+				<%= content_tag( 'td', @event_segment.location_display ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Type:' ) %>
+				<%= content_tag( 'td', link_to( @event_segment.activity_type.name, activity_type_upcoming_url( :activity_type => @event_segment.activity_type ) ) ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Is private:' ) %>
+				<%= content_tag( 'td', @event_segment.is_private ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Part of event:' ) %>
+				<%= content_tag( 'td', link_to( @event_segment.event.display_name, event_show_url( :event => @event_segment.event.system_id ) ) ) %>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<% unless @event_segment.oral_evidence_sessions.empty? -%>
+	<div id="oral-evidence-sessions">
+		<%= content_tag( 'h2', 'Oral evidence sessions' ) %>
+		<ul>
+			<%= render :partial => 'oral_evidence_session/oral_evidence_session', :collection => @event_segment.oral_evidence_sessions %>
+		</ul>
+	</div>
+<% end -%>

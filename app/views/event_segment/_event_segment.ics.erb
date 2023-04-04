@@ -1,0 +1,8 @@
+BEGIN:VEVENT
+DTSTART:<%= event_segment.start_at.strftime( '%Y%m%dT%H%M%S' ) %>
+SUMMARY:<%= event_segment.display_name %>
+LOCATION:<%= event_segment.location_display_escaped_for_ics %>
+URL:<%= event_segment_show_url( :event_segment => event_segment.system_id ) %>
+UID:<%= event_segment_show_url( :event_segment => event_segment.system_id ) %>
+DTSTAMP:19971210T080000Z
+END:VEVENT

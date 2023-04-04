@@ -1,0 +1,5 @@
+<%= render :partial => 'upcoming_switcher' %>
+<%= content_tag( 'h2', 'All event segments' ) %>
+<ul>
+	<%= render :partial => 'event_segment', :collection => @all_event_segments %>
+</ul>
