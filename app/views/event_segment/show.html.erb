@@ -29,11 +29,11 @@
 	</table>
 </div>
 
-<% unless @event_segment.oral_evidence_sessions.empty? -%>
-	<div id="oral-evidence-sessions">
-		<%= content_tag( 'h2', 'Oral evidence sessions' ) %>
+<% unless @event_segment.oral_evidence_transcripts.empty? -%>
+	<div id="oral-evidence-transcripts">
+		<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
 		<ul>
-			<%= render :partial => 'oral_evidence_session/oral_evidence_session', :collection => @event_segment.oral_evidence_sessions %>
+			<%= render :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @event_segment.oral_evidence_transcripts %>
 		</ul>
 	</div>
 <% end -%>
