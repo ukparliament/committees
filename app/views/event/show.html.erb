@@ -35,12 +35,14 @@
 	</table>
 </div>
 
-<div id="committees">
-	<%= content_tag( 'h2', 'Committees' ) %>
-	<ul>
-		<%= render :partial => 'committee/committee', :collection => @event.committees %>
-	</ul>
-</div>
+<% unless @event.committees.empty? -%>
+	<div id="committees">
+		<%= content_tag( 'h2', 'Committees' ) %>
+		<ul>
+			<%= render :partial => 'committee/committee', :collection => @event.committees %>
+		</ul>
+	</div>
+<% end -%>
 
 <% unless @event.event_segments.empty? -%>
 	<div id="segments">
