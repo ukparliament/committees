@@ -10,5 +10,5 @@ task :setup => [
   :import_work_packages,
   :link_committees_to_work_packages,
   :import_events,
-  :import_oral_evidence_sessions] do
+  :import_oral_evidence_transcripts] do
 end
