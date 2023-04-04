@@ -1,0 +1,6 @@
+<li>
+	<%= content_tag( 'h4', link_to( event_segment.display_name, event_segment_show_url( :event_segment => event_segment.system_id ) ) ) %>
+	<%= content_tag( 'p', event_segment.times, :class => 'times' ) %>
+	<%= content_tag( 'p', "Location: #{event_segment.location_display}", :class => 'location' ) %>
+	<%= content_tag( 'p', event_segment.activity_type_name, :class => 'activity-type' ) %>
+</li>

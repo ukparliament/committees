@@ -53,6 +53,18 @@ Rails.application.routes.draw do
   get 'committees/locations/:location' => 'location#show', :as => 'location_show'
   get 'committees/locations/:location/upcoming' => 'location#upcoming', :as => 'location_upcoming'
   
+  get 'committees/activity-types' => 'activity_type#index', :as => 'activity_type_list'
+  get 'committees/activity-types/:activity_type' => 'activity_type#show', :as => 'activity_type_show'
+  get 'committees/activity-types/:activity_type/upcoming' => 'activity_type#upcoming', :as => 'activity_type_upcoming'
+  
+  get 'committees/event-segments' => 'event_segment#index', :as => 'event_segment_list'
+  get 'committees/event-segments/upcoming' => 'event_segment#upcoming', :as => 'event_segment_upcoming'
+  get 'committees/event-segments/:event_segment' => 'event_segment#show', :as => 'event_segment_show'
+  
+  get 'committees/oral-evidence-sessions' => 'oral_evidence_session#index', :as => 'oral_evidence_session_list'
+  get 'committees/oral-evidence-sessions/upcoming' => 'oral_evidence_session#upcoming', :as => 'oral_evidence_session_upcoming'
+  get 'committees/oral-evidence-sessions/:oral_evidence_session' => 'oral_evidence_session#show', :as => 'oral_evidence_session_show'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end

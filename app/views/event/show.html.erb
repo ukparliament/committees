@@ -3,38 +3,50 @@
 <% else -%>
 	<%= content_tag( 'p', link_to( 'Add to calendar', event_show_url( :format => 'ics' ) ) ) %>
 <% end -%>
-<table>
-	<tbody>
-		<tr>
-			<%= content_tag( 'th', 'Start time:' ) %>
-			<%= content_tag( 'td', @event.start_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
-		</tr>
-		<tr>
-			<%= content_tag( 'th', 'End time:' ) %>
-			<%= content_tag( 'td', @event.end_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
-		</tr>
-		<tr>
-			<%= content_tag( 'th', 'Location:' ) %>
-			<%= content_tag( 'td', @event.location_display ) %>
-		</tr>
-		<tr>
-			<%= content_tag( 'th', 'Event type:' ) %>
-			<%= content_tag( 'td', @event.event_type_name ) %>
-		</tr>
-		<% if @event.cancelled_at -%>
-			<tr>
-				<%= content_tag( 'th', 'Cancelled at:' ) %>
-				<%= content_tag( 'td', @event.cancelled_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
-			</tr>
-		<% end -%>
-		<tr>
-			<%= content_tag( 'th', 'Originating system:' ) %>
-			<%= content_tag( 'td', @event.originating_system ) %>
-		</tr>
-	</tbody>
-</table>
 
-<%= content_tag( 'h2', 'Committees' ) %>
-<ul>
-	<%= render :partial => 'committee/committee', :collection => @event.committees %>
-</ul>
+<div id="details">
+	<%= content_tag( 'p', @event.times ) %>
+
+	<table>
+		<tbody>
+			<tr>
+				<%= content_tag( 'th', 'Location:' ) %>
+				<% if @event.location -%>
+					<%= content_tag( 'td', link_to( @event.location_display, location_show_url( :location => @event.location.system_id ) ) ) %>
+				<% else -%>
+					<%= content_tag( 'td', @event.location_display ) %>
+				<% end -%>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Event type:' ) %>
+				<%= content_tag( 'td', @event.event_type_name ) %>
+			</tr>
+			<% if @event.cancelled_at -%>
+				<tr>
+					<%= content_tag( 'th', 'Cancelled at:' ) %>
+					<%= content_tag( 'td', @event.cancelled_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
+				</tr>
+			<% end -%>
+			<tr>
+				<%= content_tag( 'th', 'Originating system:' ) %>
+				<%= content_tag( 'td', @event.originating_system ) %>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div id="committees">
+	<%= content_tag( 'h2', 'Committees' ) %>
+	<ul>
+		<%= render :partial => 'committee/committee', :collection => @event.committees %>
+	</ul>
+</div>
+
+<% unless @event.event_segments.empty? -%>
+	<div id="segments">
+		<%= content_tag( 'h2', 'Segments' ) %>
+		<ul>
+			<%= render :partial => 'event_segment/event_segment', :collection => @event.event_segments %>
+		</ul>
+	</div>
+<% end -%>

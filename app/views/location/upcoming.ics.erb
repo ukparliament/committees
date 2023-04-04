@@ -1,0 +1,6 @@
+BEGIN:VCALENDAR
+PRODID:https://api.parliament.uk/committees
+VERSION:2.0
+…
+<%= render :partial => 'event/event', :collection => @upcoming_events %>
+END:VCALENDAR
