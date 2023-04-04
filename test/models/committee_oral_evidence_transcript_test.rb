@@ -1,6 +1,6 @@
 require "test_helper"
 
-class CommitteeOralEvidenceSessionTest < ActiveSupport::TestCase
+class CommitteeOralEvidenceTranscriptTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
