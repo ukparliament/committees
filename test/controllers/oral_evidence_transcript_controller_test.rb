@@ -1,6 +1,6 @@
 require "test_helper"
 
-class OralEvidenceSessionControllerTest < ActionDispatch::IntegrationTest
+class OralEvidenceTranscriptControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end
