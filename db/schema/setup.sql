@@ -1,3 +1,4 @@
+drop table if exists committee_events;
 drop table if exists committee_work_packages;
 drop table if exists work_packages;
 drop table if exists scrutinisings;
@@ -9,6 +10,43 @@ drop table if exists departments;
 drop table if exists work_package_types;
 drop table if exists committees;
 drop table if exists parliamentary_houses;
+drop table if exists events;
+drop table if exists locations;
+drop table if exists event_types;
+
+
+
+create table event_types (
+	id serial not null,
+	name varchar(255),
+	is_visit boolean default false,
+	description varchar(5000) not null,
+	system_id int not null,
+	primary key (id)
+);
+
+create table locations (
+	id serial not null,
+	name varchar(255),
+	system_id int not null,
+	primary key (id)
+);
+
+create table events (
+	id serial not null,
+	name varchar(255),
+	start_at timestamp not null,
+	end_at timestamp not null,
+	cancelled_at timestamp,
+	location_name varchar(255),
+	originating_system varchar(255) not null,
+	system_id int not null,
+	location_id int,
+	event_type_id int not null,
+	constraint fk_location foreign key (location_id) references locations(id),
+	constraint fk_event_type foreign key (event_type_id) references event_types(id),
+	primary key (id)
+);
 
 create table work_package_types (
 	id serial not null,
@@ -118,5 +156,14 @@ create table committee_work_packages (
 	work_package_id int not null,
 	constraint fk_committee foreign key (committee_id) references committees(id),
 	constraint fk_work_package foreign key (work_package_id) references work_packages(id),
+	primary key (id)
+);
+
+create table committee_events (
+	id serial not null,
+	committee_id int not null,
+	event_id int not null,
+	constraint fk_committee foreign key (committee_id) references committees(id),
+	constraint fk_event foreign key (event_id) references events(id),
 	primary key (id)
 );

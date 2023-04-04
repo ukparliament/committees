@@ -2,6 +2,7 @@
 
 <%= render :partial => 'current_switcher' %>
 <%= content_tag( 'h2', 'Current work packages' ) %>
+<%= content_tag( 'p', link_to( 'RSS', work_package_type_current_url( :format => 'rss' ) ) ) %>
 <ul>
 	<%= render :partial => 'work_package/work_package', :collection => @work_package_type.current_work_packages %>
 </ul>

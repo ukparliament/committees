@@ -1,0 +1,12 @@
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', 'Work packages' ) %>
+
+<%= render :partial => 'committee_work_package_nav', :object => @committee %>
+
+<%= content_tag( 'h3', 'Current work packages' ) %>
+
+<%= content_tag( 'p', link_to( 'RSS', committee_work_package_current_url( :format => 'rss' ) ) ) %>
+<ul>
+	<%= render :partial => 'work_package/work_package', :collection => @current_work_packages %>
+</ul>

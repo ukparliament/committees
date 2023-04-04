@@ -4,8 +4,12 @@
 		&middot;
 		<%= link_to( "Contact", committee_contact_url ) %>
 	<% end -%>
-	<% unless committee_nav.work_packages.empty? -%>
+	<% unless committee_nav.all_work_packages.empty? -%>
 		&middot;
-		<%= link_to( "Work packages", committee_work_package_list_url ) %>
+		<%= link_to( "Work packages", committee_work_package_current_url ) %>
+	<% end -%>
+	<% unless committee_nav.all_events.empty? -%>
+		&middot;
+		<%= link_to( "Events", committee_event_upcoming_url ) %>
 	<% end -%>
 </p>

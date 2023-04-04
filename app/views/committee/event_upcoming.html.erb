@@ -1,0 +1,14 @@
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', 'Events' ) %>
+
+<%= render :partial => 'committee_event_nav', :object => @committee %>
+
+<%= content_tag( 'h3', 'Upcoming events' ) %>
+
+<%= content_tag( 'p', 'Subscribe to this calendar:' ) %>
+<input type="text" value="<%= url_for( committee_event_upcoming_url( :format => 'ics' ) ) %>"/>
+
+<ul>
+	<%= render :partial => 'event/event', :collection => @upcoming_events %>
+</ul>
