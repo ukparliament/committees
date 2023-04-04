@@ -45,6 +45,14 @@
 					-
 				 	<%= link_to( 'by location', location_list_url ) %>
   		  		</p>
+				<p>
+					<%= link_to( 'EVENT SEGMENTS', event_segment_upcoming_url ) %>
+					-
+				 	<%= link_to( 'by activity type', activity_type_list_url ) %>
+  		  		</p>
+				<p>
+					<%= link_to( 'ORAL EVIDENCE SESSIONS', oral_evidence_session_upcoming_url ) %>
+  		  		</p>
 			</nav>
 			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
 		</header>
