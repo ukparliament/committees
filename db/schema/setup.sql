@@ -1,6 +1,6 @@
-drop table if exists committee_oral_evidence_sessions;
-drop table if exists work_package_oral_evidence_sessions;
-drop table if exists oral_evidence_sessions;
+drop table if exists committee_oral_evidence_transcripts;
+drop table if exists work_package_oral_evidence_transcripts;
+drop table if exists oral_evidence_transcripts;
 drop table if exists event_segments;
 drop table if exists committee_events;
 drop table if exists committee_work_packages;
@@ -193,7 +193,7 @@ create table event_segments (
 	primary key (id)
 );
 
-create table oral_evidence_sessions (
+create table oral_evidence_transcripts (
 	id serial not null,
 	start_on date not null,
 	start_at timestamp,
@@ -206,20 +206,20 @@ create table oral_evidence_sessions (
 	primary key (id)
 );
 
-create table committee_oral_evidence_sessions (
+create table committee_oral_evidence_transcripts (
 	id serial not null,
 	committee_id int not null,
-	oral_evidence_session_id int not null,
+	oral_evidence_transcript_id int not null,
 	constraint fk_committee foreign key (committee_id) references committees(id),
-	constraint fk_oral_evidence_session foreign key (oral_evidence_session_id) references oral_evidence_sessions(id),
+	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
 	primary key (id)
 );
 
-create table work_package_oral_evidence_sessions (
+create table work_package_oral_evidence_transcripts (
 	id serial not null,
 	work_package_id int not null,
-	oral_evidence_session_id int not null,
+	oral_evidence_transcript_id int not null,
 	constraint fk_work_package foreign key (work_package_id) references work_packages(id),
-	constraint fk_oral_evidence_session foreign key (oral_evidence_session_id) references oral_evidence_sessions(id),
+	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
 	primary key (id)
 );
