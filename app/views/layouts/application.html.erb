@@ -6,8 +6,6 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<style>		body {font-family: system-ui;padding:1rem;font-size:1.2rem;line-height:1.4;max-width:42rem;margin:0.5rem auto;}
 		h1, h2, h3, h4 {font-weight:normal;}
-		li h2, li h3 {font-size: 1em;}
-		li .sub-committee-number, li .dates, li .times, li .location, li .cancelled, li .activity-type {font-size: .8em;}
 		th, td {text-align: left;vertical-align: top;padding: .5em;font-weight:normal;}
 		td ul {list-style:none;margin:0;padding:0;}
 		footer {padding-top:2rem;}
@@ -15,14 +13,24 @@
 </head>
 <body>
 <header>
-	<nav>
-		<details open> <summary> 
+
 <%= content_tag( 'span', link_to( 'Committees', home_url ) ) %>
+
+<%= content_tag( 'h1', @page_title || 'Committees' ) %>
+</header>
+<main> 
+<%= yield %>
+</main> 
+<footer>
+	<nav>
+
+Committees
 		- 
 <%= link_to( 'current', committee_current_url ) %>
 		- 
 <%= link_to( 'joint', joint_current_url ) %>
-		</summary>by 
+		<br>
+		by 
 <%= link_to( 'category', committee_category_list_url ) %>
 		… 
 <%= link_to( 'type', committee_type_list_url ) %>
@@ -53,22 +61,14 @@
 		<p>
 <%= link_to( 'Oral evidence sessions', oral_evidence_session_upcoming_url ) %>
 		</p>
-		</details> 
 	</nav>
-
-<%= content_tag( 'h1', @page_title || 'Committees' ) %>
-</header>
-<main> 
-<%= yield %>
-</main> 
-<footer>
-	<nav>
+	
 		<p>
 			This site includes information made available at parliament.uk under the <a href='https://www.parliament.uk/site-information/copyright-parliament/open-parliament-licence/' rel='licence'>Open Parliament Licence</a>.
 		</p>
 
 <%= content_tag( 'p', link_to( 'Meta', meta_list_url ) ) %>
-	</nav>
+
 </footer>
 </body>
 </html>
