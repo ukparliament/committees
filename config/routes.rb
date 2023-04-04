@@ -61,9 +61,9 @@ Rails.application.routes.draw do
   get 'committees/event-segments/upcoming' => 'event_segment#upcoming', :as => 'event_segment_upcoming'
   get 'committees/event-segments/:event_segment' => 'event_segment#show', :as => 'event_segment_show'
   
-  get 'committees/oral-evidence-sessions' => 'oral_evidence_session#index', :as => 'oral_evidence_session_list'
-  get 'committees/oral-evidence-sessions/upcoming' => 'oral_evidence_session#upcoming', :as => 'oral_evidence_session_upcoming'
-  get 'committees/oral-evidence-sessions/:oral_evidence_session' => 'oral_evidence_session#show', :as => 'oral_evidence_session_show'
+  get 'committees/oral-evidence-transcripts' => 'oral_evidence_transcript#index', :as => 'oral_evidence_transcript_list'
+  get 'committees/oral-evidence-transcripts/upcoming' => 'oral_evidence_transcript#upcoming', :as => 'oral_evidence_transcript_upcoming'
+  get 'committees/oral-evidence-transcripts/:oral_evidence_transcript' => 'oral_evidence_transcript#show', :as => 'oral_evidence_transcript_show'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
