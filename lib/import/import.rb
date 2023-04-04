@@ -214,8 +214,8 @@ module IMPORT
   end
   
   # A method to import all oral evidence sessions.
-  def import_oral_evidence_sessions( skip )
-    puts "importing oral evidence sessions"
+  def import_oral_evidence_transcripts( skip )
+    puts "importing oral evidence transcripts"
     
     # We set the URL to import from.
     url = "https://committees-api.parliament.uk/api/OralEvidence?take=30&skip=#{skip}"
@@ -223,11 +223,11 @@ module IMPORT
     # We get the JSON.
     json = JSON.load( URI.open( url ) )
     
-    # For each oral evidence session item in the feed ....
-    json['items'].each do |oral_evidence_session_item|
+    # For each oral evidence transcript item in the feed ....
+    json['items'].each do |oral_evidence_transcript_item|
       
-      # ... we import or update the oral evidence session.
-      import_or_update_oral_evidence_session( oral_evidence_session_item )
+      # ... we import or update the oral evidence transcript.
+      import_or_update_oral_evidence_transcript( oral_evidence_transcript_item )
     end
     
     # We get the total results count from the API.
@@ -237,74 +237,74 @@ module IMPORT
     if total_results > skip
       
       # ... we call this method again, incrementing the skip by by 30 results.
-      import_oral_evidence_sessions( skip + 30 )
+      import_oral_evidence_transcripts( skip + 30 )
     end
   end
   
-  def import_or_update_oral_evidence_session( oral_evidence_session_item )
+  def import_or_update_oral_evidence_transcript( oral_evidence_transcript_item )
     
     # We store the returned values.
-    oral_evidence_session_system_id = oral_evidence_session_item['id']
-    oral_evidence_session_event_segment_system_id = oral_evidence_session_item['activityId']
-    oral_evidence_session_start_on = oral_evidence_session_item['activityStartDate']
-    oral_evidence_session_start_at = oral_evidence_session_item['activityStartAt']
-    oral_evidence_session_legacy_html_url = oral_evidence_session_item['legacyHtmlUrl']
-    oral_evidence_session_legacy_pdf_url = oral_evidence_session_item['legacyPdfUrl']
-    oral_evidence_session_published_on = oral_evidence_session_item['publicationDate']
-    #oral_evidence_session_document = oral_evidence_session_item['document']
-    #oral_evidence_session_house_of_commons_numbers = oral_evidence_session_item['hcNumbers']
-    #oral_evidence_session_witnesses = oral_evidence_session_item['witnesses']
-    oral_evidence_session_work_packages = oral_evidence_session_item['committeeBusinesses']
-    oral_evidence_session_committees = oral_evidence_session_item['committees']
+    oral_evidence_transcript_system_id = oral_evidence_transcript_item['id']
+    oral_evidence_transcript_event_segment_system_id = oral_evidence_transcript_item['activityId']
+    oral_evidence_transcript_start_on = oral_evidence_transcript_item['activityStartDate']
+    oral_evidence_transcript_start_at = oral_evidence_transcript_item['activityStartAt']
+    oral_evidence_transcript_legacy_html_url = oral_evidence_transcript_item['legacyHtmlUrl']
+    oral_evidence_transcript_legacy_pdf_url = oral_evidence_transcript_item['legacyPdfUrl']
+    oral_evidence_transcript_published_on = oral_evidence_transcript_item['publicationDate']
+    #oral_evidence_transcript_document = oral_evidence_transcript_item['document']
+    #oral_evidence_transcript_house_of_commons_numbers = oral_evidence_transcript_item['hcNumbers']
+    #oral_evidence_transcript_witnesses = oral_evidence_transcript_item['witnesses']
+    oral_evidence_transcript_work_packages = oral_evidence_transcript_item['committeeBusinesses']
+    oral_evidence_transcript_committees = oral_evidence_transcript_item['committees']
     
     # We find the associated event segment.
-    event_segment = EventSegment.find_by_system_id( oral_evidence_session_event_segment_system_id )
+    event_segment = EventSegment.find_by_system_id( oral_evidence_transcript_event_segment_system_id )
     
-    # We attempt to find the oral evidence session.
-    oral_evidence_session = OralEvidenceSession.find_by_system_id( oral_evidence_session_system_id )
+    # We attempt to find the oral evidence transcript.
+    oral_evidence_transcript = OralEvidenceTranscript.find_by_system_id( oral_evidence_transcript_system_id )
     
-    # If we don't find the oral evidence session ...
-    unless oral_evidence_session
+    # If we don't find the oral evidence transcript ...
+    unless oral_evidence_transcript
       
-      # ... we create a new oral evidence session.
-      oral_evidence_session = OralEvidenceSession.new
-      oral_evidence_session.system_id = oral_evidence_session_system_id
+      # ... we create a new oral evidence transcript.
+      oral_evidence_transcript = OralEvidenceTranscript.new
+      oral_evidence_transcript.system_id = oral_evidence_transcript_system_id
     end
     
     # We assign or update attributes.
-    oral_evidence_session.start_on = oral_evidence_session_start_on
-    oral_evidence_session.start_at = oral_evidence_session_start_at
-    oral_evidence_session.legacy_html_url = oral_evidence_session_legacy_html_url
-    oral_evidence_session.legacy_pdf_url = oral_evidence_session_legacy_pdf_url
-    oral_evidence_session.published_on = oral_evidence_session_published_on
+    oral_evidence_transcript.start_on = oral_evidence_transcript_start_on
+    oral_evidence_transcript.start_at = oral_evidence_transcript_start_at
+    oral_evidence_transcript.legacy_html_url = oral_evidence_transcript_legacy_html_url
+    oral_evidence_transcript.legacy_pdf_url = oral_evidence_transcript_legacy_pdf_url
+    oral_evidence_transcript.published_on = oral_evidence_transcript_published_on
     # NOTE: the najority of oral evidence sessions are associated with an event segment. A minority are not.
     # Missing event segments are: 11373, 11399, 12490, 12497, 12514, 12529, 12535, 12571, 12572, 12588, 12601, 12635, 12643, 12645, 12721, 12760, 19417, 19419, 19420
     # Oral evidence sessions with no event segment are: 4535, 4561, 5652, 5659, 5676, 5691, 5697, 5733, 5734, 5750, 5763, 5797, 5805, 5807, 5883, 5922, 10872, 10874, 10875
-    oral_evidence_session.event_segment = event_segment if event_segment
-    oral_evidence_session.save!
+    oral_evidence_transcript.event_segment = event_segment if event_segment
+    oral_evidence_transcript.save!
     
     # Unless the oral evidence is not associated with any work packages ...
-    unless oral_evidence_session_work_packages.empty?
+    unless oral_evidence_transcript_work_packages.empty?
       
-      # ... we attempt to associate the oral evidence session with its work packages.
-      associate_oral_evidence_session_with_work_packages( oral_evidence_session, oral_evidence_session_work_packages )
+      # ... we attempt to associate the oral evidence transcript with its work packages.
+      associate_oral_evidence_transcript_with_work_packages( oral_evidence_transcript, oral_evidence_transcript_work_packages )
     end
     
     # Unless the oral evidence is not associated with any committees ...
-    unless oral_evidence_session_committees.empty?
+    unless oral_evidence_transcript_committees.empty?
       
-      # ... we attempt to associate the oral evidence session with its committees.
-      associate_oral_evidence_session_with_committees( oral_evidence_session, oral_evidence_session_committees )
+      # ... we attempt to associate the oral evidence transcript with its committees.
+      associate_oral_evidence_transcript_with_committees( oral_evidence_transcript, oral_evidence_transcript_committees )
     end
   end
   
   
   
-  # A method to associate an oral evidence session with its work packages.
-  def associate_oral_evidence_session_with_work_packages( oral_evidence_session, oral_evidence_session_work_packages )
+  # A method to associate an oral evidence transcript with its work packages.
+  def associate_oral_evidence_transcript_with_work_packages( oral_evidence_transcript, oral_evidence_transcript_work_packages )
     
     # For each work package item associated with the oral evidence ...
-    oral_evidence_session_work_packages.each do |work_package_item|
+    oral_evidence_transcript_work_packages.each do |work_package_item|
       
       # ... we get the ID of the work package.
       work_package_item_system_id = work_package_item['id']
@@ -312,26 +312,26 @@ module IMPORT
       # We find the work package.
       work_package = WorkPackage.find_by_system_id( work_package_item_system_id )
       
-      # We attempt to find an existing work package oral evidence session.
-      work_package_oral_evidence_session = WorkPackageOralEvidenceSession.all.where( "work_package_id = ?", work_package.id ).where( "oral_evidence_session_id = ?", oral_evidence_session.id ).first
+      # We attempt to find an existing work package oral evidence transcript.
+      work_package_oral_evidence_transcript = WorkPackageOralEvidenceTranscript.all.where( "work_package_id = ?", work_package.id ).where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id ).first
       
-      # Unless the work package oral evidence session exists ...
-      unless work_package_oral_evidence_session
+      # Unless the work package oral evidence transcript exists ...
+      unless work_package_oral_evidence_transcript
         
-        # ... we create a new work package oral evidence session.
-        work_package_oral_evidence_session = WorkPackageOralEvidenceSession.new
-        work_package_oral_evidence_session.work_package = work_package
-        work_package_oral_evidence_session.oral_evidence_session = oral_evidence_session
-        work_package_oral_evidence_session.save!
+        # ... we create a new work package oral evidence transcript.
+        work_package_oral_evidence_transcript = WorkPackageOralEvidenceTranscript.new
+        work_package_oral_evidence_transcript.work_package = work_package
+        work_package_oral_evidence_transcript.oral_evidence_transcript = oral_evidence_transcript
+        work_package_oral_evidence_transcript.save!
       end
     end
   end
   
-  # A method to associate an oral evidence session with its committees.
-  def associate_oral_evidence_session_with_committees( oral_evidence_session, oral_evidence_session_committees )
+  # A method to associate an oral evidence transcript with its committees.
+  def associate_oral_evidence_transcript_with_committees( oral_evidence_transcript, oral_evidence_transcript_committees )
     
     # For each committee item associated with the oral evidence ...
-    oral_evidence_session_committees.each do |committee_item|
+    oral_evidence_transcript_committees.each do |committee_item|
       
       # ... we get the ID of the committee.
       committee_item_system_id = committee_item['id']
@@ -342,17 +342,17 @@ module IMPORT
       # If we find the committee ...
       if committee
       
-        # ... we attempt to find an existing committee oral evidence session.
-        committee_oral_evidence_session = CommitteeOralEvidenceSession.all.where( "committee_id = ?", committee.id ).where( "oral_evidence_session_id = ?", oral_evidence_session.id ).first
+        # ... we attempt to find an existing committee oral evidence transcript.
+        committee_oral_evidence_transcript = CommitteeOralEvidenceTranscript.all.where( "committee_id = ?", committee.id ).where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id ).first
       
-        # Unless the committee oral evidence session exists ...
-        unless committee_oral_evidence_session
+        # Unless the committee oral evidence transcript exists ...
+        unless committee_oral_evidence_transcript
         
-          # ... we create a new work package oral evidence session.
-          committee_oral_evidence_session = CommitteeOralEvidenceSession.new
-          committee_oral_evidence_session.committee = committee
-          committee_oral_evidence_session.oral_evidence_session = oral_evidence_session
-          committee_oral_evidence_session.save!
+          # ... we create a new work package oral evidence transcript.
+          committee_oral_evidence_transcript = CommitteeOralEvidenceTranscript.new
+          committee_oral_evidence_transcript.committee = committee
+          committee_oral_evidence_transcript.oral_evidence_transcript = oral_evidence_transcript
+          committee_oral_evidence_transcript.save!
         end
       end
     end
