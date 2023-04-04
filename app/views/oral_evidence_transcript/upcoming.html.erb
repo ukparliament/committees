@@ -1,0 +1,5 @@
+<%= render :partial => 'upcoming_switcher' %>
+<%= content_tag( 'h2', 'Upcoming oral evidence transcripts' ) %>
+<ul>
+	<%= render :partial => 'oral_evidence_transcript', :collection => @upcoming_oral_evidence_transcripts %>
+</ul>
