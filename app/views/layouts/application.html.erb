@@ -19,11 +19,11 @@
 		<header>			
 			<nav>
 				<p>
-					<%= content_tag( 'span', link_to( 'COMMITTEES', home_url ) ) %>
+					<%= content_tag( 'span', link_to( 'Committees', home_url ) ) %>
 				 	-
-				 	<%= link_to( 'Current', committee_current_url ) %>
+				 	<%= link_to( 'current', committee_current_url ) %>
 					-
-					<%= link_to( 'Joint', joint_current_url ) %>
+					<%= link_to( 'joint', joint_current_url ) %>
 					<br>
 					by <%= link_to( 'category', committee_category_list_url ) %>
 					&hellip;
@@ -34,24 +34,24 @@
 					<%= link_to( 'department', department_list_url ) %>
 				</p>
 				<p>
-					<%= link_to( 'WORK PACKAGES', work_package_current_url ) %>
+					<%= link_to( 'Work packages', work_package_current_url ) %>
 					<br>
   		  			by <%= link_to( 'type', work_package_type_list_url ) %>
 				</p>
 				<p>
-					<%= link_to( 'EVENTS', event_upcoming_url ) %>
+					<%= link_to( 'Events', event_upcoming_url ) %>
 					<br>
 				 	by <%= link_to( 'type', event_type_list_url ) %>
 					&hellip;
 				 	<%= link_to( 'location', location_list_url ) %>
   		  		</p>
 				<p>
-					<%= link_to( 'EVENT SEGMENTS', event_segment_upcoming_url ) %>
+					<%= link_to( 'Event segments', event_segment_upcoming_url ) %>
 					<br>
 				 	by <%= link_to( 'activity type', activity_type_list_url ) %>
   		  		</p>
 				<p>
-					<%= link_to( 'ORAL EVIDENCE SESSIONS', oral_evidence_session_upcoming_url ) %>
+					<%= link_to( 'Oral evidence sessions', oral_evidence_session_upcoming_url ) %>
   		  		</p>
 			</nav>
 			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
