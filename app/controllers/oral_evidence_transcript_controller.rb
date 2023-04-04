@@ -44,7 +44,7 @@ class OralEvidenceTranscriptController < ApplicationController
       "
         SELECT oet.*
         FROM oral_evidence_transcripts oet
-        WHERE oet.system_id = #{oral_evidence_session}
+        WHERE oet.system_id = #{oral_evidence_transcript}
         LIMIT 1;
       "
     ).first
