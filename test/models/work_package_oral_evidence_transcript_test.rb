@@ -1,6 +1,6 @@
 require "test_helper"
 
-class WorkPackageOralEvidenceSessionTest < ActiveSupport::TestCase
+class WorkPackageOralEvidenceTranscriptTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
