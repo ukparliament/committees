@@ -30,13 +30,13 @@ class EventSegment < ApplicationRecord
     self.location_display.gsub( ',', '\,')
   end
   
-  def oral_evidence_sessions
-    OralEvidenceSession.find_by_sql(
+  def oral_evidence_transcripts
+    OralEvidenceTranscript.find_by_sql(
       "
-        SELECT oes.*
-        FROM oral_evidence_sessions oes
-        WHERE oes.event_segment_id = #{self.id}
-        ORDER BY oes.published_on
+        SELECT oet.*
+        FROM oral_evidence_transcripts oet
+        WHERE oet.event_segment_id = #{self.id}
+        ORDER BY oet.published_on
       "
     )
   end
