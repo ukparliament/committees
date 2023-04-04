@@ -16,15 +16,22 @@
 		</style>
 	</head>
 	<body>
-		<header>			
+		<header>	
+		
+		
+
+		
 			<nav>
-				<p>
-					<%= content_tag( 'span', link_to( 'Committees', home_url ) ) %>
+			
+			
+			<details open>
+    <summary>
+    <%= content_tag( 'span', link_to( 'Committees', home_url ) ) %>
 				 	-
 				 	<%= link_to( 'current', committee_current_url ) %>
 					-
 					<%= link_to( 'joint', joint_current_url ) %>
-					<br>
+					</summary>
 					by <%= link_to( 'category', committee_category_list_url ) %>
 					&hellip;
   		  			<%= link_to( 'type', committee_type_list_url ) %>
@@ -32,7 +39,7 @@
   		  			<%= link_to( 'House', house_list_url ) %>
 					&hellip;
 					<%= link_to( 'department', department_list_url ) %>
-				</p>
+				
 				<p>
 					<%= link_to( 'Work packages', work_package_current_url ) %>
 					<br>
@@ -53,6 +60,7 @@
 				<p>
 					<%= link_to( 'Oral evidence sessions', oral_evidence_session_upcoming_url ) %>
   		  		</p>
+  		  		</details>
 			</nav>
 			<%= content_tag( 'h1', @page_title || 'Committees' ) %>
 		</header>
