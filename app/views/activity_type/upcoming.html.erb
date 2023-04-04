@@ -1,0 +1,10 @@
+<%= content_tag( 'h2', 'Event segments' ) %>
+
+<%= render :partial => 'event_segment_nav' %>
+
+<%= content_tag( 'h3', 'Upcoming event segments' ) %>
+<%= content_tag( 'p', 'Subscribe to this calendar:' ) %>
+<input type="text" value="<%= url_for( activity_type_upcoming_url( :format => 'ics' ) ) %>"/>
+<ul>
+	<%= render :partial => 'event_segment/event_segment', :collection => @upcoming_event_segments %>
+</ul>
