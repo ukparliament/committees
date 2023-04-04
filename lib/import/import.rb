@@ -30,7 +30,7 @@ module IMPORT
         category = Category.new
         category.system_id = committee_type_item_category_system_id
         category.name = committee_type_item_category_name
-        category.save
+        category.save!
       end
       
       # We attempt to find the committee type.
@@ -44,7 +44,7 @@ module IMPORT
         committee_type.system_id = committee_type_item_system_id
         committee_type.name = committee_type_item_name
         committee_type.category = category
-        committee_type.save
+        committee_type.save!
       end
     end
   end
@@ -54,7 +54,7 @@ module IMPORT
     puts "importing committees"
     
     # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/Committees?CommitteeStatus=all&take=30&skip=#{skip}"
+    url = "https://committees-api.parliament.uk/api/Committees?CommitteeStatus=all&ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
     
     # We get the JSON.
     json = JSON.load( URI.open( url ) )
@@ -108,14 +108,12 @@ module IMPORT
         work_package_type.description = business_type_item_description
         work_package_type.is_inquiry = business_type_item_is_inquiry
         work_package_type.system_id = business_type_item_system_id
-        work_package_type.save
+        work_package_type.save!
       end
     end
   end
   
-  
-  
-  # NOTE: should we creating work packages in link_committees_to_work_packages?
+  # NOTE: should we be creating work packages in link_committees_to_work_packages?
   # A method to import all work packages.
   def import_work_packages( skip )
     puts "importing work packages"
@@ -215,10 +213,150 @@ module IMPORT
     end
   end
   
+  # A method to import all oral evidence sessions.
+  def import_oral_evidence_sessions( skip )
+    #puts "importing oral evidence sessions"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/OralEvidence?take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each oral evidence session item in the feed ....
+    json['items'].each do |oral_evidence_session_item|
+      
+      # ... we import or update the oral evidence session.
+      import_or_update_oral_evidence_session( oral_evidence_session_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_oral_evidence_sessions( skip + 30 )
+    end
+  end
+  
+  def import_or_update_oral_evidence_session( oral_evidence_session_item )
+    
+    # We store the returned values.
+    oral_evidence_session_system_id = oral_evidence_session_item['id']
+    oral_evidence_session_event_segment_system_id = oral_evidence_session_item['activityId']
+    oral_evidence_session_start_on = oral_evidence_session_item['activityStartDate']
+    oral_evidence_session_start_at = oral_evidence_session_item['activityStartAt']
+    oral_evidence_session_legacy_html_url = oral_evidence_session_item['legacyHtmlUrl']
+    oral_evidence_session_legacy_pdf_url = oral_evidence_session_item['legacyPdfUrl']
+    oral_evidence_session_published_on = oral_evidence_session_item['publicationDate']
+    #oral_evidence_session_document = oral_evidence_session_item['document']
+    #oral_evidence_session_house_of_commons_numbers = oral_evidence_session_item['hcNumbers']
+    #oral_evidence_session_witnesses = oral_evidence_session_item['witnesses']
+    oral_evidence_session_work_packages = oral_evidence_session_item['committeeBusinesses']
+    oral_evidence_session_committees = oral_evidence_session_item['committees']
+    
+    # We find the associated event segment.
+    event_segment = EventSegment.find_by_system_id( oral_evidence_session_event_segment_system_id )
+    
+    # We attempt to find the oral evidence session.
+    oral_evidence_session = OralEvidenceSession.find_by_system_id( oral_evidence_session_system_id )
+    
+    # If we don't find the oral evidence session ...
+    unless oral_evidence_session
+      
+      # ... we create a new oral evidence session.
+      oral_evidence_session = OralEvidenceSession.new
+      oral_evidence_session.system_id = oral_evidence_session_system_id
+    end
+    
+    # We assign or update attributes.
+    oral_evidence_session.start_on = oral_evidence_session_start_on
+    oral_evidence_session.start_at = oral_evidence_session_start_at
+    oral_evidence_session.legacy_html_url = oral_evidence_session_legacy_html_url
+    oral_evidence_session.legacy_pdf_url = oral_evidence_session_legacy_pdf_url
+    oral_evidence_session.published_on = oral_evidence_session_published_on
+    # NOTE: the najority of oral evidence sessions are associated with an event segment. A minority are not.
+    # Missing event segments are: 11373, 11399, 12490, 12497, 12514, 12529, 12535, 12571, 12572, 12588, 12601, 12635, 12643, 12645, 12721, 12760, 19417, 19419, 19420
+    # Oral evidence sessions with no event segment are: 4535, 4561, 5652, 5659, 5676, 5691, 5697, 5733, 5734, 5750, 5763, 5797, 5805, 5807, 5883, 5922, 10872, 10874, 10875
+    oral_evidence_session.event_segment = event_segment if event_segment
+    oral_evidence_session.save!
+    
+    # Unless the oral evidence is not associated with any work packages ...
+    unless oral_evidence_session_work_packages.empty?
+      
+      # ... we attempt to associate the oral evidence session with its work packages.
+      associate_oral_evidence_session_with_work_packages( oral_evidence_session, oral_evidence_session_work_packages )
+    end
+    
+    # Unless the oral evidence is not associated with any committees ...
+    unless oral_evidence_session_committees.empty?
+      
+      # ... we attempt to associate the oral evidence session with its committees.
+      associate_oral_evidence_session_with_committees( oral_evidence_session, oral_evidence_session_committees )
+    end
+  end
   
   
   
+  # A method to associate an oral evidence session with its work packages.
+  def associate_oral_evidence_session_with_work_packages( oral_evidence_session, oral_evidence_session_work_packages )
+    
+    # For each work package item associated with the oral evidence ...
+    oral_evidence_session_work_packages.each do |work_package_item|
+      
+      # ... we get the ID of the work package.
+      work_package_item_system_id = work_package_item['id']
+      
+      # We find the work package.
+      work_package = WorkPackage.find_by_system_id( work_package_item_system_id )
+      
+      # We attempt to find an existing work package oral evidence session.
+      work_package_oral_evidence_session = WorkPackageOralEvidenceSession.all.where( "work_package_id = ?", work_package.id ).where( "oral_evidence_session_id = ?", oral_evidence_session.id ).first
+      
+      # Unless the work package oral evidence session exists ...
+      unless work_package_oral_evidence_session
+        
+        # ... we create a new work package oral evidence session.
+        work_package_oral_evidence_session = WorkPackageOralEvidenceSession.new
+        work_package_oral_evidence_session.work_package = work_package
+        work_package_oral_evidence_session.oral_evidence_session = oral_evidence_session
+        work_package_oral_evidence_session.save!
+      end
+    end
+  end
   
+  # A method to associate an oral evidence session with its committees.
+  def associate_oral_evidence_session_with_committees( oral_evidence_session, oral_evidence_session_committees )
+    
+    # For each committee item associated with the oral evidence ...
+    oral_evidence_session_committees.each do |committee_item|
+      
+      # ... we get the ID of the committee.
+      committee_item_system_id = committee_item['id']
+      
+      # We attempt to find the committee.
+      committee = Committee.find_by_system_id( committee_item_system_id )
+      
+      # If we find the committee ...
+      if committee
+      
+        # ... we attempt to find an existing committee oral evidence session.
+        committee_oral_evidence_session = CommitteeOralEvidenceSession.all.where( "committee_id = ?", committee.id ).where( "oral_evidence_session_id = ?", oral_evidence_session.id ).first
+      
+        # Unless the committee oral evidence session exists ...
+        unless committee_oral_evidence_session
+        
+          # ... we create a new work package oral evidence session.
+          committee_oral_evidence_session = CommitteeOralEvidenceSession.new
+          committee_oral_evidence_session.committee = committee
+          committee_oral_evidence_session.oral_evidence_session = oral_evidence_session
+          committee_oral_evidence_session.save!
+        end
+      end
+    end
+  end
   
   # A method to import an event.
   def import_or_update_event( event_item )
@@ -254,7 +392,7 @@ module IMPORT
       event_type.is_visit = event_event_type_is_visit
       event_type.description = event_event_type_description
       event_type.system_id = event_event_type_system_id
-      event_type.save
+      event_type.save!
     end
     
     # We attempt to find the event.
@@ -291,7 +429,7 @@ module IMPORT
       committee_event = CommitteeEvent.new
       committee_event.committee = committee
       committee_event.event = event
-      committee_event.save
+      committee_event.save!
     end
     
     # If the event has a location ID ...
@@ -307,7 +445,7 @@ module IMPORT
         location = Location.new
         location.name = event_location_name
         location.system_id = event_location_id
-        location.save
+        location.save!
       end
       
       # We associate the event with the location.
@@ -315,7 +453,7 @@ module IMPORT
     end
     
     # We save the event.
-    event.save
+    event.save!
     
     # If the event has segments ...
     unless event_segments.empty?
@@ -329,7 +467,7 @@ module IMPORT
         event_segment_item_start_at = event_segment_item['startDate']
         event_segment_item_end_at = event_segment_item['endDate']
         event_segment_item_is_private = event_segment_item['isPrivate']
-        event_segment_item_activity_type = event_segment_item['activity_type']
+        event_segment_item_activity_type = event_segment_item['activityType']
         
         # We try to find the activity type.
         activity_type = ActivityType.find_by_name( event_segment_item_activity_type )
@@ -340,7 +478,7 @@ module IMPORT
           # ... we create a new activity type.
           activity_type = ActivityType.new
           activity_type.name = event_segment_item_activity_type
-          activity_type.save
+          activity_type.save!
         end
         
         # We try to find the event segment.
@@ -361,7 +499,7 @@ module IMPORT
         event_segment.is_private = event_segment_item_is_private
         event_segment.event = event
         event_segment.activity_type = activity_type
-        event_segment.save
+        event_segment.save!
       end
     end
   end
@@ -395,7 +533,7 @@ module IMPORT
     work_package.close_on = work_package_close_on
     work_package.system_id = work_package_system_id
     work_package.work_package_type = work_package_type
-    work_package.save
+    work_package.save!
     
 	
 		#	"latestReport": null,
@@ -440,6 +578,9 @@ module IMPORT
       
       # ... we attempt to find the parent committee.
       parent_committee = Committee.find_by_system_id( committee_parent_committee_system_id )
+      
+      # We flag an error if we don't find the parent committee.
+      puts "Committee #{committee_system_id} has parent committee #{committee_parent_committee_system_id} - not loaded into database" unless parent_committee
     end
     
     # If the committee has no parent committtee or if we've found the parent committee ...
@@ -447,30 +588,17 @@ module IMPORT
     
       # ... we attempt to find the committee.
       committee = Committee.find_by_system_id( committee_system_id )
-      
-      # NOTE: committee 352 - Education, Skills and the Economy Sub-Committee - declares its parent as committee 9 - Business, Innovation and Skills Committee - but the latter doesn't exist in the API.
-      # Because we don't create a committee with a parent committee until we've created its parent, in this case we can create neither parent nor child.
     
       # If we fail to find the committee ...
       unless committee
       
         # ... we create the committee.
         committee = Committee.new
-        committee.name = committee_name
         committee.system_id = committee_system_id
-        committee.parent_committee_id = parent_committee.id if parent_committee
-        
-        # We associate the committee with a House or Houses.
-        associate_committee_with_house( committee, committee_house )
-        
-        # We associate the committee with its types.
-        associate_committee_with_type( committee, committee_committee_types )
-        
-        # We associate the committee with the departments it scrutinises.
-        associate_committee_with_departments( committee, committee_scrutinising_departments )
       end
       
       # Regardless of whether we found the committee or created it, we update its attributes.
+      committee.name = committee_name
       committee.start_on = committee_start_on
       committee.end_on = committee_end_on
       committee.commons_appointed_on = committee_commons_appointed_on if committee_commons_appointed_on
@@ -483,6 +611,16 @@ module IMPORT
       committee.email = committee_email
       committee.contact_disclaimer = committee_contact_disclaimer
       committee.is_lead_committee = committee_is_lead_committee
+      committee.parent_committee_id = parent_committee.id if parent_committee
+      
+      # We associate the committee with a House or Houses.
+      associate_committee_with_houses( committee, committee_house )
+      
+      # We associate the committee with its types.
+      associate_committee_with_type( committee, committee_committee_types )
+      
+      # We associate the committee with the departments it scrutinises.
+      associate_committee_with_departments( committee, committee_scrutinising_departments )
       
       # If the committee is a joint committee it should have a lead house.
       # ... if there's a lead House.
@@ -504,12 +642,12 @@ module IMPORT
         # We associate the committee with the lead House.
         committee.lead_parliamentary_house_id = house.id
       end
-      committee.save
+      committee.save!
     end
   end
   
   # A method to associate a committee with a House or Houses.
-  def associate_committee_with_house( committee, committee_house )
+  def associate_committee_with_houses( committee, committee_house )
     
     # We check which House or Houses the committee belongs to.
     case committee_house
@@ -521,10 +659,7 @@ module IMPORT
       parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Commons' )
       
       # ... and create a new association to the Commons.
-      committee_house = CommitteeHouse.new
-      committee_house.committee = committee
-      committee_house.parliamentary_house = parliamentary_house
-      committee_house.save
+      associate_committee_with_a_house( committee, parliamentary_house )
     
     # If the committee is a Lords committee ...
     when 'Lords'
@@ -533,10 +668,7 @@ module IMPORT
       parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Lords' )
       
       # ... and create a new association to the Lords.
-      committee_house = CommitteeHouse.new
-      committee_house.committee = committee
-      committee_house.parliamentary_house = parliamentary_house
-      committee_house.save
+      associate_committee_with_a_house( committee, parliamentary_house )
     
     # If the committee is a joint committee ...
     when 'Joint'
@@ -545,19 +677,30 @@ module IMPORT
       parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Commons' )
       
       # ... and create a new association to the Commons.
-      committee_house = CommitteeHouse.new
-      committee_house.committee = committee
-      committee_house.parliamentary_house = parliamentary_house
-      committee_house.save
+      associate_committee_with_a_house( committee, parliamentary_house )
       
       # We find the Lords ...
       parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Lords' )
       
-      # ... and create a new association to the Lords.
+      # ... and create a new association to the Commons.
+      associate_committee_with_a_house( committee, parliamentary_house )
+    end
+  end
+  
+  # A method to associate a committee to a House.
+  def associate_committee_with_a_house( committee, parliamentary_house )
+    
+    # We attempt to find an association between the committee and the House.
+    committee_house = CommitteeHouse.all.where( "committee_id = ?", committee.id ).where( "parliamentary_house_id = ?", parliamentary_house.id).first
+    
+    # If we don't find an assocation between the committee and the House ...
+    unless committee_house
+      
+      # ... we create an association between the committee and the House.
       committee_house = CommitteeHouse.new
       committee_house.committee = committee
       committee_house.parliamentary_house = parliamentary_house
-      committee_house.save
+      committee_house.save!
     end
   end
   
@@ -573,11 +716,18 @@ module IMPORT
       # We find the committee type.
       committee_type = CommitteeType.find_by_system_id( committee_type_id )
       
-      # We create a new association between the committee and its committee type.
-      committee_committee_type = CommitteeCommitteeType.new
-      committee_committee_type.committee = committee
-      committee_committee_type.committee_type = committee_type
-      committee_committee_type.save
+      # We attempt to find an association between the committee and its type.
+      committee_committee_type = CommitteeCommitteeType.all.where( "committee_id = ?", committee.id ).where( "committee_type_id = ?", committee_type.id).first
+      
+      # Unless we find an association between the committee and its type ...
+      unless committee_committee_type
+        
+        # ... we create a new association between the committee and its committee type.
+        committee_committee_type = CommitteeCommitteeType.new
+        committee_committee_type.committee = committee
+        committee_committee_type.committee_type = committee_type
+        committee_committee_type.save!
+      end
     end
   end
   
@@ -601,14 +751,21 @@ module IMPORT
         department = Department.new
         department.system_id = department_system_id
         department.name = department_name
-        department.save
+        department.save!
       end
       
-      # We create the association between the committee and the department it scrutinises.
-      scrutinising = Scrutinising.new
-      scrutinising.committee = committee
-      scrutinising.department = department
-      scrutinising.save
+      # We attempt to find a scrutinising.
+      scrutinising = Scrutinising.all.where( "committee_id = ?", committee.id ).where( "department_id = ?", department.id ).first
+      
+      # Unless we find a scrutinising ...
+      unless scrutinising
+      
+        # ... we create the association between the committee and the department it scrutinises.
+        scrutinising = Scrutinising.new
+        scrutinising.committee = committee
+        scrutinising.department = department
+        scrutinising.save!
+      end
     end
   end
   
@@ -621,10 +778,17 @@ module IMPORT
     # We find the work package.
     work_package = WorkPackage.find_by_system_id( work_package_system_id )
     
-    # We create a new committee work package.
-    committee_work_package = CommitteeWorkPackage.new
-    committee_work_package.committee = committee
-    committee_work_package.work_package = work_package
-    committee_work_package.save
+    # We try to find the committee work package.
+    committee_work_package = CommitteeWorkPackage.all.where( "committee_id = ?", committee.id).where( "work_package_id = ?", work_package.id ).first
+    
+    # Unless the committee work package exists ...
+    unless committee_work_package
+      
+      # ... we create a new committee work package.
+      committee_work_package = CommitteeWorkPackage.new
+      committee_work_package.committee = committee
+      committee_work_package.work_package = work_package
+      committee_work_package.save!
+    end
   end
 end
