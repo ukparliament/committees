@@ -215,7 +215,7 @@ module IMPORT
   
   # A method to import all oral evidence sessions.
   def import_oral_evidence_sessions( skip )
-    #puts "importing oral evidence sessions"
+    puts "importing oral evidence sessions"
     
     # We set the URL to import from.
     url = "https://committees-api.parliament.uk/api/OralEvidence?take=30&skip=#{skip}"
