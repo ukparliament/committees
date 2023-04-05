@@ -247,15 +247,22 @@ module IMPORT
     oral_evidence_transcript_system_id = oral_evidence_transcript_item['id']
     oral_evidence_transcript_event_segment_system_id = oral_evidence_transcript_item['activityId']
     oral_evidence_transcript_start_on = oral_evidence_transcript_item['activityStartDate']
-    oral_evidence_transcript_start_at = oral_evidence_transcript_item['activityStartAt']
+    oral_evidence_transcript_meeting_on = oral_evidence_transcript_item['meetingDate']
     oral_evidence_transcript_legacy_html_url = oral_evidence_transcript_item['legacyHtmlUrl']
     oral_evidence_transcript_legacy_pdf_url = oral_evidence_transcript_item['legacyPdfUrl']
     oral_evidence_transcript_published_on = oral_evidence_transcript_item['publicationDate']
-    #oral_evidence_transcript_document = oral_evidence_transcript_item['document']
     #oral_evidence_transcript_house_of_commons_numbers = oral_evidence_transcript_item['hcNumbers']
     #oral_evidence_transcript_witnesses = oral_evidence_transcript_item['witnesses']
     oral_evidence_transcript_work_packages = oral_evidence_transcript_item['committeeBusinesses']
     oral_evidence_transcript_committees = oral_evidence_transcript_item['committees']
+    
+    # if the oral evidence transcript item has a document ...
+    if oral_evidence_transcript_item['document']
+      
+      # ... we get the document ID and an array of files.
+      oral_evidence_transcript_document_id = oral_evidence_transcript_item['document']['documentId']
+      oral_evidence_transcript_document_files = oral_evidence_transcript_item['document']['files']
+    end
     
     # We find the associated event segment.
     event_segment = EventSegment.find_by_system_id( oral_evidence_transcript_event_segment_system_id )
@@ -273,7 +280,7 @@ module IMPORT
     
     # We assign or update attributes.
     oral_evidence_transcript.start_on = oral_evidence_transcript_start_on
-    oral_evidence_transcript.start_at = oral_evidence_transcript_start_at
+    oral_evidence_transcript.meeting_on = oral_evidence_transcript_meeting_on
     oral_evidence_transcript.legacy_html_url = oral_evidence_transcript_legacy_html_url
     oral_evidence_transcript.legacy_pdf_url = oral_evidence_transcript_legacy_pdf_url
     oral_evidence_transcript.published_on = oral_evidence_transcript_published_on
@@ -282,6 +289,13 @@ module IMPORT
     # Oral evidence sessions with no event segment are: 4535, 4561, 5652, 5659, 5676, 5691, 5697, 5733, 5734, 5750, 5763, 5797, 5805, 5807, 5883, 5922, 10872, 10874, 10875
     oral_evidence_transcript.event_segment = event_segment if event_segment
     oral_evidence_transcript.save!
+    
+    # Unless the oral evidence is not associated with any files ...
+    if oral_evidence_transcript_document_files
+      
+      # ... we associate the oral evidence transcript with its files.
+      associate_oral_evidence_transcript_with_files( oral_evidence_transcript, oral_evidence_transcript_document_files )
+    end
     
     # Unless the oral evidence is not associated with any work packages ...
     unless oral_evidence_transcript_work_packages.empty?
@@ -299,6 +313,36 @@ module IMPORT
   end
   
   
+  
+  # A method to associate an oral evidence transcript with its files.
+  def associate_oral_evidence_transcript_with_files( oral_evidence_transcript, oral_evidence_transcript_document_files )
+    
+    # For each file assoicated with the oral evidence transcript...
+    oral_evidence_transcript_document_files.each do |file_item|
+      
+      # We store the returned values.
+      file_item_name = file_item['fileName']
+      file_item_size = file_item['fileSize']
+      file_item_format = file_item['fileDataFormat']
+      file_item_url = file_item['url']
+      
+      # We attempt to find the file.
+      file = OralEvidenceTranscriptFile.all.where( "name = ?", file_item_name ).where( "size = ?", file_item_size ).where( "format = ?", file_item_format ).where( "url = ?", file_item_url ).where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id ).first
+      
+      # If we don't find the file ...
+      unless file
+        
+        # ... we create the file.
+        file = OralEvidenceTranscriptFile.new
+        file.name = file_item_name
+        file.size = file_item_size
+        file.format = file_item_format
+        file.url = file_item_url
+        file.oral_evidence_transcript = oral_evidence_transcript
+        file.save
+      end
+    end
+  end
   
   # A method to associate an oral evidence transcript with its work packages.
   def associate_oral_evidence_transcript_with_work_packages( oral_evidence_transcript, oral_evidence_transcript_work_packages )
