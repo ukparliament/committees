@@ -23,7 +23,7 @@ class OralEvidenceTranscriptController < ApplicationController
       "
         SELECT oet.*
         FROM oral_evidence_transcripts oet
-        ORDER BY oet.published_on desc, oet.start_on desc, oet.start_at desc;
+        ORDER BY oet.published_on desc, oet.start_on desc;
       "
     )
   end
@@ -33,8 +33,8 @@ class OralEvidenceTranscriptController < ApplicationController
       "
         SELECT oet.*
         FROM oral_evidence_transcripts oet
-        WHERE oet.start_at >= '#{Time.now}'
-        ORDER BY oet.published_on desc, oet.start_on desc, oet.start_at desc;
+        WHERE oet.published_on >= '#{Date.today}'
+        ORDER BY oet.published_on desc, oet.start_on desc;
       "
     )
   end
