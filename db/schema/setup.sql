@@ -1,3 +1,4 @@
+drop table if exists oral_evidence_transcript_files;
 drop table if exists committee_oral_evidence_transcripts;
 drop table if exists work_package_oral_evidence_transcripts;
 drop table if exists oral_evidence_transcripts;
@@ -196,9 +197,10 @@ create table event_segments (
 create table oral_evidence_transcripts (
 	id serial not null,
 	start_on date not null,
-	start_at timestamp,
+	meeting_on date not null,
 	legacy_html_url varchar(255),
 	legacy_pdf_url varchar(255),
+	document_id int,
 	published_on date not null,
 	system_id int not null,
 	event_segment_id int,
@@ -220,6 +222,17 @@ create table work_package_oral_evidence_transcripts (
 	work_package_id int not null,
 	oral_evidence_transcript_id int not null,
 	constraint fk_work_package foreign key (work_package_id) references work_packages(id),
+	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
+	primary key (id)
+);
+
+create table oral_evidence_transcript_files (
+	id serial not null,
+	name varchar(255) not null,
+	size int not null,
+	format varchar(255) not null,
+	url varchar(1000),
+	oral_evidence_transcript_id int not null,
 	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
 	primary key (id)
 );
