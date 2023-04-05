@@ -1,19 +1,19 @@
 <table>
 	<tbody>
 		<tr>
-			<%= content_tag( 'th', 'Date:' ) %>
-			<%= content_tag( 'td', @oral_evidence_transcript.start_on.strftime( '%A %-d %B %Y') ) %>
-		</tr>
-		<% if @oral_evidence_transcript.start_at -%>
-			<tr>
-				<%= content_tag( 'th', 'Start at:' ) %>
-				<%= content_tag( 'td', link_to( @oral_evidence_transcript.start_at.strftime( '%A %-d %B %Y @ %H:%M') ) ) %>
-			</tr>
-		<% end -%>
-		<tr>
 			<%= content_tag( 'th', 'Published on:' ) %>
 			<%= content_tag( 'td', @oral_evidence_transcript.published_on.strftime( '%A %-d %B %Y') ) %>
 		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Date:' ) %>
+			<%= content_tag( 'td', @oral_evidence_transcript.start_on.strftime( '%A %-d %B %Y') ) %>
+		</tr>
+		<% if @oral_evidence_transcript.meeting_on -%>
+			<tr>
+				<%= content_tag( 'th', 'Meeting on:' ) %>
+				<%= content_tag( 'td', @oral_evidence_transcript.meeting_on.strftime( '%A %-d %B %Y') ) %>
+			</tr>
+		<% end -%>
 		<% if @oral_evidence_transcript.legacy_html_url and !@oral_evidence_transcript.legacy_html_url.empty? -%>
 			<tr>
 				<%= content_tag( 'th', 'Legacy HTML link:' ) %>
