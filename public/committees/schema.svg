@@ -475,7 +475,7 @@
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">publiched_on</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">start_on</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">start_at</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">meeting_on</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">legacy_html_url</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">legacy_pdf_url</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="189">document_id</tspan>
