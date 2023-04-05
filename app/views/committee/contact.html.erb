@@ -5,25 +5,25 @@
 <table>
 	<% if @committee.address -%>
 		<tr>
-			<%= content_tag( 'th', 'Postal address:' ) %>
+			<%= content_tag( 'th', 'Postal address' ) %>
 			<%= content_tag( 'td', @committee.address ) %>
 		</tr>
 	<% end -%>
 	<% if @committee.phone -%>
 		<tr>
-			<%= content_tag( 'th', 'Phone:' ) %>
+			<%= content_tag( 'th', 'Phone' ) %>
 			<%= content_tag( 'td', @committee.phone ) %>
 		</tr>
 	<% end -%>
 	<% if @committee.email -%>
 		<tr>
-			<%= content_tag( 'th', 'Email:' ) %>
+			<%= content_tag( 'th', 'Email' ) %>
 			<%= content_tag( 'td', link_to( @committee.email, "mailto:#{@committee.email}") ) %>
 		</tr>
 	<% end -%>
 	<% if @committee.contact_disclaimer -%>
 		<tr>
-			<%= content_tag( 'th', 'Disclaimer:' ) %>
+			<%= content_tag( 'th', 'Disclaimer' ) %>
 			<%= content_tag( 'td', @committee.contact_disclaimer ) %>
 		</tr>
 	<% end -%>
