@@ -17,9 +17,10 @@
 
 <%= content_tag( 'span', link_to( 'Committees', home_url ) ) %>
 
-<%= content_tag( 'h1', @page_title || 'Committees' ) %>
 </header>
 <main> 
+<%= content_tag( 'h1', @page_title || 'Committees' ) %>
+
 <%= yield %>
 </main> 
 <footer>
