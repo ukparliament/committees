@@ -1,11 +1,10 @@
 <%= render :partial => 'committee_nav', :object => @committee %>
 
 <%= content_tag( 'h2', 'Details' ) %>
-
 <table>
 	<tbody>
 		<tr>
-			<%= content_tag( 'th', 'Houses:' ) %>
+			<%= content_tag( 'th', 'Houses' ) %>
 			<td>
 				<ul>
 					<%= render :partial => 'house/house', :collection => @committee.parliamentary_houses %>
@@ -14,19 +13,19 @@
 		</tr>
 		<% if @committee.lead_parliamentary_house -%>
 			<tr>
-				<%= content_tag( 'th', 'Lead House:' ) %>
+				<%= content_tag( 'th', 'Lead House' ) %>
 				<%= content_tag( 'td', link_to( @committee.lead_parliamentary_house.label, house_show_url( :house => @committee.lead_parliamentary_house ) ) ) %>
 			</tr>
 		<% end -%>
 		<% if @committee.commons_appointed_on -%>
 			<tr>
-				<%= content_tag( 'th', 'Commons Members appointed on:' ) %>
+				<%= content_tag( 'th', 'Commons Members appointed on' ) %>
 				<%= content_tag( 'td', @committee.commons_appointed_on.strftime( '%A %-d %B %Y') ) %>
 			</tr>
 		<% end -%>
 		<% if @committee.lords_appointed_on -%>
 			<tr>
-				<%= content_tag( 'th', 'Lords Members appointed on:' ) %>
+				<%= content_tag( 'th', 'Lords Members appointed on' ) %>
 				<%= content_tag( 'td', @committee.lords_appointed_on.strftime( '%A %-d %B %Y') ) %>
 			</tr>
 		<% end -%>
@@ -40,7 +39,7 @@
 		</tr>
 		<% unless @committee.departments.empty? -%>
 			<tr>
-				<%= content_tag( 'th', 'Scrutinises:' ) %>
+				<%= content_tag( 'th', 'Scrutinises' ) %>
 				<td>
 					<ul>
 						<%= render :partial => 'department/department', :collection => @committee.departments %>
@@ -50,41 +49,41 @@
 		<% end -%>
 		<% if @committee.start_on -%>
 			<tr>
-				<%= content_tag( 'th', 'Start date:' ) %>
+				<%= content_tag( 'th', 'Start date' ) %>
 				<%= content_tag( 'td', @committee.start_on.strftime( '%A %-d %B %Y') ) %>
 			</tr>
 		<% end -%>
 		<% if @committee.end_on -%>
 			<tr>
-				<%= content_tag( 'th', 'End date:' ) %>
+				<%= content_tag( 'th', 'End date' ) %>
 				<%= content_tag( 'td', @committee.end_on.strftime( '%A %-d %B %Y') ) %>
 			</tr>
 		<% end -%>
 		<!-- NOTE: this is always null in the API -->
 		<% if @committee.is_lead_committee -%>
 			<tr>
-				<%= content_tag( 'th', 'Is lead committee:' ) %>
+				<%= content_tag( 'th', 'Is lead committee' ) %>
 				<%= content_tag( 'td', @committee.is_lead_committee ) %>
 			</tr>
 		<% end -%>
 		<tr>
-			<%= content_tag( 'th', 'Is shown on website:' ) %>
+			<%= content_tag( 'th', 'Is shown on website' ) %>
 			<%= content_tag( 'td', @committee.is_shown_on_website ) %>
 		</tr>
 		<% if @committee.legacy_url -%>
 			<tr>
-				<%= content_tag( 'th', 'Legacy URL:' ) %>
+				<%= content_tag( 'th', 'Legacy URL' ) %>
 				<%= content_tag( 'td', link_to( @committee.legacy_url, @committee.legacy_url ) ) %>
 			</tr>
 		<% end -%>
 		<tr>
-			<%= content_tag( 'th', 'Is redirect enabled:' ) %>
+			<%= content_tag( 'th', 'Is redirect enabled' ) %>
 			<%= content_tag( 'td', @committee.is_redirect_enabled ) %>
 		</tr>
 	</tbody>
 </table>
 
-<%= content_tag( 'p', "Parent committee: #{link_to( @committee.parent_committee.name, committee_show_url( :committee => @committee.parent_committee.system_id ) )}".html_safe ) if @committee.parent_committee %>
+<%= content_tag( 'p', "Parent committee #{link_to( @committee.parent_committee.name, committee_show_url( :committee => @committee.parent_committee.system_id ) )}".html_safe ) if @committee.parent_committee %>
 
 <% unless @committee.sub_committees.empty? %>
 	<div id="sub-committees">
