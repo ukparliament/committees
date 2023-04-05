@@ -197,11 +197,11 @@ create table event_segments (
 create table oral_evidence_transcripts (
 	id serial not null,
 	start_on date not null,
-	meeting_on date not null,
+	meeting_on date,
+	published_on date not null,
 	legacy_html_url varchar(255),
 	legacy_pdf_url varchar(255),
 	document_id int,
-	published_on date not null,
 	system_id int not null,
 	event_segment_id int,
 	constraint fk_event_segment foreign key (event_segment_id) references event_segments(id),
