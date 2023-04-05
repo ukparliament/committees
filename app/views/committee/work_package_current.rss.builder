@@ -4,7 +4,7 @@ xml.rss( :version => '2.0', 'xmlns:atom' => 'http://www.w3.org/2005/Atom' ) do
 		xml.description( "Updates whenever a new work package is established." )
 		xml.link( committee_work_package_current_url )
 		xml.copyright( 'https://www.parliament.uk/site-information/copyright-parliament/open-parliament-licence/' )
-		xml.language( 'en-uk' )
+		xml.language( 'en-gb' )
 		xml.managingEditor( 'somervillea@parliament.uk (Anya Somerville)' )
 		xml.pubDate( @current_work_packages.first.open_on.rfc822 ) unless @current_work_packages.empty?
 		xml.tag!( 'atom:link', { :href => committee_work_package_current_url( :format => 'rss' ), :rel => 'self', :type => 'application/rss+xml' } )
