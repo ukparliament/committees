@@ -1,5 +1,6 @@
-<%= render :partial => 'upcoming_switcher' %>
-<%= content_tag( 'h2', 'All oral evidence transcripts' ) %>
+<!-- Given all oral evidence transcripts are in the past, there's no need for an upcoming view or a subhead -->
+<!-- %= render :partial => 'upcoming_switcher' % -->
+<!-- %= content_tag( 'h2', 'All oral evidence transcripts' ) % -->
 <ul>
 	<%= render :partial => 'oral_evidence_transcript', :collection => @all_oral_evidence_transcripts %>
 </ul>
