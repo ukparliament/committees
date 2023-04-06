@@ -284,6 +284,7 @@ module IMPORT
     oral_evidence_transcript.legacy_html_url = oral_evidence_transcript_legacy_html_url
     oral_evidence_transcript.legacy_pdf_url = oral_evidence_transcript_legacy_pdf_url
     oral_evidence_transcript.published_on = oral_evidence_transcript_published_on
+    oral_evidence_transcript.document_id = oral_evidence_transcript_document_id
     # NOTE: the najority of oral evidence sessions are associated with an event segment. A minority are not.
     # Missing event segments are: 11373, 11399, 12490, 12497, 12514, 12529, 12535, 12571, 12572, 12588, 12601, 12635, 12643, 12645, 12721, 12760, 19417, 19419, 19420
     # Oral evidence sessions with no event segment are: 4535, 4561, 5652, 5659, 5676, 5691, 5697, 5733, 5734, 5750, 5763, 5797, 5805, 5807, 5883, 5922, 10872, 10874, 10875
@@ -327,10 +328,12 @@ module IMPORT
       file_item_url = file_item['url']
       
       # We attempt to find the file.
-      file = OralEvidenceTranscriptFile.all.where( "name = ?", file_item_name ).where( "size = ?", file_item_size ).where( "format = ?", file_item_format ).where( "url = ?", file_item_url ).where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id ).first
+      file = OralEvidenceTranscriptFile.all.where( "name = ?", file_item_name ).where( "size = ?", file_item_size ).where( "format = ?", file_item_format ).where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id ).first
       
       # If we don't find the file ...
       unless file
+        
+        puts "making a new file"
         
         # ... we create the file.
         file = OralEvidenceTranscriptFile.new
