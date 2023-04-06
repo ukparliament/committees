@@ -1,4 +1,4 @@
-<table>
+<table id="details">
 	<tbody>
 		<tr>
 			<%= content_tag( 'th', 'Published on:' ) %>
@@ -32,3 +32,10 @@
 		</tr>
 	</tbody>
 </table>
+
+<% unless @oral_evidence_transcript.oral_evidence_transcript_files.empty? -%>
+	<%= content_tag( 'h2', 'Files' ) %>
+	<ul>
+		<%= render :partial => 'oral_evidence_transcript_file/oral_evidence_transcript_file', :collection => @oral_evidence_transcript.oral_evidence_transcript_files %>
+	</ul>
+<% end -%>
