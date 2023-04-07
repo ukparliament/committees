@@ -1,6 +1,4 @@
 <li>
-	<%= content_tag( 'h3', oral_evidence_transcript_file.name ) %>
-	<%= content_tag( 'p', "Format: #{oral_evidence_transcript_file.format}" ) %>
+	<%= content_tag( 'h3', link_to( oral_evidence_transcript_file.format_display, oral_evidence_transcript_file.link ) ) %>
 	<%= content_tag( 'p', "File size: #{oral_evidence_transcript_file.size}" ) %>
-	<%= content_tag( 'p', "URL: #{oral_evidence_transcript_file.url}" ) if  oral_evidence_transcript_file.url %>
 </li>
