@@ -39,9 +39,20 @@
 	</tbody>
 </table>
 
+<% unless @oral_evidence_transcript.committees.empty? -%>
+	<div id="committees">
+		<%= content_tag( 'h2', 'Committees' ) %>
+		<ul>
+			<%= render :partial => 'committee/committee', :collection => @oral_evidence_transcript.committees %>
+		</ul>
+	</div>
+<% end -%>
+
 <% unless @oral_evidence_transcript.oral_evidence_transcript_files.empty? -%>
-	<%= content_tag( 'h2', 'Files' ) %>
-	<ol>
-		<%= render :partial => 'oral_evidence_transcript_file/oral_evidence_transcript_file', :collection => @oral_evidence_transcript.oral_evidence_transcript_files %>
-	</ul>
+	<div id="files">
+		<%= content_tag( 'h2', 'Files' ) %>
+		<ul>
+			<%= render :partial => 'oral_evidence_transcript_file/oral_evidence_transcript_file', :collection => @oral_evidence_transcript.oral_evidence_transcript_files %>
+		</ul>
+	</div>
 <% end -%>
