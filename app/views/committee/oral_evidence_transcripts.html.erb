@@ -1,0 +1,7 @@
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
+
+<ul>
+	<%= render :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @oral_evidence_transcripts %>
+</ul>
