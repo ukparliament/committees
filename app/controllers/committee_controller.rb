@@ -56,6 +56,13 @@ class CommitteeController < ApplicationController
     @upcoming_events = @committee.upcoming_events
   end
   
+  def oral_evidence_transcripts
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+    @oral_evidence_transcripts = @committee.oral_evidence_transcripts
+  end
+  
   def all_committees
     Committee.find_by_sql(
       "
