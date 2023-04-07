@@ -2,6 +2,8 @@
 
 <%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
 
+<%= content_tag( 'p', link_to( 'RSS', committee_oral_evidence_transcripts_url( :format => 'rss' ) ) ) %>
+
 <ul>
 	<%= render :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @oral_evidence_transcripts %>
 </ul>
