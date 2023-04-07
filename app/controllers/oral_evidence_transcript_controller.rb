@@ -3,12 +3,12 @@ class OralEvidenceTranscriptController < ApplicationController
   def index
     @page_title = 'Oral evidence transcripts'
     @all_oral_evidence_transcripts = all_oral_evidence_transcripts
-    @upcoming_oral_evidence_transcripts = upcoming_oral_evidence_transcripts
+    #@upcoming_oral_evidence_transcripts = upcoming_oral_evidence_transcripts
   end
   
   def upcoming
     @page_title = 'Oral evidence transcripts'
-    @all_oral_evidence_transcripts = all_oral_evidence_transcripts
+    #@all_oral_evidence_transcripts = all_oral_evidence_transcripts
     @upcoming_oral_evidence_transcripts = upcoming_oral_evidence_transcripts
   end
   
