@@ -12,4 +12,8 @@
 		-
 		<%= link_to( "Events", committee_event_upcoming_url ) %>
 	<% end -%>
+	<% unless committee_nav.oral_evidence_transcripts.empty? -%>
+		-
+		<%= link_to( "Oral evidence transcripts", committee_oral_evidence_transcripts_url ) %>
+	<% end -%>
 </nav>
