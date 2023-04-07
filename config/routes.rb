@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'committees/committees/:committee/work-packages/current' => 'committee#work_package_current', :as => 'committee_work_package_current'
   get 'committees/committees/:committee/events' => 'committee#event_list', :as => 'committee_event_list'
   get 'committees/committees/:committee/events/upcoming' => 'committee#event_upcoming', :as => 'committee_event_upcoming'
+  get 'committees/committees/:committee/oral-evidence-transcripts' => 'committee#oral_evidence_transcripts', :as => 'committee_oral_evidence_transcripts'
   
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
