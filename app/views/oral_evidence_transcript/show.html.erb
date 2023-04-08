@@ -48,6 +48,15 @@
 	</div>
 <% end -%>
 
+<% unless @oral_evidence_transcript.work_packages.empty? -%>
+	<div id="work-packages">
+		<%= content_tag( 'h2', 'Work packages' ) %>
+		<ul>
+			<%= render :partial => 'work_package/work_package', :collection => @oral_evidence_transcript.work_packages %>
+		</ul>
+	</div>
+<% end -%>
+
 <% unless @oral_evidence_transcript.oral_evidence_transcript_files.empty? -%>
 	<div id="files">
 		<%= content_tag( 'h2', 'Files' ) %>
