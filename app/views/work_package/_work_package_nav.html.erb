@@ -1,0 +1,7 @@
+<nav>
+	<%= link_to( "Details", work_package_show_url ) %>
+	<% unless work_package_nav.oral_evidence_transcripts.empty? -%>
+		-
+		<%= link_to( "Oral evidence transcripts", work_package_oral_evidence_transcript_list_url ) %>
+	<% end -%>
+</nav>
