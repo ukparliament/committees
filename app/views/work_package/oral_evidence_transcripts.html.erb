@@ -1,0 +1,11 @@
+<%= content_tag( 'p', @work_package.dates ) %>
+
+<%= render :partial => 'work_package_nav', :object => @work_package %>
+
+<ul>
+	<%= render :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @work_package.oral_evidence_transcripts %>
+</ul>
+
+
+
+
