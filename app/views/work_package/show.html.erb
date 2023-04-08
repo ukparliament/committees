@@ -1,4 +1,7 @@
 <%= content_tag( 'p', @work_package.dates ) %>
+
+<%= render :partial => 'work_package_nav', :object => @work_package %>
+
 <%= content_tag( 'p', "Work package type: #{link_to( @work_package.work_package_type.name, work_package_type_current_url( :work_package_type => @work_package.work_package_type.system_id ) )}".html_safe ) %>
 
 <% unless @work_package.committees.empty? -%>
