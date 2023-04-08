@@ -52,4 +52,15 @@ class OralEvidenceTranscript < ApplicationRecord
   def link
     "https://committees.parliament.uk/oralevidence/#{self.system_id}/html"
   end
+  
+  def preferred_link
+    if self.document_id
+      preferred_link = link
+    elsif !self.legacy_html_url.blank?
+      preferred_link = self.legacy_html_url
+    elsif !self.legacy_pdf_url.blank?
+      preferred_link = self.legacy_pdf_url
+    end
+    preferred_link
+  end
 end
