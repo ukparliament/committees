@@ -23,4 +23,10 @@ class WorkPackageController < ApplicationController
     @work_package = WorkPackage.find_by_system_id( work_package )
     @page_title = @work_package.title
   end
+  
+  def oral_evidence_transcripts
+    work_package = params[:work_package]
+    @work_package = WorkPackage.find_by_system_id( work_package )
+    @page_title = @work_package.title
+  end
 end
