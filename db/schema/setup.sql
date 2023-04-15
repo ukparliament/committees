@@ -1,3 +1,4 @@
+drop table if exists house_of_commons_numbers;
 drop table if exists oral_evidence_transcript_files;
 drop table if exists committee_oral_evidence_transcripts;
 drop table if exists work_package_oral_evidence_transcripts;
@@ -19,8 +20,16 @@ drop table if exists events;
 drop table if exists locations;
 drop table if exists event_types;
 drop table if exists activity_types;
+drop table if exists sessions;
 
 
+
+create table sessions (
+	id serial not null,
+	label varchar(255),
+	system_id int not null,
+	primary key (id)
+);
 
 create table activity_types (
 	id serial not null,
@@ -234,5 +243,15 @@ create table oral_evidence_transcript_files (
 	url varchar(1000),
 	oral_evidence_transcript_id int not null,
 	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
+	primary key (id)
+);
+
+create table house_of_commons_numbers (
+	id serial not null,
+	number varchar(255) not null,
+	session_id int not null,
+	oral_evidence_transcript_id int not null,
+	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
+	constraint fk_session foreign key (session_id) references sessions(id),
 	primary key (id)
 );
