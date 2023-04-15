@@ -36,6 +36,16 @@
 				<%= content_tag( 'td', @oral_evidence_transcript.document_id  ) %>
 			</tr>
 		<% end -%>
+		<% unless @oral_evidence_transcript.house_of_commons_numbers.empty? -%>
+			<tr>
+				<%= content_tag( 'th', 'House of Commons numbers:' ) %>
+				<td>
+					<ul>
+						<%= render :partial => 'house_of_commons_number/house_of_commons_number', :collection => @oral_evidence_transcript.house_of_commons_numbers %>
+					</ul>
+				</td>
+			</tr>
+		<% end -%>
 	</tbody>
 </table>
 
