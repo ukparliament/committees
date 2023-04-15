@@ -251,7 +251,7 @@ module IMPORT
     oral_evidence_transcript_legacy_html_url = oral_evidence_transcript_item['legacyHtmlUrl']
     oral_evidence_transcript_legacy_pdf_url = oral_evidence_transcript_item['legacyPdfUrl']
     oral_evidence_transcript_published_on = oral_evidence_transcript_item['publicationDate']
-    #oral_evidence_transcript_house_of_commons_numbers = oral_evidence_transcript_item['hcNumbers']
+    oral_evidence_transcript_house_of_commons_numbers = oral_evidence_transcript_item['hcNumbers']
     #oral_evidence_transcript_witnesses = oral_evidence_transcript_item['witnesses']
     oral_evidence_transcript_work_packages = oral_evidence_transcript_item['committeeBusinesses']
     oral_evidence_transcript_committees = oral_evidence_transcript_item['committees']
@@ -311,9 +311,63 @@ module IMPORT
       # ... we attempt to associate the oral evidence transcript with its committees.
       associate_oral_evidence_transcript_with_committees( oral_evidence_transcript, oral_evidence_transcript_committees )
     end
+    
+    # Unless the oral evidence transcript has no House of Commons numbers ...
+    if oral_evidence_transcript_house_of_commons_numbers
+      
+      # ... we attempt to associate the oral evidence transcript with its House of Commons numbers.
+      associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
+    end
   end
   
   
+  
+  # A method to associate an oral evidence transcript with its House of Commons numbers.
+  def associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
+    
+    # For each House of Commons number assoicated with the oral evidence transcript...
+    oral_evidence_transcript_house_of_commons_numbers.each do |house_of_commons_number|
+      
+      # We store the returned values.
+      house_of_commons_number_number = house_of_commons_number['number']
+      house_of_commons_number_session_id = house_of_commons_number['sessionId']
+      house_of_commons_number_session_label = house_of_commons_number['sessionDescription']
+      
+      # We attempt to find the session.
+      session = Session.find_by_system_id( house_of_commons_number_session_id )
+      
+      # Unless we find the session ...
+      unless session
+        
+        # ... we create a new session.
+        session = Session.new
+        session.system_id = house_of_commons_number_session_id
+      end
+      
+      # We create or update the session description.
+      session.label = house_of_commons_number_session_label
+      session.save
+      
+      # We attempt to find this House of Commons number.
+      house_of_commons_number = HouseOfCommonsNumber
+        .all
+        .where( "session_id = ?", session.id )
+        .where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id )
+        .where( "number = ?", house_of_commons_number_number )
+        .first
+        
+      # Unless this House of Commons number exists ...
+      unless house_of_commons_number
+        
+        # ... we create the House of Commons number.
+        house_of_commons_number = HouseOfCommonsNumber.new
+        house_of_commons_number.number = house_of_commons_number_number
+        house_of_commons_number.oral_evidence_transcript = oral_evidence_transcript
+        house_of_commons_number.session = session
+        house_of_commons_number.save
+      end
+    end
+  end
   
   # A method to associate an oral evidence transcript with its files.
   def associate_oral_evidence_transcript_with_files( oral_evidence_transcript, oral_evidence_transcript_document_files )
@@ -332,8 +386,6 @@ module IMPORT
       
       # If we don't find the file ...
       unless file
-        
-        puts "making a new file"
         
         # ... we create the file.
         file = OralEvidenceTranscriptFile.new
