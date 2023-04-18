@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xl="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" viewBox="36 -873 3487 1786" width="3487" height="1786">
+<svg xmlns:xl="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" viewBox="36 -1050.5 3924 1963.5" width="3924" height="1963.5">
   <defs>
     <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="CrowBall_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -5 20 10" markerWidth="20" markerHeight="10" color="black">
       <g>
@@ -20,7 +20,7 @@
   </defs>
   <g id="Canvas_1" stroke-opacity="1" fill-opacity="1" stroke-dasharray="none" fill="none" stroke="none">
     <title>Canvas 1</title>
-    <rect fill="white" x="36" y="-873" width="3487" height="1786"/>
+    <rect fill="white" x="36" y="-1050.5" width="3924" height="1963.5"/>
     <g id="Canvas_1_Layer_1">
       <title>Layer 1</title>
       <g id="Group_2">
@@ -469,31 +469,31 @@
         <title>Class with Attributes</title>
         <g id="Graphic_77">
           <title>Attributes</title>
-          <rect x="2672" y="-456" width="307" height="272" fill="#ccc"/>
-          <rect x="2672" y="-456" width="307" height="272" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(2678 -450)" fill="#515556">
+          <rect x="2672" y="-423" width="307" height="206" fill="#ccc"/>
+          <rect x="2672" y="-423" width="307" height="206" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(2678 -417)" fill="#515556">
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">publiched_on</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">published_on</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">start_on</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">meeting_on</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">legacy_html_url</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">legacy_pdf_url</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="145">document_id</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="233">event_segment_id</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="255">system_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="167">event_segment_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="189">system_id</tspan>
           </text>
         </g>
         <g id="Graphic_76">
           <title>Class Name</title>
-          <rect x="2672" y="-482" width="307" height="26" fill="#ccc"/>
-          <rect x="2672" y="-482" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(2678 -478)" fill="#515556">
+          <rect x="2672" y="-449" width="307" height="26" fill="#ccc"/>
+          <rect x="2672" y="-449" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(2678 -445)" fill="#515556">
             <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="70.085" y="13">oral_evidence_transcripts</tspan>
           </text>
         </g>
       </g>
       <g id="Line_78">
-        <line x1="2449.2498" y1="357.82486" x2="2740.4748" y2="-166.82486" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2449.2498" y1="357.82486" x2="2758.7926" y2="-199.82486" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Group_79">
         <title>Class with Attributes</title>
@@ -517,7 +517,7 @@
         </g>
       </g>
       <g id="Line_82">
-        <line x1="2662.4203" y1="-173.30273" x2="2416.8175" y2="47.62762" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2699.1056" y1="-206.30273" x2="2416.8175" y2="47.62762" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_83">
         <line x1="2152.5" y1="124" x2="2214.5" y2="124" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
@@ -526,9 +526,9 @@
         <title>Class with Attributes</title>
         <g id="Graphic_86">
           <title>Attributes</title>
-          <rect x="1402" y="-357" width="307" height="74" fill="#ccc"/>
-          <rect x="1402" y="-357" width="307" height="74" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(1408 -351)" fill="#515556">
+          <rect x="1401" y="-357" width="307" height="74" fill="#ccc"/>
+          <rect x="1401" y="-357" width="307" height="74" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(1407 -351)" fill="#515556">
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">committee_id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">oral_evidence_id</tspan>
@@ -536,46 +536,46 @@
         </g>
         <g id="Graphic_85">
           <title>Class Name</title>
-          <rect x="1402" y="-383" width="307" height="26" fill="#ccc"/>
-          <rect x="1402" y="-383" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(1408 -379)" fill="#515556">
+          <rect x="1401" y="-383" width="307" height="26" fill="#ccc"/>
+          <rect x="1401" y="-383" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(1407 -379)" fill="#515556">
             <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="34.2115" y="13">committee_oral_evidence_transcripts</tspan>
           </text>
         </g>
       </g>
       <g id="Line_87">
-        <line x1="1187.0918" y1="137.70447" x2="1513.3137" y2="-267.58847" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="1187.0772" y1="137.6927" x2="1512.4134" y2="-267.57345" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_88">
-        <line x1="2656.5" y1="-320" x2="1728.5" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2656.5" y1="-320" x2="1727.5" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Group_89">
         <title>Class with Attributes</title>
         <g id="Graphic_91">
           <title>Attributes</title>
-          <rect x="3215" y="-390" width="307" height="140" fill="#ccc"/>
-          <rect x="3215" y="-390" width="307" height="140" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(3221 -384)" fill="#515556">
+          <rect x="3210.5" y="-390" width="307" height="140" fill="#ccc"/>
+          <rect x="3210.5" y="-390" width="307" height="140" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -384)" fill="#515556">
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">name</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">size</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">format</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">url</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">or</tspan>
-            <tspan font-family="Avenir" font-style="italic" font-size="13" fill="#515556" y="123">al_evidence_transcript_id</tspan>
+            <tspan font-family="Avenir" font-style="italic" font-size="13" fill="#515556" x="0" y="123">or</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" y="123">al_evidence_transcript_id</tspan>
           </text>
         </g>
         <g id="Graphic_90">
           <title>Class Name</title>
-          <rect x="3215" y="-416" width="307" height="26" fill="#ccc"/>
-          <rect x="3215" y="-416" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(3221 -412)" fill="#515556">
+          <rect x="3210.5" y="-416" width="307" height="26" fill="#ccc"/>
+          <rect x="3210.5" y="-416" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -412)" fill="#515556">
             <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="57.5595" y="13">oral_evidence_transcript_files</tspan>
           </text>
         </g>
       </g>
       <g id="Line_92">
-        <line x1="2994.5" y1="-320" x2="3195.5" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2994.5" y1="-320" x2="3191" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Group_93">
         <title>Class with Attributes</title>
@@ -621,10 +621,110 @@
         </g>
       </g>
       <g id="Line_99">
-        <line x1="2825.5" y1="-497.5" x2="2825.5" y2="-546.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2825.5" y1="-464.5" x2="2825.5" y2="-546.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_100">
         <line x1="2825.5" y1="-756.5" x2="2825.5" y2="-707.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Group_104">
+        <title>Class with Attributes</title>
+        <g id="Graphic_106">
+          <title>Attributes</title>
+          <rect x="3210.5" y="-846" width="307" height="74" fill="#ccc"/>
+          <rect x="3210.5" y="-846" width="307" height="74" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -840)" fill="#515556">
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">name</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">organisation_id</tspan>
+          </text>
+        </g>
+        <g id="Graphic_105">
+          <title>Class Name</title>
+          <rect x="3210.5" y="-872" width="307" height="26" fill="#ccc"/>
+          <rect x="3210.5" y="-872" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -868)" fill="#515556">
+            <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="120.057" y="13">positions</tspan>
+          </text>
+        </g>
+      </g>
+      <g id="Group_108">
+        <title>Class with Attributes</title>
+        <g id="Graphic_110">
+          <title>Attributes</title>
+          <rect x="3652" y="-651" width="307" height="74" fill="#ccc"/>
+          <rect x="3652" y="-651" width="307" height="74" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3658 -645)" fill="#515556">
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">name</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">system_id</tspan>
+          </text>
+        </g>
+        <g id="Graphic_109">
+          <title>Class Name</title>
+          <rect x="3652" y="-677" width="307" height="26" fill="#ccc"/>
+          <rect x="3652" y="-677" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3658 -673)" fill="#515556">
+            <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="126.193" y="13">people</tspan>
+          </text>
+        </g>
+      </g>
+      <g id="Group_114">
+        <title>Class with Attributes</title>
+        <g id="Graphic_116">
+          <title>Attributes</title>
+          <rect x="3210.5" y="-1023.5" width="307" height="96" fill="#ccc"/>
+          <rect x="3210.5" y="-1023.5" width="307" height="96" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -1017.5)" fill="#515556">
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">name</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">idms_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">system_id</tspan>
+          </text>
+        </g>
+        <g id="Graphic_115">
+          <title>Class Name</title>
+          <rect x="3210.5" y="-1049.5" width="307" height="26" fill="#ccc"/>
+          <rect x="3210.5" y="-1049.5" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -1045.5)" fill="#515556">
+            <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="106.9335" y="13">organisations</tspan>
+          </text>
+        </g>
+      </g>
+      <g id="Group_117">
+        <title>Class with Attributes</title>
+        <g id="Graphic_119">
+          <title>Attributes</title>
+          <rect x="3210.5" y="-684" width="307" height="140" fill="#ccc"/>
+          <rect x="3210.5" y="-684" width="307" height="140" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -678)" fill="#515556">
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">person_name</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">system_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">person_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">position_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">oral_evidence_transcript_id</tspan>
+          </text>
+        </g>
+        <g id="Graphic_118">
+          <title>Class Name</title>
+          <rect x="3210.5" y="-710" width="307" height="26" fill="#ccc"/>
+          <rect x="3210.5" y="-710" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3216.5 -706)" fill="#515556">
+            <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="118.2565" y="13">witnesses</tspan>
+          </text>
+        </g>
+      </g>
+      <g id="Line_120">
+        <line x1="2992.7268" y1="-411.2993" x2="3217.7165" y2="-534.1349" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_121">
+        <line x1="3632.5" y1="-614" x2="3537" y2="-614" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_123">
+        <line x1="3364" y1="-756.5" x2="3364" y2="-729.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_124">
+        <line x1="3364" y1="-912" x2="3364" y2="-891.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
     </g>
   </g>
