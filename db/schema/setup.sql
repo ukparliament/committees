@@ -1,3 +1,7 @@
+drop table if exists witnesses;
+drop table if exists positions;
+drop table if exists organisations;
+drop table if exists people;
 drop table if exists house_of_commons_numbers;
 drop table if exists oral_evidence_transcript_files;
 drop table if exists committee_oral_evidence_transcripts;
@@ -253,5 +257,41 @@ create table house_of_commons_numbers (
 	oral_evidence_transcript_id int not null,
 	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
 	constraint fk_session foreign key (session_id) references sessions(id),
+	primary key (id)
+);
+
+create table people (
+	id serial not null,
+	name varchar(1000) not null,
+	system_id int not null,
+	primary key (id)
+);
+
+create table organisations (
+	id serial not null,
+	name varchar(1000) not null,
+	idms_id varchar(255),
+	system_id int not null,
+	primary key (id)
+);
+
+create table positions (
+	id serial not null,
+	name varchar(255) not null,
+	organisation_id int not null,
+	constraint fk_organisation foreign key (organisation_id) references organisations(id),
+	primary key (id)
+);
+
+create table witnesses (
+	id serial not null,
+	person_name varchar(1000),
+	system_id int not null,
+	person_id int,
+	position_id int not null,
+	oral_evidence_transcript_id int not null,
+	constraint fk_person foreign key (person_id) references people(id),
+	constraint fk_position foreign key (position_id) references positions(id),
+	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
 	primary key (id)
 );
