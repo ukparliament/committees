@@ -1,0 +1,8 @@
+<%= content_tag( 'p', link_to( @organisation.idms_id, @organisation.idms_id ) ) if @organisation.idms_id %>
+
+<div id="positions">
+	<%= content_tag( 'h2', 'Positions' ) %>
+	<ul>
+		<%= render :partial => 'position/position', :collection => @organisation.positions %>
+	</ul>
+</div>

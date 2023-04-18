@@ -1,0 +1,1 @@
+<%= content_tag( 'li', link_to( "#{organisation.name} (#{organisation.position_count} #{'position'.pluralize( organisation.position_count ) })", organisation_show_url( :organisation => organisation.system_id ) ) ) %>
