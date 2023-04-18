@@ -67,6 +67,12 @@ Rails.application.routes.draw do
   get 'committees/oral-evidence-transcripts/upcoming' => 'oral_evidence_transcript#upcoming', :as => 'oral_evidence_transcript_upcoming'
   get 'committees/oral-evidence-transcripts/:oral_evidence_transcript' => 'oral_evidence_transcript#show', :as => 'oral_evidence_transcript_show'
   
+  get 'committees/organisations' => 'organisation#index', :as => 'organisation_list'
+  get 'committees/organisations/:organisation' => 'organisation#show', :as => 'organisation_show'
+  
+  get 'committees/positions' => 'position#index', :as => 'position_list'
+  get 'committees/positions/:position' => 'position#show', :as => 'position_show'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
