@@ -1,0 +1,6 @@
+<div id="oral-evidence-transcripts">
+	<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
+	<ul>
+		<%= render :partial => 'witness/witness', :collection => @position.witnesses %>
+	</ul>
+</div>

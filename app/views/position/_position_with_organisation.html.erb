@@ -1,0 +1,1 @@
+<%= content_tag( 'li', link_to( "#{position_with_organisation.organisation_name} - #{position_with_organisation.name} (#{position_with_organisation.oral_evidence_transcript_count} oral evidence #{'transcript'.pluralize( position_with_organisation.oral_evidence_transcript_count )})", position_show_url( :position => position_with_organisation ) ) ) %>
