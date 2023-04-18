@@ -215,7 +215,7 @@ module IMPORT
   
   # A method to import all oral evidence sessions.
   def import_oral_evidence_transcripts( skip )
-    puts "importing oral evidence transcripts"
+    #puts "importing oral evidence transcripts"
     
     # We set the URL to import from.
     url = "https://committees-api.parliament.uk/api/OralEvidence?take=30&skip=#{skip}"
@@ -252,7 +252,7 @@ module IMPORT
     oral_evidence_transcript_legacy_pdf_url = oral_evidence_transcript_item['legacyPdfUrl']
     oral_evidence_transcript_published_on = oral_evidence_transcript_item['publicationDate']
     oral_evidence_transcript_house_of_commons_numbers = oral_evidence_transcript_item['hcNumbers']
-    #oral_evidence_transcript_witnesses = oral_evidence_transcript_item['witnesses']
+    oral_evidence_transcript_witnesses = oral_evidence_transcript_item['witnesses']
     oral_evidence_transcript_work_packages = oral_evidence_transcript_item['committeeBusinesses']
     oral_evidence_transcript_committees = oral_evidence_transcript_item['committees']
     
@@ -318,9 +318,95 @@ module IMPORT
       # ... we attempt to associate the oral evidence transcript with its House of Commons numbers.
       associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
     end
+    
+    # For each oral evidence transcript witness item ...
+    oral_evidence_transcript_witnesses.each do |oral_evidence_transcript_witness_item|
+      
+      # ... we store the returned values.
+      oral_evidence_transcript_witness_submitter_type = oral_evidence_transcript_witness_item['submitterType']
+      oral_evidence_transcript_witness_context = oral_evidence_transcript_witness_item['additionalContext']
+      oral_evidence_transcript_witness_organisations = oral_evidence_transcript_witness_item['organisations']
+      oral_evidence_transcript_witness_person_name = oral_evidence_transcript_witness_item['name']
+      oral_evidence_transcript_witness_person_system_id = oral_evidence_transcript_witness_item['personId']
+      oral_evidence_transcript_witness_system_id = oral_evidence_transcript_witness_item['id']
+      
+      # NOTE: there are people names with no ID.
+      # If the witness item contains a person id ...
+      if oral_evidence_transcript_witness_person_system_id
+        
+        # ... we attempt to find the person.
+        person = Person.find_by_system_id( oral_evidence_transcript_witness_person_system_id )
+      
+        # Unless we find the person ...
+        unless person
+          
+          # ... we create a new person.
+          person = Person.new
+          # NOTE: it's possible for a person with a given ID to have different names over time. We store the first one we come across.
+          person.name = oral_evidence_transcript_witness_person_name
+          person.system_id = oral_evidence_transcript_witness_person_system_id
+          person.save
+        end
+      end
+        
+      # For each organisation item ...
+      oral_evidence_transcript_witness_organisations.each do |organisation_item|
+        
+        # ... we store the returned values.
+        organisation_name = organisation_item['name']
+        organisation_role = organisation_item['role']
+        organisation_idms_id = organisation_item['idmsId']
+        organisation_system_id = organisation_item['cisId']
+        
+        # We attempt to find the organisation.
+        organisation = Organisation.find_by_system_id ( organisation_system_id )
+        
+        # Unless we find the organisation ...
+        unless organisation
+          
+          # ... we create the organisation.
+          organisation = Organisation.new
+          organisation.name = organisation_name
+          organisation.idms_id = organisation_idms_id
+          organisation.system_id = organisation_system_id
+          organisation.save
+        end
+        
+        # We attempt to find the position.
+        position = Position
+          .all
+          .where( "name = ?", organisation_role )
+          .where( "organisation_id = ?", organisation.id )
+          .first
+          
+        # Unless we find the position ...
+        unless position
+          
+          # ... we create a new position.
+          position = Position.new
+          position.name = organisation_role
+          position.organisation = organisation
+          position.save
+        end
+        
+        # We attempt to find the witness.
+        witness = Witness.find_by_system_id( oral_evidence_transcript_witness_system_id )
+        
+        # Unless we find the witness ...
+        unless witness
+        
+          # ... we create a new witness.
+          witness = Witness.new
+          witness.person_name = oral_evidence_transcript_witness_person_name
+          witness.system_id = oral_evidence_transcript_witness_system_id
+          witness.oral_evidence_transcript = oral_evidence_transcript
+          witness.position = position
+          witness.person = person if person
+          witness.save
+        end
+      end
+    end
   end
-  
-  
   
   # A method to associate an oral evidence transcript with its House of Commons numbers.
   def associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
@@ -743,7 +829,7 @@ module IMPORT
       end
       committee.save!
     end
-  end
+iont  end
   
   # A method to associate a committee with a House or Houses.
   def associate_committee_with_houses( committee, committee_house )
