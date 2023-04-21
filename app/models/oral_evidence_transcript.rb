@@ -78,4 +78,14 @@ class OralEvidenceTranscript < ApplicationRecord
       "
     )
   end
+  
+  def witnesses
+    Witness.find_by_sql(
+      "
+        SELECT w.*
+        FROM witnesses w
+        WHERE oral_evidence_transcript_id = #{self.id}
+      "
+    )
+  end
 end
