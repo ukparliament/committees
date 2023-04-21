@@ -215,7 +215,7 @@ module IMPORT
   
   # A method to import all oral evidence sessions.
   def import_oral_evidence_transcripts( skip )
-    #puts "importing oral evidence transcripts"
+    puts "importing oral evidence transcripts"
     
     # We set the URL to import from.
     url = "https://committees-api.parliament.uk/api/OralEvidence?take=30&skip=#{skip}"
@@ -323,15 +323,15 @@ module IMPORT
     oral_evidence_transcript_witnesses.each do |oral_evidence_transcript_witness_item|
       
       # ... we store the returned values.
+      oral_evidence_transcript_witness_person_name = oral_evidence_transcript_witness_item['name']
+      oral_evidence_transcript_witness_person_system_id = oral_evidence_transcript_witness_item['personId']
       oral_evidence_transcript_witness_submitter_type = oral_evidence_transcript_witness_item['submitterType']
       oral_evidence_transcript_witness_context = oral_evidence_transcript_witness_item['additionalContext']
       oral_evidence_transcript_witness_organisations = oral_evidence_transcript_witness_item['organisations']
-      oral_evidence_transcript_witness_person_name = oral_evidence_transcript_witness_item['name']
-      oral_evidence_transcript_witness_person_system_id = oral_evidence_transcript_witness_item['personId']
       oral_evidence_transcript_witness_system_id = oral_evidence_transcript_witness_item['id']
       
       # NOTE: there are people names with no ID.
-      # If the witness item contains a person id ...
+      # If the witness item contains a person system id ...
       if oral_evidence_transcript_witness_person_system_id
         
         # ... we attempt to find the person.
@@ -345,8 +345,23 @@ module IMPORT
           # NOTE: it's possible for a person with a given ID to have different names over time. We store the first one we come across.
           person.name = oral_evidence_transcript_witness_person_name
           person.system_id = oral_evidence_transcript_witness_person_system_id
-          person.save
+          person.save!
         end
+      end
+      
+      # We attempt to find the witness.
+      witness = Witness.find_by_system_id( oral_evidence_transcript_witness_system_id )
+      
+      # Unless we find the witness ...
+      unless witness
+      
+        # ... we create a new witness.
+        witness = Witness.new
+        witness.person_name = oral_evidence_transcript_witness_person_name
+        witness.system_id = oral_evidence_transcript_witness_system_id
+        witness.oral_evidence_transcript = oral_evidence_transcript
+        witness.person = person if person
+        witness.save!
       end
         
       # For each organisation item ...
@@ -369,7 +384,7 @@ module IMPORT
           organisation.name = organisation_name
           organisation.idms_id = organisation_idms_id
           organisation.system_id = organisation_system_id
-          organisation.save
+          organisation.save!
         end
         
         # We attempt to find the position.
@@ -386,23 +401,23 @@ module IMPORT
           position = Position.new
           position.name = organisation_role
           position.organisation = organisation
-          position.save
+          position.save!
         end
         
-        # We attempt to find the witness.
-        witness = Witness.find_by_system_id( oral_evidence_transcript_witness_system_id )
-        
-        # Unless we find the witness ...
-        unless witness
-        
-          # ... we create a new witness.
-          witness = Witness.new
-          witness.person_name = oral_evidence_transcript_witness_person_name
-          witness.system_id = oral_evidence_transcript_witness_system_id
-          witness.oral_evidence_transcript = oral_evidence_transcript
-          witness.position = position
-          witness.person = person if person
-          witness.save
+        # We attempt to find the witness position.
+        witness_position = WitnessPosition.all
+          .where( "witness_id = ?", witness.id )
+          .where( "position_id = ?", position.id )
+          .first
+          
+        # If we don't find the witness position ...
+        unless witness_position
+          
+          # ... we create the witness position.
+          witness_position = WitnessPosition.new
+          witness_position.witness = witness
+          witness_position.position = position
+          witness_position.save!
         end
       end
     end
@@ -829,7 +844,7 @@ module IMPORT
       end
       committee.save!
     end
-iont  end
+  end
   
   # A method to associate a committee with a House or Houses.
   def associate_committee_with_houses( committee, committee_house )
