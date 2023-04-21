@@ -1,0 +1,8 @@
+<li>
+	<%= content_tag( 'h3', witness_from_oral_evidence_transcript.person_name ) %>
+	<% unless witness_from_oral_evidence_transcript.positions.empty? -%>
+		<ul>
+			<%= render :partial => 'position/position_with_organisation_no_count', :collection => witness_from_oral_evidence_transcript.positions %>
+		</ul>
+	<% end %>
+</li>
