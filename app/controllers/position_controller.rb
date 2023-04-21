@@ -14,14 +14,13 @@ class PositionController < ApplicationController
         ON organisation.organisation_id = p.organisation_id
         
         INNER JOIN (
-          SELECT w.position_id AS position_id, COUNT(oet.id) AS oral_evidence_transcript_count
-          FROM witnesses w, oral_evidence_transcripts oet
+          SELECT wp.position_id AS position_id, COUNT(oet.id) AS oral_evidence_transcript_count
+          FROM witnesses w, oral_evidence_transcripts oet, witness_positions wp
           WHERE w.oral_evidence_transcript_id = oet.id
-          GROUP BY w.position_id
+          AND w.id = wp.witness_id
+          GROUP BY wp.position_id
         ) witness
         ON witness.position_id = p.id
-        
-        
         
         ORDER BY organisation.organisation_name, p.name
       "
