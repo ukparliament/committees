@@ -67,6 +67,15 @@
 	</div>
 <% end -%>
 
+<% unless @oral_evidence_transcript.witnesses.empty? -%>
+	<div id="witnesses">
+		<%= content_tag( 'h2', 'Witnesses' ) %>
+		<ul>
+			<%= render :partial => 'witness/witness_from_oral_evidence_transcript', :collection => @oral_evidence_transcript.witnesses %>
+		</ul>
+	</div>
+<% end -%>
+
 <% unless @oral_evidence_transcript.oral_evidence_transcript_files.empty? -%>
 	<div id="files">
 		<%= content_tag( 'h2', 'Files' ) %>
