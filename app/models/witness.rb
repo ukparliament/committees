@@ -14,4 +14,13 @@ class Witness < ApplicationRecord
       "
     )
   end
+  
+  def person_display_name
+    person_display_name = ''
+    if self.person_name
+      person_display_name = self.person_name
+    else
+      person_display_name = 'No witness name given'
+    end
+  end
 end
