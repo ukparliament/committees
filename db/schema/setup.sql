@@ -1,3 +1,4 @@
+drop table if exists witness_positions;
 drop table if exists witnesses;
 drop table if exists positions;
 drop table if exists organisations;
@@ -288,10 +289,17 @@ create table witnesses (
 	person_name varchar(1000),
 	system_id int not null,
 	person_id int,
-	position_id int not null,
 	oral_evidence_transcript_id int not null,
 	constraint fk_person foreign key (person_id) references people(id),
-	constraint fk_position foreign key (position_id) references positions(id),
 	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
+	primary key (id)
+);
+
+create table witness_positions (
+	id serial not null,
+	witness_id int not null,
+	position_id int not null,
+	constraint fk_witness foreign key (witness_id) references witnesses(id),
+	constraint fk_position foreign key (position_id) references positions(id),
 	primary key (id)
 );
