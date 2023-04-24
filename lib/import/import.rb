@@ -329,12 +329,43 @@ module IMPORT
       oral_evidence_transcript_witness_context = oral_evidence_transcript_witness_item['additionalContext']
       oral_evidence_transcript_witness_organisations = oral_evidence_transcript_witness_item['organisations']
       oral_evidence_transcript_witness_system_id = oral_evidence_transcript_witness_item['id']
+      oral_evidence_transcript_witness_mnis_id = nil
+      oral_evidence_transcript_witness_mnis_name = nil
       
-      # NOTE: there are people names with no ID.
-      # If the witness item contains a person system id ...
-      if oral_evidence_transcript_witness_person_system_id
+      # If the witness is a Member ...
+      if oral_evidence_transcript_witness_item['memberInfo']
         
-        # ... we attempt to find the person.
+        # ... we store their MNIS ID and name.
+        oral_evidence_transcript_witness_mnis_id = oral_evidence_transcript_witness_item['memberInfo']['mnisId']
+        oral_evidence_transcript_witness_mnis_name = oral_evidence_transcript_witness_item['memberInfo']['displayAs']
+      end
+      
+      # We set a person name, being either the MNIS name or the CIS name.
+      person_name = oral_evidence_transcript_witness_mnis_name || oral_evidence_transcript_witness_person_name
+      
+      # NOTE: people have either a CIS ID, a MNIS ID or neither.
+      # If the witness item has a MNIS id ...
+      if oral_evidence_transcript_witness_mnis_id
+        
+        # ... we attempt to find the person by their MNIS ID.
+        person = Person.find_by_mnis_id( oral_evidence_transcript_witness_mnis_id )
+      
+        # Unless we find the person ...
+        unless person
+          
+          # ... we create a new person.
+          person = Person.new
+          person.mnis_id = oral_evidence_transcript_witness_mnis_id
+        end
+        
+        # We set or update the person attributes
+        person.name = person_name
+        person.save!
+        
+      # Otherwise, if the witness item has a CIS person ID ...
+      elsif oral_evidence_transcript_witness_person_system_id
+        
+        # ... we attempt to find the person by the CIS ID.
         person = Person.find_by_system_id( oral_evidence_transcript_witness_person_system_id )
       
         # Unless we find the person ...
@@ -342,25 +373,54 @@ module IMPORT
           
           # ... we create a new person.
           person = Person.new
-          # NOTE: it's possible for a person with a given ID to have different names over time. We store the first one we come across.
-          person.name = oral_evidence_transcript_witness_person_name
           person.system_id = oral_evidence_transcript_witness_person_system_id
-          person.save!
         end
+        
+        # We set or update the person attributes
+        person.name = person_name
+        person.save!
       end
       
-      # We attempt to find the witness.
-      witness = Witness.find_by_system_id( oral_evidence_transcript_witness_system_id )
+      # Some witnesses have a CIS ID of 0.
+      # If the witness ID is 0 ...
+      if oral_evidence_transcript_witness_system_id == 0
+        
+        # ... we attempt to find the witness.
+        witness = Witness.all
+          .where( "oral_evidence_transcript_id =?", oral_evidence_transcript.id )
+          .where( 'person_name = ?', oral_evidence_transcript_witness_person_name )
+          .first
       
-      # Unless we find the witness ...
-      unless witness
+        # Unless we find the witness ...
+        unless witness
+        
+          # ... we create a new witness.
+          witness = Witness.new
+          witness.oral_evidence_transcript = oral_evidence_transcript
+          witness.person = person if person
+          witness.person_name = oral_evidence_transcript_witness_person_name
+          witness.save!
+        end
+        
+        
+      # If the witness ID is not 0 ...
+      else
       
-        # ... we create a new witness.
-        witness = Witness.new
+        # ... we attempt to find the witness.
+        witness = Witness.find_by_system_id( oral_evidence_transcript_witness_system_id )
+      
+        # Unless we find the witness ...
+        unless witness
+      
+          # ... we create a new witness.
+          witness = Witness.new
+          witness.system_id = oral_evidence_transcript_witness_system_id
+          witness.oral_evidence_transcript = oral_evidence_transcript
+          witness.person = person if person
+        end
+        
+        # We set or update the witness attributes.
         witness.person_name = oral_evidence_transcript_witness_person_name
-        witness.system_id = oral_evidence_transcript_witness_system_id
-        witness.oral_evidence_transcript = oral_evidence_transcript
-        witness.person = person if person
         witness.save!
       end
         
@@ -381,11 +441,13 @@ module IMPORT
           
           # ... we create the organisation.
           organisation = Organisation.new
-          organisation.name = organisation_name
           organisation.idms_id = organisation_idms_id
           organisation.system_id = organisation_system_id
-          organisation.save!
         end
+        
+        # We set or update the organisation attributes.
+        organisation.name = organisation_name
+        organisation.save!
         
         # We attempt to find the position.
         position = Position
@@ -399,10 +461,12 @@ module IMPORT
           
           # ... we create a new position.
           position = Position.new
-          position.name = organisation_role
           position.organisation = organisation
-          position.save!
         end
+        
+        # We set or update the position attributes.
+        position.name = organisation_role
+        position.save!
         
         # We attempt to find the witness position.
         witness_position = WitnessPosition.all
