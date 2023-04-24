@@ -1,0 +1,9 @@
+<%= content_tag( 'p', "Committee system ID: #{@person.system_id}" ) if @person.system_id %>
+<%= content_tag( 'p', "MNIS ID: #{link_to( @person.mnis_id, "https://members.parliament.uk/member/#{@person.mnis_id}")}".html_safe ) if @person.mnis_id %>
+
+<div id="oral-evidence-transcripts">
+	<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
+	<ul>
+		<%= render :partial => 'witness/witness_from_person', :collection => @person.witnesses %>
+	</ul>
+</div>

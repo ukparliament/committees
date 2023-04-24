@@ -1,0 +1,7 @@
+<%= render :partial => 'people_nav' %>
+
+<%= content_tag( 'h2', 'Members' ) %>
+
+<ul>
+	<%= render :partial => 'person', :collection => @people %>
+</ul>

@@ -1,0 +1,1 @@
+<%= content_tag( 'li', link_to( "#{person.name} (#{person.oral_evidence_transcript_count} oral evidence #{'transcript'.pluralize( person.oral_evidence_transcript_count )})", person_show_url( :person => person ) ) ) %>
