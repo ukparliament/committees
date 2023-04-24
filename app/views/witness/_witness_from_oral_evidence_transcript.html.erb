@@ -1,5 +1,10 @@
 <li>
-	<%= content_tag( 'h3', witness_from_oral_evidence_transcript.person_display_name ) %>
+	<% if witness_from_oral_evidence_transcript.person -%>
+		<%= content_tag( 'h3', link_to( witness_from_oral_evidence_transcript.person_display_name, person_show_url( :person => witness_from_oral_evidence_transcript.person_id ) ) ) %>
+	<% else -%>
+		<%= content_tag( 'h3', witness_from_oral_evidence_transcript.person_display_name ) %>
+	<% end -%>
+	
 	<% unless witness_from_oral_evidence_transcript.positions.empty? -%>
 		<ul>
 			<%= render :partial => 'position/position_with_organisation_no_count', :collection => witness_from_oral_evidence_transcript.positions %>

@@ -1,4 +1,8 @@
 <li>
 	<%= content_tag( 'h3', link_to( witness_from_position.oral_evidence_transcript_published_on, oral_evidence_transcript_show_url( :oral_evidence_transcript => witness_from_position.oral_evidence_transcript_system_id )) ) %>
-	<%= content_tag( 'p', witness_from_position.person_display_name ) %>
+	<% if witness_from_position.person -%>
+		<%= content_tag( 'p', link_to( witness_from_position.person_display_name, person_show_url( :person => witness_from_position.person_id ) ) ) %>
+	<% else -%>
+		<%= content_tag( 'p', witness_from_position.person_display_name ) %>
+	<% end -%>
 </li>
