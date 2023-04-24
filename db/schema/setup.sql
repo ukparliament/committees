@@ -264,7 +264,8 @@ create table house_of_commons_numbers (
 create table people (
 	id serial not null,
 	name varchar(1000) not null,
-	system_id int not null,
+	system_id int,
+	mnis_id int,
 	primary key (id)
 );
 
@@ -286,8 +287,8 @@ create table positions (
 
 create table witnesses (
 	id serial not null,
-	person_name varchar(1000),
-	system_id int not null,
+	person_name varchar(3000),
+	system_id int,
 	person_id int,
 	oral_evidence_transcript_id int not null,
 	constraint fk_person foreign key (person_id) references people(id),
