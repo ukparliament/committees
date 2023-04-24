@@ -1,0 +1,8 @@
+<li>
+	<%= content_tag( 'h3', link_to( witness_from_person.oral_evidence_transcript_published_on, oral_evidence_transcript_show_url( :oral_evidence_transcript => witness_from_person.oral_evidence_transcript_system_id )) ) %>
+	<% unless witness_from_person.positions.empty? -%>
+		<ul>
+			<%= render :partial => 'position/position_with_organisation_no_count', :collection => witness_from_person.positions %>
+		</ul>
+	<% end %>
+</li>
