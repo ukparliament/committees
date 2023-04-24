@@ -73,6 +73,11 @@ Rails.application.routes.draw do
   get 'committees/positions' => 'position#index', :as => 'position_list'
   get 'committees/positions/:position' => 'position#show', :as => 'position_show'
   
+  get 'committees/people' => 'person#index', :as => 'person_list'
+  get 'committees/people/members' => 'person#members', :as => 'person_member_list'
+  get 'committees/people/non-members' => 'person#non_members', :as => 'person_non_member_list'
+  get 'committees/people/:person' => 'person#show', :as => 'person_show'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
