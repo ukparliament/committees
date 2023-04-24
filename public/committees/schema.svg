@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="36 -1218 3924 2131" width="3924" height="2131">
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="36 -1218 3926.5 2131" width="3926.5" height="2131">
   <defs>
     <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="CrowBall_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -5 20 10" markerWidth="20" markerHeight="10" color="black">
       <g>
@@ -20,7 +20,7 @@
   </defs>
   <g id="Canvas_1" stroke-opacity="1" fill="none" stroke="none" fill-opacity="1" stroke-dasharray="none">
     <title>Canvas 1</title>
-    <rect fill="white" x="36" y="-1218" width="3924" height="2131"/>
+    <rect fill="white" x="36" y="-1218" width="3926.5" height="2131"/>
     <g id="Canvas_1_Layer_1">
       <title>Layer 1</title>
       <g id="Group_2">
@@ -651,19 +651,20 @@
         <title>Class with Attributes</title>
         <g id="Graphic_110">
           <title>Attributes</title>
-          <rect x="3652" y="-651" width="307" height="74" fill="#ccc"/>
-          <rect x="3652" y="-651" width="307" height="74" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(3658 -645)" fill="#515556">
+          <rect x="3654.5" y="-662" width="307" height="96" fill="#ccc"/>
+          <rect x="3654.5" y="-662" width="307" height="96" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3660.5 -656)" fill="#515556">
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">name</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">system_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">mnis_id</tspan>
           </text>
         </g>
         <g id="Graphic_109">
           <title>Class Name</title>
-          <rect x="3652" y="-677" width="307" height="26" fill="#ccc"/>
-          <rect x="3652" y="-677" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-          <text transform="translate(3658 -673)" fill="#515556">
+          <rect x="3654.5" y="-688" width="307" height="26" fill="#ccc"/>
+          <rect x="3654.5" y="-688" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(3660.5 -684)" fill="#515556">
             <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="126.193" y="13">people</tspan>
           </text>
         </g>
@@ -717,7 +718,7 @@
         <line x1="2992.7268" y1="-411.2993" x2="3237.8644" y2="-545.1349" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_121">
-        <line x1="3632.5" y1="-614" x2="3537" y2="-614" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="3635" y1="-614" x2="3537" y2="-614" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_123">
         <line x1="3364" y1="-714.5" x2="3364" y2="-752.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
