@@ -72,6 +72,7 @@ Rails.application.routes.draw do
   
   get 'committees/positions' => 'position#index', :as => 'position_list'
   get 'committees/positions/:position' => 'position#show', :as => 'position_show'
+  get 'committees/positions/:position/oral-evidence-transcripts' => 'position#oral_evidence_transcripts', :as => 'position_oral_evidence_transcripts'
   
   get 'committees/people' => 'person#index', :as => 'person_list'
   get 'committees/people/members' => 'person#members', :as => 'person_member_list'
