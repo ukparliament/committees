@@ -1,5 +1,6 @@
 <div id="oral-evidence-transcripts">
 	<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
+	<%= content_tag( 'p', link_to( 'RSS', position_oral_evidence_transcripts_url( :format => 'rss' ) ) ) %>
 	<ul>
 		<%= render :partial => 'witness/witness_from_position', :collection => @position.witnesses %>
 	</ul>
