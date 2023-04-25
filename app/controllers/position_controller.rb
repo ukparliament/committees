@@ -50,6 +50,6 @@ class PositionController < ApplicationController
         AND p.id = #{position}
       "
     ).first
-    @page_title = "#{@position.name} - #{@position.organisation_name} - Oral evidence transcripts"
+    @page_title = "#{@position.name} - #{@position.organisation_name} - oral evidence transcripts"
   end
 end
