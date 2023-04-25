@@ -39,4 +39,17 @@ class PositionController < ApplicationController
     ).first
     @page_title = "#{@position.name} - #{@position.organisation_name}"
   end
+  
+  def oral_evidence_transcripts
+    position = params[:position]
+    @position = Position.find_by_sql(
+      "
+        SELECT p.*, o.name AS organisation_name
+        FROM positions p, organisations o
+        WHERE p.organisation_id = o.id
+        AND p.id = #{position}
+      "
+    ).first
+    @page_title = "#{@position.name} - #{@position.organisation_name} - Oral evidence transcripts"
+  end
 end
