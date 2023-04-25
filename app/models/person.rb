@@ -10,4 +10,16 @@ class Person < ApplicationRecord
       "
     )
   end
+  
+  def oral_evidence_transcripts
+    OralEvidenceTranscript.find_by_sql(
+      "
+        SELECT oet.*
+        FROM oral_evidence_transcripts oet, witnesses w
+        WHERE oet.id = w.oral_evidence_transcript_id
+        AND w.person_id = #{self.id}
+        ORDER BY oet.published_on desc
+      "
+    )
+  end
 end
