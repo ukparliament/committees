@@ -72,4 +72,10 @@ class PersonController < ApplicationController
     @person = Person.find( person )
     @page_title = @person.name
   end
+  
+  def oral_evidence_transcripts
+    person = params[:person]
+    @person = Person.find( person )
+    @page_title = "#{@person.name} - oral evidence transcripts"
+  end
 end
