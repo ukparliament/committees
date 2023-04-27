@@ -20,4 +20,11 @@ class HouseController < ApplicationController
     @all_committees = @house.all_committees
     @current_committees = @house.current_committees
   end
+  
+  def oral_evidence_transcripts
+    house = params[:house]
+    @house = ParliamentaryHouse.find( house )
+    @page_title = @house.label
+    @oral_evidence_transcripts = @house.oral_evidence_transcripts
+  end
 end
