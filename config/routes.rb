@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
   get 'committees/houses/:house/current' => 'house#current', :as => 'house_current'
+  get 'committees/houses/:house/oral-evidence-transcripts' => 'house#oral_evidence_transcripts', :as => 'house_oral_evidence_transcripts'
   
   get 'committees/joint' => 'joint#index', :as => 'joint_list'
   get 'committees/joint/current' => 'joint#current', :as => 'joint_current'
