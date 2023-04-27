@@ -493,7 +493,7 @@
         </g>
       </g>
       <g id="Line_78">
-        <line x1="2449.2498" y1="357.82486" x2="2758.7926" y2="-199.82486" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2449.2498" y1="357.82486" x2="2758.7926" y2="-199.82486" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
       </g>
       <g id="Group_79">
         <title>Class with Attributes</title>
@@ -517,7 +517,7 @@
         </g>
       </g>
       <g id="Line_82">
-        <line x1="2699.1056" y1="-206.30273" x2="2416.8175" y2="47.62762" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2699.1056" y1="-206.30273" x2="2416.8175" y2="47.62762" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
       </g>
       <g id="Line_83">
         <line x1="2152.5" y1="124" x2="2214.5" y2="124" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
@@ -547,7 +547,7 @@
         <line x1="1187.0772" y1="137.6927" x2="1512.4134" y2="-267.57345" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_88">
-        <line x1="2656.5" y1="-320" x2="1727.5" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <line x1="2656.5" y1="-320" x2="1727.5" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
       </g>
       <g id="Group_89">
         <title>Class with Attributes</title>
