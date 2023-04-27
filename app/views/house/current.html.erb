@@ -1,5 +1,7 @@
+<%= render :partial => 'committee_oral_evidence_transcript_switcher' %>
+<%= content_tag( 'h2', 'Committees' ) %>
 <%= render :partial => 'current_switcher' %>
-<%= content_tag( 'h2', 'Current committees' ) %>
+<%= content_tag( 'h3', 'Current committees' ) %>
 <ul>
 	<%= render :partial => 'committee/committee', :collection => @current_committees %>
 </ul>
