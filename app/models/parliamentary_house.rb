@@ -84,4 +84,19 @@ class ParliamentaryHouse < ApplicationRecord
       "
     )
   end
+  
+  def oral_evidence_transcripts
+    OralEvidenceTranscript.find_by_sql(
+      "
+        SELECT oet.*
+        FROM oral_evidence_transcripts oet, committee_oral_evidence_transcripts coet, committees c, committee_houses ch
+        WHERE oet.id = coet.oral_evidence_transcript_id
+        AND coet.committee_id = c.id
+        AND c.id = ch.committee_id
+        AND ch.parliamentary_house_id = #{self.id}
+        GROUP BY oet.id
+        ORDER BY oet.published_on desc, oet.start_on desc;
+      "
+    )
+  end
 end
