@@ -1,0 +1,6 @@
+<%= render :partial => 'committee_oral_evidence_transcript_switcher' %>
+<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
+<%= content_tag( 'p', link_to( 'RSS', house_oral_evidence_transcripts_url( :format => 'rss' ) ) ) %>
+<ol>
+	<%= render :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @oral_evidence_transcripts %>
+</ol>
