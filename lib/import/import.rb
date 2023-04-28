@@ -1,7 +1,9 @@
 # # A module for importing for the committee system API.
 module IMPORT
   
-  # ## A method to import committee types.
+  # ## Import methods.
+  
+  # ### A method to import committee types.
   def import_committee_types
     puts "Importing committee types"
     
@@ -27,7 +29,7 @@ module IMPORT
       unless category
         
         # ... we create a new category.
-        puts "creating new category"
+        puts "creating new category: #{committee_type_item_category_name}"
         category = Category.new
         category.system_id = committee_type_item_category_system_id
         category.name = committee_type_item_category_name
@@ -41,7 +43,7 @@ module IMPORT
       unless committee_type
         
         # ... we create a new committee type.
-        puts "creating new committee type"
+        puts "creating new committee type: #{committee_type_item_name}"
         committee_type = CommitteeType.new
         committee_type.system_id = committee_type_item_system_id
         committee_type.name = committee_type_item_name
@@ -51,7 +53,7 @@ module IMPORT
     end
   end
   
-  # A method to import all work package types.
+  # ### A method to import all work package types.
   def import_work_package_types
     puts "Importing work package types"
     
@@ -77,7 +79,7 @@ module IMPORT
       unless work_package_type
         
         # ... we create it.
-        puts "creating new work package type"
+        puts "creating new work package type: #{business_type_item_name}"
         work_package_type = WorkPackageType.new
         work_package_type.system_id = business_type_item_system_id
       end
@@ -87,6 +89,34 @@ module IMPORT
       work_package_type.description = business_type_item_description
       work_package_type.is_inquiry = business_type_item_is_inquiry
       work_package_type.save!
+    end
+  end
+  
+  # ## A method to import current committees.
+  def import_current_committees( skip )
+    puts "importing committees"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/Committees?CommitteeStatus=current&ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each committee item in the feed ....
+    json['items'].each do |committee_item|
+      
+      # ... we import or update the committee.
+      import_or_update_committee( committee_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_committees( skip + 30 )
     end
   end
   
@@ -260,6 +290,246 @@ module IMPORT
       import_oral_evidence_transcripts( skip + 30 )
     end
   end
+  
+  
+  
+  
+  # ## Helper methods.
+  
+  # ### A method to import or update a committee.
+  def import_or_update_committee( committee_item )
+    
+    # We store the returned values.
+    committee_system_id = committee_item['id']
+    committee_name = committee_item['name']
+    committee_parent_committee_system_id = committee_item['parentCommittee']['id'] if committee_item['parentCommittee']
+    committee_committee_types = committee_item['committeeTypes']
+    committee_scrutinising_departments = committee_item['scrutinisingDepartments']
+    committee_house = committee_item['house']
+    committee_show_on_website = committee_item['showOnWebsite']
+    committee_website_legacy_url = committee_item['websiteLegacyUrl']
+    committee_website_legacy_redirect_enabled = committee_item['websiteLegacyRedirectEnabled']
+    committee_start_on = committee_item['startDate']
+    committee_end_on = committee_item['endDate']
+    committee_address = committee_item['contact']['address']
+    committee_phone = committee_item['contact']['phone']
+    committee_email = committee_item['contact']['email']
+    committee_contact_disclaimer = committee_item['contact']['contactDisclaimer']
+    committee_commons_appointed_on = committee_item['dateCommonsAppointed']
+    committee_lords_appointed_on = committee_item['dateLordsAppointed']
+    committee_is_lead_committee = committee_item['isLeadCommittee']
+    committee_lead_house = committee_item['leadHouse']
+    
+    # If the committee has a parent committee ...
+    if committee_parent_committee_system_id
+      
+      # ... we attempt to find the parent committee.
+      parent_committee = Committee.find_by_system_id( committee_parent_committee_system_id )
+      
+      # We flag an error if we don't find the parent committee.
+      puts "Committee #{committee_system_id} has parent committee #{committee_parent_committee_system_id} - not loaded into database" unless parent_committee
+    end
+    
+    # If the committee has no parent committtee or if we've found the parent committee ...
+    if committee_parent_committee_system_id.nil? || parent_committee
+    
+      # ... we attempt to find the committee.
+      committee = Committee.find_by_system_id( committee_system_id )
+    
+      # If we fail to find the committee ...
+      unless committee
+      
+        # ... we create the committee.
+        puts "creating new committee: #{committee_name}"
+        committee = Committee.new
+        committee.system_id = committee_system_id
+      end
+      
+      # Regardless of whether we found the committee or created it, we update its attributes.
+      committee.name = committee_name
+      committee.start_on = committee_start_on
+      committee.end_on = committee_end_on
+      committee.commons_appointed_on = committee_commons_appointed_on if committee_commons_appointed_on
+      committee.lords_appointed_on = committee_lords_appointed_on if committee_lords_appointed_on
+      committee.is_shown_on_website = committee_show_on_website
+      committee.legacy_url = committee_website_legacy_url
+      committee.is_redirect_enabled = committee_website_legacy_redirect_enabled
+      committee.address = committee_address
+      committee.phone = committee_phone
+      committee.email = committee_email
+      committee.contact_disclaimer = committee_contact_disclaimer
+      committee.is_lead_committee = committee_is_lead_committee
+      committee.parent_committee_id = parent_committee.id if parent_committee
+      
+      # We associate the committee with a House or Houses.
+      associate_committee_with_houses( committee, committee_house )
+      
+      # We associate the committee with its types.
+      associate_committee_with_type( committee, committee_committee_types )
+      
+      # We associate the committee with the departments it scrutinises.
+      associate_committee_with_departments( committee, committee_scrutinising_departments )
+      
+      # If the committee is a joint committee it should have a lead house.
+      # ... if there's a lead House.
+      if committee_lead_house
+        
+        # ... if the Commons is marked as the lead House ...
+        if committee_lead_house['isCommons']
+          
+          # ... we find the Commons.
+          house = ParliamentaryHouse.find_by_short_label( 'Commons' )
+          
+        # If the Lords is the lead House ...
+        elsif committee_lead_house['isLords']
+          
+          # ... we find the Lords.
+          house = ParliamentaryHouse.find_by_short_label( 'Lords' )
+        end
+        
+        # We associate the committee with the lead House.
+        committee.lead_parliamentary_house_id = house.id
+      end
+      committee.save!
+    end
+  end
+  
+  # ### A method to associate a committee with a House or Houses.
+  def associate_committee_with_houses( committee, committee_house )
+    
+    # We check which House or Houses the committee belongs to.
+    case committee_house
+      
+    # If the committee is a Commons committee ...
+    when 'Commons'
+      
+      # ... we find the Commons ...
+      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Commons' )
+      
+      # ... and create a new association to the Commons.
+      associate_committee_with_a_house( committee, parliamentary_house )
+    
+    # If the committee is a Lords committee ...
+    when 'Lords'
+      
+      # ... we find the Lords ...
+      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Lords' )
+      
+      # ... and create a new association to the Lords.
+      associate_committee_with_a_house( committee, parliamentary_house )
+    
+    # If the committee is a joint committee ...
+    when 'Joint'
+      
+      # ... we find the Commons ...
+      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Commons' )
+      
+      # ... and create a new association to the Commons.
+      associate_committee_with_a_house( committee, parliamentary_house )
+      
+      # We find the Lords ...
+      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Lords' )
+      
+      # ... and create a new association to the Commons.
+      associate_committee_with_a_house( committee, parliamentary_house )
+    end
+  end
+  
+  # ### A method to associate a committee to a House.
+  def associate_committee_with_a_house( committee, parliamentary_house )
+    
+    # We attempt to find an association between the committee and the House.
+    committee_house = CommitteeHouse.all.where( "committee_id = ?", committee.id ).where( "parliamentary_house_id = ?", parliamentary_house.id).first
+    
+    # If we don't find an assocation between the committee and the House ...
+    unless committee_house
+      
+      # ... we create an association between the committee and the House.
+      puts "creating committee house association"
+      committee_house = CommitteeHouse.new
+      committee_house.committee = committee
+      committee_house.parliamentary_house = parliamentary_house
+      committee_house.save!
+    end
+  end
+  
+  # ### A method associate a committee with its type or types.
+  def associate_committee_with_type( committee, committee_committee_types )
+    
+    # For each committee type item in the committee's committee types ....
+    committee_committee_types.each do |committee_type_item|
+      
+      # ... we store the returned values.
+      committee_type_id = committee_type_item['id']
+      
+      # We find the committee type.
+      committee_type = CommitteeType.find_by_system_id( committee_type_id )
+      
+      # We attempt to find an association between the committee and its type.
+      committee_committee_type = CommitteeCommitteeType.all.where( "committee_id = ?", committee.id ).where( "committee_type_id = ?", committee_type.id).first
+      
+      # Unless we find an association between the committee and its type ...
+      unless committee_committee_type
+        
+        # ... we create a new association between the committee and its committee type.
+        puts "creating committee committee type association"
+        committee_committee_type = CommitteeCommitteeType.new
+        committee_committee_type.committee = committee
+        committee_committee_type.committee_type = committee_type
+        committee_committee_type.save!
+      end
+    end
+  end
+  
+  # ### A method to associate the committee with the departments it scrutinises.
+  def associate_committee_with_departments( committee, committee_scrutinising_departments )
+    
+    # For each department item in the committee's scrutinising departments ...
+    committee_scrutinising_departments.each do |department_item|
+      
+      # ... we store the variables returned.
+      department_system_id = department_item['departmentId']
+      department_name = department_item['name']
+      
+      # We attempt to find the department.
+      department = Department.find_by_system_id( department_system_id )
+      
+      # Unless we find the department ...
+      unless department
+        
+        # ... we create a new department
+        puts "creating department: #{department_name}"
+        department = Department.new
+        department.system_id = department_system_id
+      end
+      
+      # We create or update the department attributes.
+      department.name = department_name
+      department.save!
+      
+      # We attempt to find a scrutinising.
+      scrutinising = Scrutinising.all.where( "committee_id = ?", committee.id ).where( "department_id = ?", department.id ).first
+      
+      # Unless we find a scrutinising ...
+      unless scrutinising
+      
+        # ... we create the association between the committee and the department it scrutinises.
+        puts "creating a new scrutiny association"
+        scrutinising = Scrutinising.new
+        scrutinising.committee = committee
+        scrutinising.department = department
+        scrutinising.save!
+      end
+    end
+  end
+  
+  
+  
+  
+  
+  
+  
+  
   
   def import_or_update_oral_evidence_transcript( oral_evidence_transcript_item )
     
@@ -831,226 +1101,6 @@ module IMPORT
 		#	"contact": null
 		#},
     
-  end
-  
-  # A method to import or update a committee.
-  def import_or_update_committee( committee_item )
-    
-    # We store the returned values.
-    committee_system_id = committee_item['id']
-    committee_name = committee_item['name']
-    committee_parent_committee_system_id = committee_item['parentCommittee']['id'] if committee_item['parentCommittee']
-    committee_committee_types = committee_item['committeeTypes']
-    committee_scrutinising_departments = committee_item['scrutinisingDepartments']
-    committee_house = committee_item['house']
-    committee_show_on_website = committee_item['showOnWebsite']
-    committee_website_legacy_url = committee_item['websiteLegacyUrl']
-    committee_website_legacy_redirect_enabled = committee_item['websiteLegacyRedirectEnabled']
-    committee_start_on = committee_item['startDate']
-    committee_end_on = committee_item['endDate']
-    committee_address = committee_item['contact']['address']
-    committee_phone = committee_item['contact']['phone']
-    committee_email = committee_item['contact']['email']
-    committee_contact_disclaimer = committee_item['contact']['contactDisclaimer']
-    committee_commons_appointed_on = committee_item['dateCommonsAppointed']
-    committee_lords_appointed_on = committee_item['dateLordsAppointed']
-    committee_is_lead_committee = committee_item['isLeadCommittee']
-    committee_lead_house = committee_item['leadHouse']
-    
-    # If the committee has a parent committee ...
-    if committee_parent_committee_system_id
-      
-      # ... we attempt to find the parent committee.
-      parent_committee = Committee.find_by_system_id( committee_parent_committee_system_id )
-      
-      # We flag an error if we don't find the parent committee.
-      puts "Committee #{committee_system_id} has parent committee #{committee_parent_committee_system_id} - not loaded into database" unless parent_committee
-    end
-    
-    # If the committee has no parent committtee or if we've found the parent committee ...
-    if committee_parent_committee_system_id.nil? || parent_committee
-    
-      # ... we attempt to find the committee.
-      committee = Committee.find_by_system_id( committee_system_id )
-    
-      # If we fail to find the committee ...
-      unless committee
-      
-        # ... we create the committee.
-        committee = Committee.new
-        committee.system_id = committee_system_id
-      end
-      
-      # Regardless of whether we found the committee or created it, we update its attributes.
-      committee.name = committee_name
-      committee.start_on = committee_start_on
-      committee.end_on = committee_end_on
-      committee.commons_appointed_on = committee_commons_appointed_on if committee_commons_appointed_on
-      committee.lords_appointed_on = committee_lords_appointed_on if committee_lords_appointed_on
-      committee.is_shown_on_website = committee_show_on_website
-      committee.legacy_url = committee_website_legacy_url
-      committee.is_redirect_enabled = committee_website_legacy_redirect_enabled
-      committee.address = committee_address
-      committee.phone = committee_phone
-      committee.email = committee_email
-      committee.contact_disclaimer = committee_contact_disclaimer
-      committee.is_lead_committee = committee_is_lead_committee
-      committee.parent_committee_id = parent_committee.id if parent_committee
-      
-      # We associate the committee with a House or Houses.
-      associate_committee_with_houses( committee, committee_house )
-      
-      # We associate the committee with its types.
-      associate_committee_with_type( committee, committee_committee_types )
-      
-      # We associate the committee with the departments it scrutinises.
-      associate_committee_with_departments( committee, committee_scrutinising_departments )
-      
-      # If the committee is a joint committee it should have a lead house.
-      # ... if there's a lead House.
-      if committee_lead_house
-        
-        # ... if the Commons is marked as the lead House ...
-        if committee_lead_house['isCommons']
-          
-          # ... we find the Commons.
-          house = ParliamentaryHouse.find_by_short_label( 'Commons' )
-          
-        # If the Lords is the lead House ...
-        elsif committee_lead_house['isLords']
-          
-          # ... we find the Lords.
-          house = ParliamentaryHouse.find_by_short_label( 'Lords' )
-        end
-        
-        # We associate the committee with the lead House.
-        committee.lead_parliamentary_house_id = house.id
-      end
-      committee.save!
-    end
-  end
-  
-  # A method to associate a committee with a House or Houses.
-  def associate_committee_with_houses( committee, committee_house )
-    
-    # We check which House or Houses the committee belongs to.
-    case committee_house
-      
-    # If the committee is a Commons committee ...
-    when 'Commons'
-      
-      # ... we find the Commons ...
-      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Commons' )
-      
-      # ... and create a new association to the Commons.
-      associate_committee_with_a_house( committee, parliamentary_house )
-    
-    # If the committee is a Lords committee ...
-    when 'Lords'
-      
-      # ... we find the Lords ...
-      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Lords' )
-      
-      # ... and create a new association to the Lords.
-      associate_committee_with_a_house( committee, parliamentary_house )
-    
-    # If the committee is a joint committee ...
-    when 'Joint'
-      
-      # ... we find the Commons ...
-      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Commons' )
-      
-      # ... and create a new association to the Commons.
-      associate_committee_with_a_house( committee, parliamentary_house )
-      
-      # We find the Lords ...
-      parliamentary_house = ParliamentaryHouse.find_by_short_label( 'Lords' )
-      
-      # ... and create a new association to the Commons.
-      associate_committee_with_a_house( committee, parliamentary_house )
-    end
-  end
-  
-  # A method to associate a committee to a House.
-  def associate_committee_with_a_house( committee, parliamentary_house )
-    
-    # We attempt to find an association between the committee and the House.
-    committee_house = CommitteeHouse.all.where( "committee_id = ?", committee.id ).where( "parliamentary_house_id = ?", parliamentary_house.id).first
-    
-    # If we don't find an assocation between the committee and the House ...
-    unless committee_house
-      
-      # ... we create an association between the committee and the House.
-      committee_house = CommitteeHouse.new
-      committee_house.committee = committee
-      committee_house.parliamentary_house = parliamentary_house
-      committee_house.save!
-    end
-  end
-  
-  # A method associate a committee with its type or types.
-  def associate_committee_with_type( committee, committee_committee_types )
-    
-    # For each committee type item in the committee's committee types ....
-    committee_committee_types.each do |committee_type_item|
-      
-      # ... we store the returned values.
-      committee_type_id = committee_type_item['id']
-      
-      # We find the committee type.
-      committee_type = CommitteeType.find_by_system_id( committee_type_id )
-      
-      # We attempt to find an association between the committee and its type.
-      committee_committee_type = CommitteeCommitteeType.all.where( "committee_id = ?", committee.id ).where( "committee_type_id = ?", committee_type.id).first
-      
-      # Unless we find an association between the committee and its type ...
-      unless committee_committee_type
-        
-        # ... we create a new association between the committee and its committee type.
-        committee_committee_type = CommitteeCommitteeType.new
-        committee_committee_type.committee = committee
-        committee_committee_type.committee_type = committee_type
-        committee_committee_type.save!
-      end
-    end
-  end
-  
-  # A method to associate the committee with the departments it scrutinises.
-  def associate_committee_with_departments( committee, committee_scrutinising_departments )
-    
-    # For each department item in the committee's scrutinising departments ...
-    committee_scrutinising_departments.each do |department_item|
-      
-      # ... we store the variables returned.
-      department_system_id = department_item['departmentId']
-      department_name = department_item['name']
-      
-      # We attempt to find the department.
-      department = Department.find_by_system_id( department_system_id )
-      
-      # Unless we find the department ...
-      unless department
-        
-        # ... we create a new department
-        department = Department.new
-        department.system_id = department_system_id
-        department.name = department_name
-        department.save!
-      end
-      
-      # We attempt to find a scrutinising.
-      scrutinising = Scrutinising.all.where( "committee_id = ?", committee.id ).where( "department_id = ?", department.id ).first
-      
-      # Unless we find a scrutinising ...
-      unless scrutinising
-      
-        # ... we create the association between the committee and the department it scrutinises.
-        scrutinising = Scrutinising.new
-        scrutinising.committee = committee
-        scrutinising.department = department
-        scrutinising.save!
-      end
-    end
   end
   
   # A methof to associate a committee with a work package.
