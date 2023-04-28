@@ -92,7 +92,7 @@ module IMPORT
     end
   end
   
-  # ## A method to import current committees.
+  # ### A method to import current committees.
   def import_current_committees( skip )
     puts "importing committees"
     
@@ -117,6 +117,21 @@ module IMPORT
       
       # ... we call this method again, incrementing the skip by by 30 results.
       import_committees( skip + 30 )
+    end
+  end
+  
+  # ### A method to import work packages for current committees.
+  def import_work_packages_for_current_committees
+    puts "importing work packages for current committees"
+    
+    # We get all current committees.
+    committees = Committee.all.where( "end_on IS NOT NULL AND end_on < ?", Date.today )
+    
+    # For each committee ...
+    committees.each do |committee|
+      
+      # ... we get the work packages.
+      get_work_packages_for_committee( committee, 0 )
     end
   end
   
@@ -163,7 +178,7 @@ module IMPORT
   
 
   
-  # NOTE: should we be creating work packages in link_committees_to_work_packages?
+  
   # A method to import all work packages.
   def import_work_packages( skip )
     puts "importing work packages"
@@ -196,7 +211,7 @@ module IMPORT
   def link_committees_to_work_packages
     puts "importing links between committees and work packages"
     
-    # We get all the committeees.
+    # We get all the committees.
     committees = Committee.all
     
     # For each committee ...
@@ -204,34 +219,6 @@ module IMPORT
       
       # ... we get the work packages.
       get_work_packages_for_committee( committee, 0 )
-    end
-  end
-  
-  # A method to get work packages for a committee.
-  def get_work_packages_for_committee( committee, skip )
-    
-    # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/CommitteeBusiness?CommitteeId=#{committee.system_id}&take=30&skip=#{skip}"
-    
-    
-    # We get the JSON.
-    json = JSON.load( URI.open( url ) )
-    
-    # For each work package item in the feed ....
-    json['items'].each do |work_package_item|
-      
-      # ... we associate the work package with the committee.
-      associate_work_package_with_committee( committee, work_package_item )
-    end
-    
-    # We get the total results count from the API.
-    total_results = json['totalResults']
-    
-    # If the total results count is greater than the number of results skipped ...
-    if total_results > skip
-      
-      # ... we call this method again, incrementing the skip by by 30 results.
-      get_work_packages_for_committee( committee, skip + 30 )
     end
   end
   
@@ -520,6 +507,106 @@ module IMPORT
         scrutinising.department = department
         scrutinising.save!
       end
+    end
+  end
+  
+  # ### A method to get work packages for a committee.
+  def get_work_packages_for_committee( committee, skip )
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/CommitteeBusiness?CommitteeId=#{committee.system_id}&take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each work package item in the feed ....
+    json['items'].each do |work_package_item|
+      
+      # ... we import or update the work package ...
+      import_or_update_work_package( work_package_item )
+      
+      # ... and associate the work package with the committee.
+      associate_work_package_with_committee( committee, work_package_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      get_work_packages_for_committee( committee, skip + 30 )
+    end
+  end
+  
+  # ### A method to import or update a work package.
+  def import_or_update_work_package( work_package )
+    
+    # We store the returned values.
+    work_package_system_id = work_package['id']
+    work_package_title = work_package['title']
+    work_package_work_package_type_system_id = work_package['type']['id']
+    work_package_open_on = work_package['openDate']
+    work_package_close_on = work_package['closeDate']
+    
+    # We find the work package type.
+    work_package_type = WorkPackageType.find_by_system_id( work_package_work_package_type_system_id )
+    
+    # We attempt to find the work package.
+    work_package = WorkPackage.find_by_system_id( work_package_system_id )
+    
+    # If we don't find the work package ...
+    unless work_package
+      
+      # ... we create a new work package.
+      puts "creating new work package: #{work_package_title}"
+      work_package = WorkPackage.new
+      work_package.system_id = work_package_system_id
+    end
+    
+    # We assign attributes to the work package.
+    work_package.title = work_package_title
+    work_package.open_on = work_package_open_on
+    work_package.close_on = work_package_close_on
+    work_package.work_package_type = work_package_type
+    work_package.save!
+    
+	
+		#	"latestReport": null,
+		#	"openSubmissionPeriods": [
+
+		#	],
+		#	"closedSubmissionPeriods": [
+    #
+		#	],
+		#	"nextOralEvidenceSession": null,
+		#	"contact": null
+		#},
+    
+  end
+  
+  # ### A method to associate a committee with a work package.
+  def associate_work_package_with_committee( committee, work_package_item )
+    
+    # We store the variables returned.
+    work_package_system_id = work_package_item['id']
+    
+    # We find the work package.
+    work_package = WorkPackage.find_by_system_id( work_package_system_id )
+    
+    # We try to find the committee work package.
+    committee_work_package = CommitteeWorkPackage.all.where( "committee_id = ?", committee.id).where( "work_package_id = ?", work_package.id ).first
+    
+    # Unless the committee work package exists ...
+    unless committee_work_package
+      
+      # ... we create a new committee work package.
+      puts "creating committee work package association"
+      committee_work_package = CommitteeWorkPackage.new
+      committee_work_package.committee = committee
+      committee_work_package.work_package = work_package
+      committee_work_package.save!
     end
   end
   
@@ -1055,74 +1142,6 @@ module IMPORT
         event_segment.activity_type = activity_type
         event_segment.save!
       end
-    end
-  end
-  
-  # A method to import or update a work package.
-  def import_or_update_work_package( work_package )
-    
-    # We store the returned values.
-    work_package_system_id = work_package['id']
-    work_package_title = work_package['title']
-    work_package_work_package_type_system_id = work_package['type']['id']
-    work_package_open_on = work_package['openDate']
-    work_package_close_on = work_package['closeDate']
-    
-    # We attempt to find the work package.
-    work_package = WorkPackage.find_by_system_id( work_package_system_id )
-    
-    # If we don't find the work package ...
-    unless work_package
-      
-      # ... we create a new work package.
-      work_package = WorkPackage.new
-    end
-    
-    # We find the work package type.
-    work_package_type = WorkPackageType.find_by_system_id( work_package_work_package_type_system_id )
-    
-    # We assign attributes to the work package.
-    work_package.title = work_package_title
-    work_package.open_on = work_package_open_on
-    work_package.close_on = work_package_close_on
-    work_package.system_id = work_package_system_id
-    work_package.work_package_type = work_package_type
-    work_package.save!
-    
-	
-		#	"latestReport": null,
-		#	"openSubmissionPeriods": [
-
-		#	],
-		#	"closedSubmissionPeriods": [
-    #
-		#	],
-		#	"nextOralEvidenceSession": null,
-		#	"contact": null
-		#},
-    
-  end
-  
-  # A methof to associate a committee with a work package.
-  def associate_work_package_with_committee( committee, work_package_item )
-    
-    # We store the variables returned.
-    work_package_system_id = work_package_item['id']
-    
-    # We find the work package.
-    work_package = WorkPackage.find_by_system_id( work_package_system_id )
-    
-    # We try to find the committee work package.
-    committee_work_package = CommitteeWorkPackage.all.where( "committee_id = ?", committee.id).where( "work_package_id = ?", work_package.id ).first
-    
-    # Unless the committee work package exists ...
-    unless committee_work_package
-      
-      # ... we create a new committee work package.
-      committee_work_package = CommitteeWorkPackage.new
-      committee_work_package.committee = committee
-      committee_work_package.work_package = work_package
-      committee_work_package.save!
     end
   end
 end
