@@ -27,6 +27,7 @@ module IMPORT
       unless category
         
         # ... we create a new category.
+        puts "creating new category"
         category = Category.new
         category.system_id = committee_type_item_category_system_id
         category.name = committee_type_item_category_name
@@ -40,6 +41,7 @@ module IMPORT
       unless committee_type
         
         # ... we create a new committee type.
+        puts "creating new committee type"
         committee_type = CommitteeType.new
         committee_type.system_id = committee_type_item_system_id
         committee_type.name = committee_type_item_name
@@ -48,6 +50,19 @@ module IMPORT
       end
     end
   end
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   # A method to import all committees.
   def import_committees( skip )
