@@ -1,7 +1,7 @@
 # # A module for importing for the committee system API.
 module IMPORT
   
-  # ## Import methods.
+  # ## Import sync methods run as rake tasks on Heroku.
   
   # ### A method to import committee types.
   def import_committee_types
@@ -146,81 +146,12 @@ module IMPORT
   
   
   
-  
-  
-  # A method to import all committees.
-  def import_committees( skip )
-    puts "importing committees"
-    
-    # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/Committees?CommitteeStatus=all&ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
-    
-    # We get the JSON.
-    json = JSON.load( URI.open( url ) )
-    
-    # For each committee item in the feed ....
-    json['items'].each do |committee_item|
-      
-      # ... we import or update the committee.
-      import_or_update_committee( committee_item )
-    end
-    
-    # We get the total results count from the API.
-    total_results = json['totalResults']
-    
-    # If the total results count is greater than the number of results skipped ...
-    if total_results > skip
-      
-      # ... we call this method again, incrementing the skip by by 30 results.
-      import_committees( skip + 30 )
-    end
-  end
+
   
 
   
   
-  # A method to import all work packages.
-  def import_work_packages( skip )
-    puts "importing work packages"
-    
-    # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/CommitteeBusiness?take=30&skip=#{skip}"
-    
-    # We get the JSON.
-    json = JSON.load( URI.open( url ) )
-    
-    # For each work package item in the feed ....
-    json['items'].each do |work_package|
-      
-      # ... we import or update the work package.
-      import_or_update_work_package( work_package )
-    end
-    
-    # We get the total results count from the API.
-    total_results = json['totalResults']
-    
-    # If the total results count is greater than the number of results skipped ...
-    if total_results > skip
-      
-      # ... we call this method again, incrementing the skip by by 30 results.
-      import_work_packages( skip + 30 )
-    end
-  end
-  
-  # A method to get work packages for committees.
-  def link_committees_to_work_packages
-    puts "importing links between committees and work packages"
-    
-    # We get all the committees.
-    committees = Committee.all
-    
-    # For each committee ...
-    committees.each do |committee|
-      
-      # ... we get the work packages.
-      get_work_packages_for_committee( committee, 0 )
-    end
-  end
+
   
   # A method to import all events.
   def import_events( skip )
@@ -583,7 +514,6 @@ module IMPORT
 		#	"nextOralEvidenceSession": null,
 		#	"contact": null
 		#},
-    
   end
   
   # ### A method to associate a committee with a work package.
@@ -1142,6 +1072,89 @@ module IMPORT
         event_segment.activity_type = activity_type
         event_segment.save!
       end
+    end
+  end
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  # ## Mass import methods run a one off set ups.
+  
+  # ### A method to import all committees.
+  def import_committees( skip )
+    puts "importing committees"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/Committees?CommitteeStatus=all&ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each committee item in the feed ....
+    json['items'].each do |committee_item|
+      
+      # ... we import or update the committee.
+      import_or_update_committee( committee_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_committees( skip + 30 )
+    end
+  end
+  
+  # ### A method to import all work packages.
+  def import_work_packages( skip )
+    puts "importing work packages"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/CommitteeBusiness?take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each work package item in the feed ....
+    json['items'].each do |work_package|
+      
+      # ... we import or update the work package.
+      import_or_update_work_package( work_package )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_work_packages( skip + 30 )
+    end
+  end
+  
+  # ### A method to get work packages for committees.
+  def link_committees_to_work_packages
+    puts "importing links between committees and work packages"
+    
+    # We get all the committees.
+    committees = Committee.all
+    
+    # For each committee ...
+    committees.each do |committee|
+      
+      # ... we get the work packages.
+      get_work_packages_for_committee( committee, 0 )
     end
   end
 end
