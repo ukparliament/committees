@@ -51,6 +51,45 @@ module IMPORT
     end
   end
   
+  # A method to import all work package types.
+  def import_work_package_types
+    puts "Importing work package types"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/CommitteeBusinessType"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each business type item in the feed ...
+    json.each do |business_type_item|
+      
+      # ... we store the returned values.
+      business_type_item_system_id = business_type_item['id']
+      business_type_item_name = business_type_item['name']
+      business_type_item_is_inquiry = business_type_item['isInquiry']
+      business_type_item_description = business_type_item['description']
+      
+      # We attempt to find the work package type.
+      work_package_type = WorkPackageType.find_by_system_id( business_type_item_system_id )
+      
+      # If we don't find work package type ...
+      unless work_package_type
+        
+        # ... we create it.
+        puts "creating new work package type"
+        work_package_type = WorkPackageType.new
+        work_package_type.system_id = business_type_item_system_id
+      end
+      
+      # We create or update the work package type attributes.
+      work_package_type.name = business_type_item_name
+      work_package_type.description = business_type_item_description
+      work_package_type.is_inquiry = business_type_item_is_inquiry
+      work_package_type.save!
+    end
+  end
+  
   
   
   
@@ -92,41 +131,7 @@ module IMPORT
     end
   end
   
-  # A method to import all work package types.
-  def import_work_package_types
-    puts "Importing work package types"
-    
-    # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/CommitteeBusinessType"
-    
-    # We get the JSON.
-    json = JSON.load( URI.open( url ) )
-    
-    # For each business type item in the feed ...
-    json.each do |business_type_item|
-      
-      # ... we store the returned values.
-      business_type_item_system_id = business_type_item['id']
-      business_type_item_name = business_type_item['name']
-      business_type_item_is_inquiry = business_type_item['isInquiry']
-      business_type_item_description = business_type_item['description']
-      
-      # We attempt to find the work package type.
-      work_package_type = WorkPackageType.find_by_system_id( business_type_item_system_id )
-      
-      # If we don't find work package type ...
-      unless work_package_type
-        
-        # ... we create it.
-        work_package_type = WorkPackageType.new
-        work_package_type.name = business_type_item_name
-        work_package_type.description = business_type_item_description
-        work_package_type.is_inquiry = business_type_item_is_inquiry
-        work_package_type.system_id = business_type_item_system_id
-        work_package_type.save!
-      end
-    end
-  end
+
   
   # NOTE: should we be creating work packages in link_committees_to_work_packages?
   # A method to import all work packages.
