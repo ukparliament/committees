@@ -116,7 +116,7 @@ module IMPORT
     if total_results > skip
       
       # ... we call this method again, incrementing the skip by by 30 results.
-      import_committees( skip + 30 )
+      import_current_committees( skip + 30 )
     end
   end
   
@@ -135,30 +135,12 @@ module IMPORT
     end
   end
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-  
-
-  
-  # A method to import all events.
-  def import_events( skip )
-    puts "importing events"
+  # ### A method to import upcoming events.
+  def import_upcoming_events( skip )
+    puts "importing upcoming events"
     
     # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/Events/Activities?take=30&skip=#{skip}"
+    url = "https://committees-api.parliament.uk/api/Events/Activities?StartDateFrom=#{Date.today}&take=30&skip=#{skip}"
     
     # We get the JSON.
     json = JSON.load( URI.open( url ) )
@@ -177,9 +159,22 @@ module IMPORT
     if total_results > skip
       
       # ... we call this method again, incrementing the skip by by 30 results.
-      import_events( skip + 30 )
+      import_upcoming_events( skip + 30 )
     end
   end
+  
+  
+  
+  
+  
+  
+
+
+  
+  
+
+  
+  
   
   # A method to import all oral evidence sessions.
   def import_oral_evidence_transcripts( skip )
@@ -539,6 +534,176 @@ module IMPORT
       committee_work_package.save!
     end
   end
+  
+  # ### A method to import or update an event.
+  def import_or_update_event( event_item )
+    
+    # We store the returned values.
+    event_system_id = event_item['id']
+    event_name = event_item['name']
+    event_start_at = event_item['startDate']
+    event_end_at = event_item['endDate']
+    event_cancelled_at = event_item['cancelledDate']
+    event_location_id = event_item['locationId']
+    event_location_name = event_item['location']
+    event_originating_system = event_item['eventSource']
+    event_event_type_system_id = event_item['eventType']['id']
+    event_event_type_name = event_item['eventType']['name']
+    event_event_type_is_visit = event_item['eventType']['isVisit']
+    event_event_type_description = event_item['eventType']['description']
+    event_segments = event_item['activities']
+    
+    # NOTE: todo
+		#"childEvents": null, < appears to be empty unless it requires some parameter
+		#"nextActivity": null < appears to be populated
+    
+    # We attempt to find the event type.
+    event_type = EventType.find_by_system_id( event_event_type_system_id )
+    
+    # Unless we find the event type ...
+    unless event_type
+      
+      # ... we create a new event type.
+      puts "creating a new event type: #{event_event_type_name}"
+      event_type = EventType.new
+      event_type.system_id = event_event_type_system_id
+    end
+    
+    # We create or update the event type attributes.
+    event_type.name = event_event_type_name
+    event_type.is_visit = event_event_type_is_visit
+    event_type.description = event_event_type_description
+    event_type.save!
+    
+    # We attempt to find the event.
+    event = Event.find_by_system_id( event_system_id )
+    
+    # Unless we find the event ...
+    unless event
+      
+      # ... we create the event.
+      puts "creating a new event: #{event_name}"
+      event = Event.new
+      event.system_id = event_system_id
+    end
+    
+    # We assign or update attributes.
+    event.name = event_name
+    event.start_at = event_start_at
+    event.end_at = event_end_at
+    event.cancelled_at = event_cancelled_at
+    event.location_name = event_location_name if event_location_name
+    event.originating_system = event_originating_system
+    event.event_type = event_type
+    
+    # Checked that all events have at least one associated committee. This is the case.
+    # For each committee item assigned to the event ...
+    event_item['committees'].each do |committee_item|
+      
+      # ... we store the returned values.
+      committee_system_id = committee_item['id']
+      
+      # We find the committee.
+      committee = Committee.find_by_system_id( committee_system_id )
+      
+      # We attempt to find the committee event association.
+      committee_event = CommitteeEvent.all
+        .where( "committee_id = ?", committee.id )
+        .where( "event_id = ?", event.id )
+        .first
+        
+      # Unless we find the committee event assocation ...
+      unless committee_event
+      
+        # ... we create a new committee event association.
+        puts "associating an event with a committee"
+        committee_event = CommitteeEvent.new
+        committee_event.committee = committee
+        committee_event.event = event
+        committee_event.save!
+      end
+    end
+    
+    # If the event has a location ID ...
+    if event_location_id
+      
+      # ... we attempt to find the location.
+      location = Location.find_by_system_id( event_location_id )
+      
+      # If we don't find the location ...
+      unless location
+        
+        # ... we create a new location.
+        puts "creating new location: #{event_location_name}"
+        location = Location.new
+        location.system_id = event_location_id
+      end
+      
+      # We assign or update event attributes.
+      location.name = event_location_name
+      location.save!
+      
+      # We associate the event with the location.
+      event.location = location
+    end
+    
+    # We save the event.
+    event.save!
+    
+    # If the event has segments ...
+    unless event_segments.empty?
+    
+      # ... for each event segment item ...
+      event_segments.each do |event_segment_item|
+        
+        # ... we store the returned values.
+        event_segment_item_system_id = event_segment_item['id']
+        event_segment_item_name = event_segment_item['name']
+        event_segment_item_start_at = event_segment_item['startDate']
+        event_segment_item_end_at = event_segment_item['endDate']
+        event_segment_item_is_private = event_segment_item['isPrivate']
+        event_segment_item_activity_type = event_segment_item['activityType']
+        
+        # We try to find the activity type.
+        activity_type = ActivityType.find_by_name( event_segment_item_activity_type )
+        
+        # If we don't find the activity type ...
+        unless activity_type
+          
+          # ... we create a new activity type.
+          puts "creating new activity type #{event_segment_item_activity_type}"
+          activity_type = ActivityType.new
+        end
+        
+        # We assign or update activity type attributes.
+        activity_type.name = event_segment_item_activity_type
+        activity_type.save!
+        
+        # We try to find the event segment.
+        event_segment = EventSegment.find_by_system_id( event_segment_item_system_id )
+        
+        # Unless we find the event segment ...
+        unless event_segment
+          
+          # ... we create a new event segment.
+          puts "creating a new event segment #{event_segment_item_name}"
+          event_segment = EventSegment.new
+          event_segment.system_id = event_segment_item_system_id
+        end
+        
+        # We assign or update attributes.
+        event_segment.name = event_segment_item_name
+        event_segment.start_at = event_segment_item_start_at
+        event_segment.end_at = event_segment_item_end_at
+        event_segment.is_private = event_segment_item_is_private
+        event_segment.event = event
+        event_segment.activity_type = activity_type
+        event_segment.save!
+      end
+    end
+  end
+  
+  
   
   
   
@@ -929,151 +1094,7 @@ module IMPORT
     end
   end
   
-  # A method to import an event.
-  def import_or_update_event( event_item )
-    
-    # We store the returned values.
-    event_system_id = event_item['id']
-    event_name = event_item['name']
-    event_start_at = event_item['startDate']
-    event_end_at = event_item['endDate']
-    event_cancelled_at = event_item['cancelledDate']
-    event_location_id = event_item['locationId']
-    event_location_name = event_item['location']
-    event_originating_system = event_item['eventSource']
-    event_event_type_system_id = event_item['eventType']['id']
-    event_event_type_name = event_item['eventType']['name']
-    event_event_type_is_visit = event_item['eventType']['isVisit']
-    event_event_type_description = event_item['eventType']['description']
-    event_segments = event_item['activities']
-    
-    # NOTE: todo
-		#"childEvents": null, < appears to be empty unless it requires some parameter
-		#"nextActivity": null < appears to be populated
-    
-    # We attempt to find the event type.
-    event_type = EventType.find_by_system_id( event_event_type_system_id )
-    
-    # Unless we find the event type ...
-    unless event_type
-      
-      # ... we create a new event type.
-      event_type = EventType.new
-      event_type.name = event_event_type_name
-      event_type.is_visit = event_event_type_is_visit
-      event_type.description = event_event_type_description
-      event_type.system_id = event_event_type_system_id
-      event_type.save!
-    end
-    
-    # We attempt to find the event.
-    event = Event.find_by_system_id( event_system_id )
-    
-    # Unless we find the event ...
-    unless event
-      
-      # ... we create the event.
-      event = Event.new
-      event.system_id = event_system_id
-    end
-    
-    # We assign or update attributes.
-    event.name = event_name
-    event.start_at = event_start_at
-    event.end_at = event_end_at
-    event.cancelled_at = event_cancelled_at
-    event.location_name = event_location_name if event_location_name
-    event.originating_system = event_originating_system
-    event.event_type = event_type
-    
-    # Checked that all events have at least one associated committee. This is the case.
-    # For each committee item assigned to the event ...
-    event_item['committees'].each do |committee_item|
-      
-      # ... we store the returned values.
-      committee_system_id = committee_item['id']
-      
-      # We find the committee.
-      committee = Committee.find_by_system_id( committee_system_id )
-      
-      # ... we create a new committee event.
-      committee_event = CommitteeEvent.new
-      committee_event.committee = committee
-      committee_event.event = event
-      committee_event.save!
-    end
-    
-    # If the event has a location ID ...
-    if event_location_id
-      
-      # ... we attempt to find the location.
-      location = Location.find_by_system_id( event_location_id )
-      
-      # If we don't find the location ...
-      unless location
-        
-        # ... we create a new location.
-        location = Location.new
-        location.name = event_location_name
-        location.system_id = event_location_id
-        location.save!
-      end
-      
-      # We associate the event with the location.
-      event.location = location
-    end
-    
-    # We save the event.
-    event.save!
-    
-    # If the event has segments ...
-    unless event_segments.empty?
-    
-      # ... for each event segment item ...
-      event_segments.each do |event_segment_item|
-        
-        # ... we store the returned values.
-        event_segment_item_system_id = event_segment_item['id']
-        event_segment_item_name = event_segment_item['name']
-        event_segment_item_start_at = event_segment_item['startDate']
-        event_segment_item_end_at = event_segment_item['endDate']
-        event_segment_item_is_private = event_segment_item['isPrivate']
-        event_segment_item_activity_type = event_segment_item['activityType']
-        
-        # We try to find the activity type.
-        activity_type = ActivityType.find_by_name( event_segment_item_activity_type )
-        
-        # If we don't find the activity type ...
-        unless activity_type
-          
-          # ... we create a new activity type.
-          activity_type = ActivityType.new
-          activity_type.name = event_segment_item_activity_type
-          activity_type.save!
-        end
-        
-        # We try to find the event segment.
-        event_segment = EventSegment.find_by_system_id( event_segment_item_system_id )
-        
-        # Unless we find the event segment ...
-        unless event_segment
-          
-          # ... we create a new event segment.
-          event_segment = EventSegment.new
-          event_segment.system_id = event_segment_item_system_id
-        end
-        
-        # We assign or update attributes.
-        event_segment.name = event_segment_item_name
-        event_segment.start_at = event_segment_item_start_at
-        event_segment.end_at = event_segment_item_end_at
-        event_segment.is_private = event_segment_item_is_private
-        event_segment.event = event
-        event_segment.activity_type = activity_type
-        event_segment.save!
-      end
-    end
-  end
+  
   
   
   
@@ -1155,6 +1176,34 @@ module IMPORT
       
       # ... we get the work packages.
       get_work_packages_for_committee( committee, 0 )
+    end
+  end
+  
+  # ### A method to import all events.
+  def import_events( skip )
+    puts "importing events"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/Events/Activities?take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each event item in the feed ....
+    json['items'].each do |event_item|
+      
+      # ... we import or update the event.
+      import_or_update_event( event_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_events( skip + 30 )
     end
   end
 end
