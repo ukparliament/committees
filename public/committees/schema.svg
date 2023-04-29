@@ -285,7 +285,7 @@
         <title>Class with Attributes</title>
         <g id="Graphic_45">
           <title>Attributes</title>
-          <rect x="1402" y="87" width="307" height="74" fill="#8080ff"/>
+          <rect x="1402" y="87" width="307" height="74" fill="#ffff80"/>
           <rect x="1402" y="87" width="307" height="74" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
           <text transform="translate(1408 93)" fill="#515556">
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
@@ -295,7 +295,7 @@
         </g>
         <g id="Graphic_44">
           <title>Class Name</title>
-          <rect x="1402" y="61" width="307" height="26" fill="#8080ff"/>
+          <rect x="1402" y="61" width="307" height="26" fill="#ffff80"/>
           <rect x="1402" y="61" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
           <text transform="translate(1408 65)" fill="#515556">
             <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="64.807" y="13">committee_work_packages</tspan>
@@ -493,7 +493,7 @@
         </g>
       </g>
       <g id="Line_78">
-        <line x1="2449.2498" y1="357.82486" x2="2758.7926" y2="-199.82486" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
+        <line x1="2449.2498" y1="357.82486" x2="2758.7926" y2="-199.82486" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Group_79">
         <title>Class with Attributes</title>
@@ -517,7 +517,7 @@
         </g>
       </g>
       <g id="Line_82">
-        <line x1="2699.1056" y1="-206.30273" x2="2416.8175" y2="47.62762" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
+        <line x1="2699.1056" y1="-206.30273" x2="2416.8175" y2="47.62762" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_83">
         <line x1="2152.5" y1="124" x2="2214.5" y2="124" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
@@ -547,7 +547,7 @@
         <line x1="1187.0772" y1="137.6927" x2="1512.4134" y2="-267.57345" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_88">
-        <line x1="2656.5" y1="-320" x2="1727.5" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
+        <line x1="2656.5" y1="-320" x2="1727.5" y2="-320" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Group_89">
         <title>Class with Attributes</title>
@@ -749,6 +749,80 @@
       </g>
       <g id="Line_128">
         <line x1="3364" y1="-918" x2="3364" y2="-891.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Group_155">
+        <g id="Group_129">
+          <title>Class with Attributes</title>
+          <g id="Graphic_131">
+            <title>Attributes</title>
+            <rect x="37" y="-414.9" width="307" height="30" fill="aqua"/>
+            <rect x="37" y="-414.9" width="307" height="30" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+            <text transform="translate(43 -408.9)" fill="#515556">
+              <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">import_committee_types</tspan>
+            </text>
+          </g>
+        </g>
+        <g id="Group_135">
+          <title>Class with Attributes</title>
+          <g id="Graphic_136">
+            <title>Class Name</title>
+            <rect x="37" y="-384.2" width="307" height="26" fill="#ff80ff"/>
+            <rect x="37" y="-384.2" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+            <text transform="translate(43 -380.2)" fill="#515556">
+              <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">import_work_package_types</tspan>
+            </text>
+          </g>
+        </g>
+        <g id="Group_138">
+          <title>Class with Attributes</title>
+          <g id="Graphic_139">
+            <title>Class Name</title>
+            <rect x="37" y="-330.75" width="307" height="26" fill="#ffff80"/>
+            <rect x="37" y="-330.75" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+            <text transform="translate(43 -326.75)" fill="#515556">
+              <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">import_work_packages_for_current_committees</tspan>
+            </text>
+          </g>
+        </g>
+        <g id="Group_144">
+          <title>Class with Attributes</title>
+          <g id="Graphic_145">
+            <title>Class Name</title>
+            <rect x="37" y="-303.95" width="307" height="26" fill="#c0ffc0"/>
+            <rect x="37" y="-303.95" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+            <text transform="translate(43 -299.95)" fill="#515556">
+              <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">import_upcoming_events</tspan>
+            </text>
+          </g>
+        </g>
+        <g id="Group_147">
+          <title>Class with Attributes</title>
+          <g id="Graphic_148">
+            <title>Class Name</title>
+            <rect x="37" y="-277.1" width="307" height="26" fill="#ccc"/>
+            <rect x="37" y="-277.1" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+            <text transform="translate(43 -273.1)" fill="#515556">
+              <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">import_recent_oral_evidence_transcripts</tspan>
+            </text>
+          </g>
+        </g>
+        <g id="Group_152">
+          <title>Class with Attributes</title>
+          <g id="Graphic_153">
+            <title>Class Name</title>
+            <rect x="37" y="-357.45" width="307" height="26" fill="yellow"/>
+            <rect x="37" y="-357.45" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+            <text transform="translate(43 -353.45)" fill="#515556">
+              <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">import_current_committees</tspan>
+            </text>
+          </g>
+        </g>
+      </g>
+      <g id="Graphic_156">
+        <rect x="37" y="-468.66667" width="307" height="51" fill="white"/>
+        <text transform="translate(42 -452.39067)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" fill="black" x="74.26" y="15">Deployed sync tasks</tspan>
+        </text>
       </g>
     </g>
   </g>
