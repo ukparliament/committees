@@ -94,7 +94,7 @@ module IMPORT
   
   # ### A method to import current committees.
   def import_current_committees( skip )
-    puts "importing committees"
+    puts "importing current committees"
     
     # We set the URL to import from.
     url = "https://committees-api.parliament.uk/api/Committees?CommitteeStatus=current&ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
@@ -163,25 +163,15 @@ module IMPORT
     end
   end
   
-  
-  
-  
-  
-  
-
-
-  
-  
-
-  
-  
-  
-  # A method to import all oral evidence sessions.
-  def import_oral_evidence_transcripts( skip )
-    puts "importing oral evidence transcripts"
+  # ### A method to import recent oral evidence sessions.
+  def import_recent_oral_evidence_transcripts( skip )
+    puts "importing recent oral evidence transcripts"
+    
+    # We define recent as from 2 days ago in the hope we don't miss any.
+    start_date = Date.today - 2
     
     # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/OralEvidence?take=30&skip=#{skip}"
+    url = "https://committees-api.parliament.uk/api/OralEvidence?StartDate=#{start_date}&take=30&skip=#{skip}"
     
     # We get the JSON.
     json = JSON.load( URI.open( url ) )
@@ -200,10 +190,9 @@ module IMPORT
     if total_results > skip
       
       # ... we call this method again, incrementing the skip by by 30 results.
-      import_oral_evidence_transcripts( skip + 30 )
+      import_recent_oral_evidence_transcripts( skip + 30 )
     end
   end
-  
   
   
   
@@ -703,16 +692,7 @@ module IMPORT
     end
   end
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  # ### A method to import or update an oral evidence transcript.
   def import_or_update_oral_evidence_transcript( oral_evidence_transcript_item )
     
     # We store the returned values.
@@ -746,6 +726,7 @@ module IMPORT
     unless oral_evidence_transcript
       
       # ... we create a new oral evidence transcript.
+      puts "creating new oral evidence transcript published: #{oral_evidence_transcript_published_on}"
       oral_evidence_transcript = OralEvidenceTranscript.new
       oral_evidence_transcript.system_id = oral_evidence_transcript_system_id
     end
@@ -826,6 +807,7 @@ module IMPORT
         unless person
           
           # ... we create a new person.
+          puts "creating person: #{person_name}"
           person = Person.new
           person.mnis_id = oral_evidence_transcript_witness_mnis_id
         end
@@ -844,6 +826,7 @@ module IMPORT
         unless person
           
           # ... we create a new person.
+          puts "creating person: #{person_name}"
           person = Person.new
           person.system_id = oral_evidence_transcript_witness_person_system_id
         end
@@ -867,6 +850,7 @@ module IMPORT
         unless witness
         
           # ... we create a new witness.
+          puts "creating witness: #{oral_evidence_transcript_witness_person_name}"
           witness = Witness.new
           witness.oral_evidence_transcript = oral_evidence_transcript
           witness.person = person if person
@@ -885,6 +869,7 @@ module IMPORT
         unless witness
       
           # ... we create a new witness.
+          puts "creating witness: #{oral_evidence_transcript_witness_person_name}"
           witness = Witness.new
           witness.system_id = oral_evidence_transcript_witness_system_id
           witness.oral_evidence_transcript = oral_evidence_transcript
@@ -912,6 +897,7 @@ module IMPORT
         unless organisation
           
           # ... we create the organisation.
+          puts "creating organisation: #{organisation_name}"
           organisation = Organisation.new
           organisation.idms_id = organisation_idms_id
           organisation.system_id = organisation_system_id
@@ -932,6 +918,7 @@ module IMPORT
         unless position
           
           # ... we create a new position.
+          puts "creating position: #{organisation_role}"
           position = Position.new
           position.organisation = organisation
         end
@@ -950,6 +937,7 @@ module IMPORT
         unless witness_position
           
           # ... we create the witness position.
+          puts "creating witness position"
           witness_position = WitnessPosition.new
           witness_position.witness = witness
           witness_position.position = position
@@ -959,54 +947,7 @@ module IMPORT
     end
   end
   
-  # A method to associate an oral evidence transcript with its House of Commons numbers.
-  def associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
-    
-    # For each House of Commons number assoicated with the oral evidence transcript...
-    oral_evidence_transcript_house_of_commons_numbers.each do |house_of_commons_number|
-      
-      # We store the returned values.
-      house_of_commons_number_number = house_of_commons_number['number']
-      house_of_commons_number_session_id = house_of_commons_number['sessionId']
-      house_of_commons_number_session_label = house_of_commons_number['sessionDescription']
-      
-      # We attempt to find the session.
-      session = Session.find_by_system_id( house_of_commons_number_session_id )
-      
-      # Unless we find the session ...
-      unless session
-        
-        # ... we create a new session.
-        session = Session.new
-        session.system_id = house_of_commons_number_session_id
-      end
-      
-      # We create or update the session description.
-      session.label = house_of_commons_number_session_label
-      session.save
-      
-      # We attempt to find this House of Commons number.
-      house_of_commons_number = HouseOfCommonsNumber
-        .all
-        .where( "session_id = ?", session.id )
-        .where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id )
-        .where( "number = ?", house_of_commons_number_number )
-        .first
-        
-      # Unless this House of Commons number exists ...
-      unless house_of_commons_number
-        
-        # ... we create the House of Commons number.
-        house_of_commons_number = HouseOfCommonsNumber.new
-        house_of_commons_number.number = house_of_commons_number_number
-        house_of_commons_number.oral_evidence_transcript = oral_evidence_transcript
-        house_of_commons_number.session = session
-        house_of_commons_number.save
-      end
-    end
-  end
-  
-  # A method to associate an oral evidence transcript with its files.
+  # ### A method to associate an oral evidence transcript with its files.
   def associate_oral_evidence_transcript_with_files( oral_evidence_transcript, oral_evidence_transcript_document_files )
     
     # For each file assoicated with the oral evidence transcript...
@@ -1025,6 +966,7 @@ module IMPORT
       unless file
         
         # ... we create the file.
+        puts "creating an oral evidence transcript file"
         file = OralEvidenceTranscriptFile.new
         file.name = file_item_name
         file.size = file_item_size
@@ -1036,7 +978,7 @@ module IMPORT
     end
   end
   
-  # A method to associate an oral evidence transcript with its work packages.
+  # ### A method to associate an oral evidence transcript with its work packages.
   def associate_oral_evidence_transcript_with_work_packages( oral_evidence_transcript, oral_evidence_transcript_work_packages )
     
     # For each work package item associated with the oral evidence ...
@@ -1055,6 +997,7 @@ module IMPORT
       unless work_package_oral_evidence_transcript
         
         # ... we create a new work package oral evidence transcript.
+        puts "creating work package oral evidence transcript association"
         work_package_oral_evidence_transcript = WorkPackageOralEvidenceTranscript.new
         work_package_oral_evidence_transcript.work_package = work_package
         work_package_oral_evidence_transcript.oral_evidence_transcript = oral_evidence_transcript
@@ -1063,7 +1006,7 @@ module IMPORT
     end
   end
   
-  # A method to associate an oral evidence transcript with its committees.
+  # ### A method to associate an oral evidence transcript with its committees.
   def associate_oral_evidence_transcript_with_committees( oral_evidence_transcript, oral_evidence_transcript_committees )
     
     # For each committee item associated with the oral evidence ...
@@ -1085,6 +1028,7 @@ module IMPORT
         unless committee_oral_evidence_transcript
         
           # ... we create a new work package oral evidence transcript.
+          puts "creating a committee oral evidence transcript association"
           committee_oral_evidence_transcript = CommitteeOralEvidenceTranscript.new
           committee_oral_evidence_transcript.committee = committee
           committee_oral_evidence_transcript.oral_evidence_transcript = oral_evidence_transcript
@@ -1094,15 +1038,54 @@ module IMPORT
     end
   end
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  # ### A method to associate an oral evidence transcript with its House of Commons numbers.
+  def associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
+    
+    # For each House of Commons number assoicated with the oral evidence transcript...
+    oral_evidence_transcript_house_of_commons_numbers.each do |house_of_commons_number|
+      
+      # We store the returned values.
+      house_of_commons_number_number = house_of_commons_number['number']
+      house_of_commons_number_session_id = house_of_commons_number['sessionId']
+      house_of_commons_number_session_label = house_of_commons_number['sessionDescription']
+      
+      # We attempt to find the session.
+      session = Session.find_by_system_id( house_of_commons_number_session_id )
+      
+      # Unless we find the session ...
+      unless session
+        
+        # ... we create a new session.
+        puts "creating session #{house_of_commons_number_session_label}"
+        session = Session.new
+        session.system_id = house_of_commons_number_session_id
+      end
+      
+      # We create or update the session description.
+      session.label = house_of_commons_number_session_label
+      session.save
+      
+      # We attempt to find this House of Commons number.
+      house_of_commons_number = HouseOfCommonsNumber
+        .all
+        .where( "session_id = ?", session.id )
+        .where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id )
+        .where( "number = ?", house_of_commons_number_number )
+        .first
+        
+      # Unless this House of Commons number exists ...
+      unless house_of_commons_number
+        
+        # ... we create the House of Commons number.
+        puts "creating house of commons number #{house_of_commons_number_number}"
+        house_of_commons_number = HouseOfCommonsNumber.new
+        house_of_commons_number.number = house_of_commons_number_number
+        house_of_commons_number.oral_evidence_transcript = oral_evidence_transcript
+        house_of_commons_number.session = session
+        house_of_commons_number.save
+      end
+    end
+  end
   
   
   
@@ -1204,6 +1187,34 @@ module IMPORT
       
       # ... we call this method again, incrementing the skip by by 30 results.
       import_events( skip + 30 )
+    end
+  end
+  
+  # ### A method to import all oral evidence sessions.
+  def import_oral_evidence_transcripts( skip )
+    puts "importing oral evidence transcripts"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/OralEvidence?take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each oral evidence transcript item in the feed ....
+    json['items'].each do |oral_evidence_transcript_item|
+      
+      # ... we import or update the oral evidence transcript.
+      import_or_update_oral_evidence_transcript( oral_evidence_transcript_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_oral_evidence_transcripts( skip + 30 )
     end
   end
 end
