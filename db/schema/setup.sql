@@ -1,3 +1,4 @@
+drop table if exists memberships;
 drop table if exists witness_positions;
 drop table if exists witnesses;
 drop table if exists positions;
@@ -26,8 +27,17 @@ drop table if exists locations;
 drop table if exists event_types;
 drop table if exists activity_types;
 drop table if exists sessions;
+drop table if exists roles;
 
 
+
+create table roles (
+	id serial not null,
+	name varchar(255),
+	is_chair boolean default false,
+	system_id int not null,
+	primary key (id)
+);
 
 create table sessions (
 	id serial not null,
@@ -302,5 +312,23 @@ create table witness_positions (
 	position_id int not null,
 	constraint fk_witness foreign key (witness_id) references witnesses(id),
 	constraint fk_position foreign key (position_id) references positions(id),
+	primary key (id)
+);
+
+create table memberships (
+	id serial not null,
+	start_on date not null,
+	end_on date not null,
+	is_lay_member boolean default false,
+	is_ex_officio boolean default false,
+	is_alternate boolean default false,
+	is_co_opted boolean default false,
+	system_id int not null,
+	person_id int not null,
+	committee_id int not null,
+	role_id int not null,
+	constraint fk_committee foreign key (committee_id) references committees(id),
+	constraint fk_person foreign key (person_id) references people(id),
+	constraint fk_role foreign key (role_id) references Roles(id),
 	primary key (id)
 );
