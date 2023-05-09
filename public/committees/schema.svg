@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="36 -1218 3926.5 2131" width="3926.5" height="2131">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" viewBox="36 -1378.8864 3926.5 2291.8864" width="3926.5" height="2291.8864">
   <defs>
     <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="CrowBall_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -5 20 10" markerWidth="20" markerHeight="10" color="black">
       <g>
@@ -18,9 +18,9 @@
       </g>
     </marker>
   </defs>
-  <g id="Canvas_1" stroke-opacity="1" fill="none" stroke="none" fill-opacity="1" stroke-dasharray="none">
+  <g id="Canvas_1" stroke-opacity="1" stroke="none" stroke-dasharray="none" fill-opacity="1" fill="none">
     <title>Canvas 1</title>
-    <rect fill="white" x="36" y="-1218" width="3926.5" height="2131"/>
+    <rect fill="white" x="36" y="-1378.8864" width="3926.5" height="2291.8864"/>
     <g id="Canvas_1_Layer_1">
       <title>Layer 1</title>
       <g id="Group_2">
@@ -823,6 +823,66 @@
         <text transform="translate(42 -452.39067)" fill="black">
           <tspan font-family="Helvetica Neue" font-size="16" fill="black" x="74.26" y="15">Deployed sync tasks</tspan>
         </text>
+      </g>
+      <g id="Group_157">
+        <title>Class with Attributes</title>
+        <g id="Graphic_159">
+          <title>Attributes</title>
+          <rect x="912" y="-929" width="307" height="96" fill="#ff8080"/>
+          <rect x="912" y="-929" width="307" height="96" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(918 -923)" fill="#515556">
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">name</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">is_chair</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">system_id</tspan>
+          </text>
+        </g>
+        <g id="Graphic_158">
+          <title>Class Name</title>
+          <rect x="912" y="-955" width="307" height="26" fill="#ff8080"/>
+          <rect x="912" y="-955" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(918 -951)" fill="#515556">
+            <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="132.8165" y="13">roles</tspan>
+          </text>
+        </g>
+      </g>
+      <g id="Group_160">
+        <title>Class with Attributes</title>
+        <g id="Graphic_162">
+          <title>Attributes</title>
+          <rect x="912" y="-727.5" width="307" height="250" fill="#ff8080"/>
+          <rect x="912" y="-727.5" width="307" height="250" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(918 -721.5)" fill="#515556">
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">start_on</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">end_on</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">is_lay_member</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">is_ex_officio</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">is_alternate</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="145">is_co_opted</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="167">system_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="189">committee_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="211">person_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="233">role_id</tspan>
+          </text>
+        </g>
+        <g id="Graphic_161">
+          <title>Class Name</title>
+          <rect x="912" y="-753.5" width="307" height="26" fill="#ff8080"/>
+          <rect x="912" y="-753.5" width="307" height="26" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <text transform="translate(918 -749.5)" fill="#515556">
+            <tspan font-family="Avenir" font-weight="bold" font-size="13" fill="#515556" x="106.8165" y="13">memberships</tspan>
+          </text>
+        </g>
+      </g>
+      <g id="Line_163">
+        <line x1="1065.5" y1="-817.5" x2="1065.5" y2="-773" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_164">
+        <path d="M 1002.856 143.53045 C 890.8826 106.41971 668 12.18146 668 -150 C 668 -269.1691 788.3375 -394.18905 896.5896 -482.54467" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_165">
+        <path d="M 3816.7427 -702.9022 C 3853.3603 -831.5239 3962.541 -1361.6987 3280 -1378 C 2587.3803 -1394.542 1369.8224 -874.9881 1113.6377 -761.9915" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
     </g>
   </g>
