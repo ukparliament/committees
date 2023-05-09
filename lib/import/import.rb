@@ -1087,6 +1087,181 @@ module IMPORT
     end
   end
   
+  # ## A method to get memberships for a committee.
+  def get_memberships_for_committee( committee, skip )
+    puts "importing memberships for committee: #{committee.name}"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/Committees/#{committee.system_id}/Members?MembershipStatus=all&ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each member item in the feed ...
+    json['items'].each do |member_item|
+      
+      # ... we import or uopdate the membership.
+      import_or_update_membership( committee, member_item)
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      get_memberships_for_committee( committee, skip + 30 )
+    end
+  end
+  
+  # ## A method to import or update a membership.
+  def import_or_update_membership( committee, member_item )
+    
+    # We import or update a person.
+    person = import_or_update_person( member_item )
+    
+    # We store the returned values.
+    member_item_system_id = member_item['id']
+    member_item_is_lay_member = member_item['isLayMember']
+    member_item_roles = member_item['roles']
+    
+    # For each role in the member item ...
+    member_item_roles.each do |member_item_role|
+      
+      # ... we import or update the role.
+      role = import_or_update_role( member_item_role['role'] )
+      
+      # We store the returned variables.
+      membership_start_on = member_item_role['startDate']
+      membership_end_on = member_item_role['endDate']
+      membership_is_ex_officio = member_item_role['exOfficio']
+      membership_is_alternate = member_item_role['alternate']
+      membership_is_co_opted = member_item_role['coOpted']
+      
+      # We attempt to find the membership.
+      membership = Membership.all
+        .where( "system_id = ?", member_item_system_id )
+        .where( "start_on = ?", membership_start_on )
+        .where( "committee_id = ?", committee.id )
+        .where( "person_id = ?", person.id )
+        .where( "role_id = ?", role.id )
+      
+      # Unless we find the membership ...
+      unless membership
+        
+        # We create a new membership.
+        puts "creating membership of #{person.name} on #{committee.name} in role #{role.name}"
+        membership = Membership.new
+        membership.system_id = member_item_system_id
+        membership.start_on = membership_start_on
+        membership.committee = committee
+        membership.person = person
+        membership.role = role
+      end
+      
+      # We update the membership attributes.
+      membership.end_on = membership_end_on
+      membership.is_lay_member = member_item_is_lay_member
+      membership.is_ex_officio = membership_is_ex_officio
+      membership.is_alternate = membership_is_alternate
+      membership.is_co_opted = membership_is_co_opted
+      
+      # We save the membership.
+      membership.save
+    end
+  end 
+  
+  # ## A method to import or update a person.
+  def import_or_update_person( person_item )
+    
+    # We store the returned variables.
+    person_item_person_id = person_item['personId']
+    person_item_person_name = person_item['name']
+    person_item_mnis_id = nil
+    person_item_mnis_name = nil
+    
+    # If the person is a Member ...
+    if person_item['memberInfo']
+        
+      # ... we store their MNIS ID and name.
+      person_item_mnis_id = person_item['memberInfo']['mnisId']
+      person_item_mnis_name = person_item['memberInfo']['displayAs']
+    end
+      
+    # We set a person name, being either the MNIS name or the CIS name.
+    person_name = person_item_mnis_name || person_item_person_name
+    
+    # If the person item has a MNIS id ...
+    if person_item_mnis_id
+      
+      # ... we attempt to find the person by their MNIS ID.
+      person = Person.find_by_mnis_id( person_item_mnis_id )
+    
+      # Unless we find the person ...
+      unless person
+        
+        # ... we create a new person.
+        puts "creating person: #{person_name}"
+        person = Person.new
+        person.mnis_id = person_item_mnis_id
+      end
+      
+      # We set or update the person attributes
+      person.name = person_name
+      person.save!
+      
+    # Otherwise, if the witness item has a CIS person ID ...
+    elsif person_item_person_id
+      
+      # ... we attempt to find the person by the CIS ID.
+      person = Person.find_by_system_id( person_item_person_id )
+    
+      # Unless we find the person ...
+      unless person
+        
+        # ... we create a new person.
+        puts "creating person: #{person_name}"
+        person = Person.new
+        person.system_id = person_item_person_id
+      end
+      
+      # We set or update the person attributes
+      person.name = person_name
+      person.save!
+    end
+    
+    # We return the person.
+    person
+  end
+  
+  # ## A method to import or update a role
+  def import_or_update_role( member_item_role )
+    
+    # We store the returned variables.
+    role_system_id = member_item_role['id']
+    role_name = member_item_role['name']
+    role_is_chair = member_item_role['isChair']
+    
+    # We attempt to find the role.
+    role = Role.find_by_system_id( role_system_id )
+    
+    # Unless we find the role ...
+    unless role
+      
+      # ... we create a new role.
+      puts "creating new role: #{role_name}"
+      role = Role.new
+      role.name = role_name
+      role.is_chair = role_is_chair
+      role.system_id = role_system_id
+      role.save
+    end
+    
+    # We return the role.
+    role
+  end
+  
   
   
   # ## Mass import methods run a one off set ups.
@@ -1215,6 +1390,21 @@ module IMPORT
       
       # ... we call this method again, incrementing the skip by by 30 results.
       import_oral_evidence_transcripts( skip + 30 )
+    end
+  end
+  
+  # ## A method to import all memberships.
+  def import_all_memberships
+    puts "importing all memberships"
+    
+    # We get all the committees.
+    committees = Committee.all
+    
+    # For each committee ...
+    committees.each do |committee|
+      
+      # ... we import its memberships.
+      get_memberships_for_committee( committee, 0 )
     end
   end
 end
