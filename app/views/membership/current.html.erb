@@ -1,0 +1,5 @@
+<%= render :partial => 'membership_nav' %>
+<%= content_tag( 'h2', 'Current memberships' ) %>
+<ul>
+	<%= render :partial => 'membership', :collection => @current_memberships %>
+</ul>

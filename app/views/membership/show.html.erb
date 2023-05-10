@@ -1,0 +1,33 @@
+<%= content_tag( 'p', @membership.lifespan ) %>
+<table>
+	<tbody>
+		<tr>
+			<%= content_tag( 'th', 'Person:' ) %>
+			<%= content_tag( 'td', link_to( @membership.person_name, person_show_url( :person => @membership.person_id ) ) ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Committee:' ) %>
+			<%= content_tag( 'td', link_to( @membership.committee_name, committee_show_url( :committee => @membership.committee_system_id ) ) ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Role:' ) %>
+			<%= content_tag( 'td', @membership.role_name ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Is lay member:' ) %>
+			<%= content_tag( 'td', @membership.is_lay_member ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Is ex officio:' ) %>
+			<%= content_tag( 'td', @membership.is_ex_officio ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Is alternate:' ) %>
+			<%= content_tag( 'td', @membership.is_alternate ) %>
+		</tr>
+		<tr>
+			<%= content_tag( 'th', 'Is co-opted:' ) %>
+			<%= content_tag( 'td', @membership.is_co_opted ) %>
+		</tr>
+	</tbody>
+</table>
