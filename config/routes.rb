@@ -78,6 +78,12 @@ Rails.application.routes.draw do
   get 'committees/people' => 'person#index', :as => 'person_list'
   get 'committees/people/members' => 'person#members', :as => 'person_member_list'
   get 'committees/people/non-members' => 'person#non_members', :as => 'person_non_member_list'
+  get 'committees/people/committee-members' => 'person#committee_members', :as => 'person_committee_member_list'
+  
+  
+  
+  
+  
   get 'committees/people/:person' => 'person#show', :as => 'person_show'
   get 'committees/people/:person/oral-evidence-transcripts' => 'person#oral_evidence_transcripts', :as => 'person_oral_evidence_transcripts'
   
