@@ -89,6 +89,10 @@ Rails.application.routes.draw do
   get 'committees/memberships/current' => 'membership#current', :as => 'membership_current'
   get 'committees/memberships/:membership' => 'membership#show', :as => 'membership_show'
   
+  get 'committees/membership-roles' => 'membership_role#index', :as => 'membership_role_list'
+  get 'committees/membership-roles/:membership_role' => 'membership_role#show', :as => 'membership_role_show'
+  get 'committees/membership-roles/:membership_role/current' => 'membership_role#current', :as => 'membership_role_current'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
