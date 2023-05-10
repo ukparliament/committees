@@ -1,0 +1,5 @@
+<%= render :partial => 'current_switcher' %>
+<%= content_tag( 'h2', 'All members' ) %>
+<ul>
+	<%= render :partial => 'membership/membership_from_role', :collection => @all_memberships %>
+</ul>

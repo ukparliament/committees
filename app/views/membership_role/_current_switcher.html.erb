@@ -1,0 +1,5 @@
+<nav>
+	<%= link_to( "Current members (#{@current_memberships.size})", membership_role_current_url ) %>
+	-
+	<%= link_to( "All members (#{@all_memberships.size})", membership_role_show_url ) %>
+</nav>
