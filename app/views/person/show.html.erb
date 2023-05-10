@@ -1,12 +1,23 @@
 <%= content_tag( 'p', "Committee system ID: #{@person.system_id}" ) if @person.system_id %>
 <%= content_tag( 'p', "MNIS ID: #{link_to( @person.mnis_id, "https://members.parliament.uk/member/#{@person.mnis_id}")}".html_safe ) if @person.mnis_id %>
 
-<div id="oral-evidence-transcripts">
-	<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
+<% unless @person.witnesses.empty? %>
+	<div id="oral-evidence-transcripts">
+		<%= content_tag( 'h2', 'Oral evidence transcripts' ) %>
 	
-	<%= content_tag( 'p', link_to( 'RSS', person_oral_evidence_transcripts_url( :format => 'rss' ) ) ) %>
+		<%= content_tag( 'p', link_to( 'RSS', person_oral_evidence_transcripts_url( :format => 'rss' ) ) ) %>
 	
-	<ul>
-		<%= render :partial => 'witness/witness_from_person', :collection => @person.witnesses %>
-	</ul>
-</div>
+		<ul>
+			<%= render :partial => 'witness/witness_from_person', :collection => @person.witnesses %>
+		</ul>
+	</div>
+<% end -%>
+
+<% unless @person.committee_memberships.empty? %>
+	<div id="committee-memberships">
+		<%= content_tag( 'h2', 'Committee memberships' ) %>
+		<ul>
+			<%= render :partial => 'membership/membership_from_person', :collection => @person.committee_memberships %>
+		</ul>
+	</div>
+<% end -%>
