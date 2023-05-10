@@ -1,5 +1,9 @@
 <nav>
 	<%= link_to( "Details", committee_show_url ) %>
+	<% unless committee_nav.all_memberships.empty? -%>
+		-
+		<%= link_to( "Members", committee_current_memberships_url ) %>
+	<% end -%>
 	<% if committee_nav.contactable? -%>
 		-
 		<%= link_to( "Contact", committee_contact_url ) %>
