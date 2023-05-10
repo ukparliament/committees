@@ -106,4 +106,10 @@ class PersonController < ApplicationController
     @person = Person.find( person )
     @page_title = "#{@person.name} - oral evidence transcripts"
   end
+  
+  def committee_memberships
+    person = params[:person]
+    @person = Person.find( person )
+    @page_title = "#{@person.name} - committee memberships"
+  end
 end
