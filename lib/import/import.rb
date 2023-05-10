@@ -1146,6 +1146,7 @@ module IMPORT
         .where( "committee_id = ?", committee.id )
         .where( "person_id = ?", person.id )
         .where( "role_id = ?", role.id )
+        .first
       
       # Unless we find the membership ...
       unless membership
