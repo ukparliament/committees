@@ -318,7 +318,7 @@ create table witness_positions (
 create table memberships (
 	id serial not null,
 	start_on date not null,
-	end_on date not null,
+	end_on date,
 	is_lay_member boolean default false,
 	is_ex_officio boolean default false,
 	is_alternate boolean default false,
