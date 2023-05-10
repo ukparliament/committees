@@ -31,7 +31,7 @@ class Person < ApplicationRecord
         WHERE m.person_id = #{self.id}
         AND m.committee_id = c.id
         AND m.role_id = r.id
-        ORDER BY m.start_on desc, m.end_on desc
+        ORDER BY m.start_on desc, m.end_on desc, role_name
       "
     )
   end
