@@ -167,4 +167,31 @@ class Committee < ApplicationRecord
       "
     )
   end
+  
+  def all_memberships
+    Membership.find_by_sql(
+      "
+        SELECT m.*, p.name AS person_name, r.name AS role_name
+        FROM memberships m, people p, roles r
+        WHERE m.person_id = p.id
+        AND m.role_id = r.id
+        AND m.committee_id = #{self.id}
+        ORDER BY m.start_on, role_name, person_name
+      "
+    )
+  end
+  
+  def current_memberships
+    Membership.find_by_sql(
+      "
+        SELECT m.*, p.name AS person_name, r.name AS role_name
+        FROM memberships m, people p, roles r
+        WHERE m.person_id = p.id
+        AND m.role_id = r.id
+        AND m.committee_id = #{self.id}
+        AND ( m.end_on IS NULL OR m.end_on > '#{Date.today}' )
+        ORDER BY m.start_on, role_name, person_name
+      "
+    )
+  end
 end
