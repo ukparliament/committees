@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   get 'committees/committees' => 'committee#index', :as => 'committee_list'
   get 'committees/committees/current' => 'committee#current', :as => 'committee_current'
   get 'committees/committees/:committee' => 'committee#show', :as => 'committee_show'
+  get 'committees/committees/:committee/members' => 'committee#memberships', :as => 'committee_memberships'
+  get 'committees/committees/:committee/members/current' => 'committee#current_memberships', :as => 'committee_current_memberships'
   get 'committees/committees/:committee/contact' => 'committee#contact', :as => 'committee_contact'
   get 'committees/committees/:committee/work-packages' => 'committee#work_package_list', :as => 'committee_work_package_list'
   get 'committees/committees/:committee/work-packages/current' => 'committee#work_package_current', :as => 'committee_work_package_current'
@@ -82,6 +84,10 @@ Rails.application.routes.draw do
   get 'committees/people/:person' => 'person#show', :as => 'person_show'
   get 'committees/people/:person/oral-evidence-transcripts' => 'person#oral_evidence_transcripts', :as => 'person_oral_evidence_transcripts'
   get 'committees/people/:person/committee-memberships' => 'person#committee_memberships', :as => 'person_committee_memberships'
+  
+  get 'committees/memberships' => 'membership#index', :as => 'membership_list'
+  get 'committees/memberships/current' => 'membership#current', :as => 'membership_current'
+  get 'committees/memberships/:membership' => 'membership#show', :as => 'membership_show'
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
