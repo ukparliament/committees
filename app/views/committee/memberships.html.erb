@@ -1,0 +1,11 @@
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', 'Members' ) %>
+
+<%= render :partial => 'committee_memberships_nav' %>
+
+<%= content_tag( 'h2', 'All members' ) %>
+
+<ul>
+	<%= render :partial => 'membership/membership_from_committee', :collection => @all_memberships %>
+</ul>
