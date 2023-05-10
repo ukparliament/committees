@@ -18,6 +18,22 @@ class CommitteeController < ApplicationController
     @page_title = @committee.name
   end
   
+  def memberships
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+    @all_memberships = @committee.all_memberships
+    @current_memberships = @committee.current_memberships
+  end
+  
+  def current_memberships
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+    @all_memberships = @committee.all_memberships
+    @current_memberships = @committee.current_memberships
+  end
+  
   def contact
     committee = params[:committee]
     @committee = Committee.find_by_system_id( committee )
