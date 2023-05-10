@@ -1,0 +1,5 @@
+<li>
+	<%= content_tag( 'h3', link_to( membership_from_person.committee_name, committee_show_url( :committee => membership_from_person.committee_system_id ) ) ) %>
+	<%= content_tag( 'p', membership_from_person.lifespan ) %>
+	<%= membership_from_person.role_name %>
+</li>
