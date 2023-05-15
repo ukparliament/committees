@@ -194,6 +194,21 @@ module IMPORT
     end
   end
   
+  # ## A method to import memberships from current committees.
+  def import_memberships_from_current_committees
+    puts "importing memberships from current committees"
+    
+    # We get all current committees.
+    committees = Committee.all.where( "end_on IS NOT NULL AND end_on < ?", Date.today )
+    
+    # For each committee ...
+    committees.each do |committee|
+      
+      # ... we import its memberships.
+      get_memberships_for_committee( committee, 0 )
+    end
+  end
+  
   
   
   # ## Helper methods.
