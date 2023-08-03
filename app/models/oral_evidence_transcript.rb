@@ -68,13 +68,13 @@ class OralEvidenceTranscript < ApplicationRecord
     display_label = self.published_on
   end
   
-  def house_of_commons_numbers
-    HouseOfCommonsNumber.find_by_sql(
+  def paper_series_numbers
+    PaperSeriesNumber.find_by_sql(
       "
-        SELECT hocn.*, s.label AS session_label
-        FROM house_of_commons_numbers hocn, sessions s
-        WHERE hocn.session_id = s.id
-        AND hocn.oral_evidence_transcript_id = #{self.id}
+        SELECT psn.*, s.label AS session_label
+        FROM paper_series_numbers psn, sessions s
+        WHERE psn.session_id = s.id
+        AND psn.oral_evidence_transcript_id = #{self.id}
       "
     )
   end
