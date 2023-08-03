@@ -1,0 +1,24 @@
+rerun:
+rake import_oral_evidence_transcripts
+(forced to import all work packages + committee / work package links)
+
+run:
+rake import_all_publication_types
+
+
+
+
+
+check web code
+
+checkin code
+push code to heroku
+push code to github
+
+push database to heroku
+
+heroku out of maintenance
+
+restart import scripts on heroku
+
+add views for publications
