@@ -5,5 +5,6 @@ task :topup => [
   :import_work_packages_for_current_committees,
   :import_upcoming_events,
   :import_recent_oral_evidence_transcripts,
-  :import_memberships_from_current_committees] do
+  :import_memberships_from_current_committees,
+  :import_all_publication_types] do
 end
