@@ -253,6 +253,37 @@ module IMPORT
     end
   end
   
+  # ### A method to import recent publications.
+  def import_recent_publications( skip )
+    puts "importing recent publications"
+    
+    # We define recent as from 2 days ago in the hope we don't miss any.
+    start_date = Date.today - 2
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/Publications?StartDate=#{start_date}&take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each publication item in the feed ....
+    json['items'].each do |publication_item|
+      
+      # ... we import or update the publication.
+      import_or_update_publication( publication_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_recent_publications( skip + 30 )
+    end
+  end
+  
   
   
   # ## Helper methods.
