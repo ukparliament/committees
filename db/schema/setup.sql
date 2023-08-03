@@ -1,10 +1,17 @@
+drop table if exists paper_series_numbers;
+drop table if exists committee_written_evidence_publications;
+drop table if exists written_evidence_publications;
+drop table if exists publication_document_files;
+drop table if exists publication_documents;
+drop table if exists work_package_publications;
+drop table if exists publications;
+drop table if exists publication_types;
 drop table if exists memberships;
 drop table if exists witness_positions;
 drop table if exists witnesses;
 drop table if exists positions;
 drop table if exists organisations;
 drop table if exists people;
-drop table if exists house_of_commons_numbers;
 drop table if exists oral_evidence_transcript_files;
 drop table if exists committee_oral_evidence_transcripts;
 drop table if exists work_package_oral_evidence_transcripts;
@@ -261,16 +268,6 @@ create table oral_evidence_transcript_files (
 	primary key (id)
 );
 
-create table house_of_commons_numbers (
-	id serial not null,
-	number varchar(255) not null,
-	session_id int not null,
-	oral_evidence_transcript_id int not null,
-	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
-	constraint fk_session foreign key (session_id) references sessions(id),
-	primary key (id)
-);
-
 create table people (
 	id serial not null,
 	name varchar(1000) not null,
@@ -330,5 +327,104 @@ create table memberships (
 	constraint fk_committee foreign key (committee_id) references committees(id),
 	constraint fk_person foreign key (person_id) references people(id),
 	constraint fk_role foreign key (role_id) references Roles(id),
+	primary key (id)
+);
+
+create table publication_types (
+	id serial not null,
+	name varchar(255) not null,
+	plural_name varchar(255) not null,
+	description text not null,
+	government_can_respond boolean default false,
+	can_be_response boolean default false,
+	icon_key varchar(255),
+	system_id int not null,
+	primary key (id)
+);
+
+create table publications (
+	id serial not null,
+	description text not null,
+	start_on date,
+	end_on date,
+	additional_content_url varchar(500),
+	additional_content_url_2 varchar(500),
+	system_id int not null,
+	committee_id int not null,
+	publication_type_id int not null,
+	responded_to_publication_id int,
+	department_id int,
+	constraint fk_committee foreign key (committee_id) references committees(id),
+	constraint fk_publication_type foreign key (publication_type_id) references publication_types(id),
+	constraint fk_responded_to_publication_type foreign key (responded_to_publication_id) references publication_types(id),
+	constraint fk_department foreign key (department_id) references departments(id),
+	primary key (id)
+);
+
+create table work_package_publications (
+	id serial not null,
+	work_package_id int not null,
+	publication_id int not null,
+	constraint fk_work_package foreign key (work_package_id) references work_packages(id),
+	constraint fk_publication foreign key (publication_id) references publications(id),
+	primary key (id)
+);
+
+create table publication_documents (
+	id serial not null,
+	publication_id int not null,
+	system_id int not null,
+	constraint fk_publication foreign key (publication_id) references publications(id),
+	primary key (id)
+);
+
+create table publication_document_files (
+	id serial not null,
+	name text not null,
+	size int not null,
+	format varchar(255) not null,
+	url varchar(1000),
+	publication_document_id int not null,
+	constraint fk_publication_document foreign key (publication_document_id) references publication_documents(id),
+	primary key (id)
+);
+
+create table written_evidence_publications (
+	id serial not null,
+	submission_id varchar(255) not null,
+	internal_reference varchar(255) not null,
+	published_at timestamp not null,
+	legacy_html_url varchar(255),
+	legacy_pdf_url varchar(255),
+	is_anonymous boolean default false,
+	anonymous_witness_text varchar(255),
+	work_package_id int not null,
+	system_id int not null,
+	constraint fk_work_package foreign key (work_package_id) references work_packages(id),
+	primary key (id)
+);
+
+create table committee_written_evidence_publications (
+	id serial not null,
+	committee_id int not null,
+	written_evidence_publication_id int not null,
+	constraint fk_committee foreign key (committee_id) references committees(id),
+	constraint fk_written_evidence_publication foreign key (written_evidence_publication_id) references written_evidence_publications(id),
+	primary key (id)
+);
+
+create table paper_series_numbers (
+	id serial not null,
+	number varchar(255) not null,
+	session_id int not null,
+	parliamentary_house_id int not null,
+	oral_evidence_transcript_id int,
+	publication_id int,
+	written_evidence_publication_id int,
+	constraint fk_session foreign key (session_id) references sessions(id),
+	constraint fk_parliamentary_house foreign key (parliamentary_house_id) references parliamentary_houses(id),
+	constraint fk_oral_evidence_transcript foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
+	constraint fk_written_evidence_publication foreign key (oral_evidence_transcript_id) references oral_evidence_transcripts(id),
+	constraint fk_publication foreign key (publication_id) references publications(id),
 	primary key (id)
 );
