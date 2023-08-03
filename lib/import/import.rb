@@ -1,7 +1,7 @@
 # # A module for importing for the committee system API.
 module IMPORT
   
-  # ## Import sync methods run as rake tasks on Heroku.
+  # ## Import top up methods run as rake tasks on Heroku.
   
   # ### A method to import committee types.
   def import_committee_types
@@ -206,6 +206,50 @@ module IMPORT
       
       # ... we import its memberships.
       get_memberships_for_committee( committee, 0 )
+    end
+  end
+  
+  # ### A method to import all publication types.
+  def import_all_publication_types
+    puts "importing publication types"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/PublicationType"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each publication type item in the feed ....
+    json.each do |publication_type_item|
+      
+      # ... we store the returned values.
+      publication_type_item_system_id = publication_type_item['id']
+      publication_type_item_name = publication_type_item['name']
+      publication_type_item_plural_name = publication_type_item['pluralVersion']
+      publication_type_item_description = publication_type_item['description']
+      publication_type_item_government_can_respond = publication_type_item['governmentCanRespond']
+      publication_type_item_can_be_response = publication_type_item['canBeResponse']
+      publication_type_item_icon_key = publication_type_item['iconKey']
+      
+      # We attempt to find the publication type.
+      publication_type = PublicationType.find_by_system_id( publication_type_item_system_id )
+      
+      # Unless we find the publication type ....
+      unless publication_type
+        
+        # ... we create a new publication type.
+        publication_type = PublicationType.new
+        publication_type.system_id = publication_type_item_system_id
+      end
+      
+      # We set or update the publication type attributes.
+      publication_type.name = publication_type_item_name
+      publication_type.plural_name = publication_type_item_plural_name
+      publication_type.description = publication_type_item_description
+      publication_type.government_can_respond = publication_type_item_government_can_respond
+      publication_type.can_be_response = publication_type_item_can_be_response
+      publication_type.icon_key = publication_type_item_icon_key
+      publication_type.save!
     end
   end
   
@@ -783,8 +827,8 @@ module IMPORT
     # Unless the oral evidence transcript has no House of Commons numbers ...
     if oral_evidence_transcript_house_of_commons_numbers
       
-      # ... we attempt to associate the oral evidence transcript with its House of Commons numbers.
-      associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
+      # ... we attempt to associate the oral evidence transcript with its paper series numbers.
+      associate_oral_evidence_transcript_with_paper_series_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers, 'Commons' )
     end
     
     # For each oral evidence transcript witness item ...
@@ -1053,19 +1097,19 @@ module IMPORT
     end
   end
   
-  # ### A method to associate an oral evidence transcript with its House of Commons numbers.
-  def associate_oral_evidence_transcript_with_house_of_commons_numbers( oral_evidence_transcript, oral_evidence_transcript_house_of_commons_numbers )
+  # ### A method to associate an oral evidence transcript with its paper series numbers.
+  def associate_oral_evidence_transcript_with_paper_series_numbers( oral_evidence_transcript, oral_evidence_transcript_paper_series_numbers, house )
     
-    # For each House of Commons number assoicated with the oral evidence transcript...
-    oral_evidence_transcript_house_of_commons_numbers.each do |house_of_commons_number|
+    # For each paper series number associated with the oral evidence transcript...
+    oral_evidence_transcript_paper_series_numbers.each do |paper_series_number|
       
       # We store the returned values.
-      house_of_commons_number_number = house_of_commons_number['number']
-      house_of_commons_number_session_id = house_of_commons_number['sessionId']
-      house_of_commons_number_session_label = house_of_commons_number['sessionDescription']
+      paper_series_number_number = paper_series_number['number']
+      paper_series_number_session_id = paper_series_number['sessionId']
+      paper_series_number_session_label = paper_series_number['sessionDescription']
       
       # We attempt to find the session.
-      session = Session.find_by_system_id( house_of_commons_number_session_id )
+      session = Session.find_by_system_id( paper_series_number_session_id )
       
       # Unless we find the session ...
       unless session
@@ -1077,28 +1121,83 @@ module IMPORT
       end
       
       # We create or update the session description.
-      session.label = house_of_commons_number_session_label
+      session.label = paper_series_number_session_label
       session.save
       
-      # We attempt to find this House of Commons number.
-      house_of_commons_number = HouseOfCommonsNumber
+      # We find the parliamentary House.
+      parliamentary_house = ParliamentaryHouse.find_by_short_label( house )
+      
+      # We attempt to find this paper number.
+      paper_series_number = PaperSeriesNumber
         .all
         .where( "session_id = ?", session.id )
         .where( "oral_evidence_transcript_id = ?", oral_evidence_transcript.id )
-        .where( "number = ?", house_of_commons_number_number )
+        .where( "number = ?", paper_series_number_number )
+        .where( "parliamentary_house_id = ?", parliamentary_house.id )
         .first
         
-      # Unless this House of Commons number exists ...
-      unless house_of_commons_number
+      # Unless this paper series number exists ...
+      unless paper_series_number
         
-        # ... we create the House of Commons number.
-        puts "creating house of commons number #{house_of_commons_number_number}"
-        house_of_commons_number = HouseOfCommonsNumber.new
-        house_of_commons_number.number = house_of_commons_number_number
-        house_of_commons_number.oral_evidence_transcript = oral_evidence_transcript
-        house_of_commons_number.session = session
-        house_of_commons_number.save
+        # ... we create the paper series number.
+        puts "creating paper series number #{paper_series_number_number}"
+        paper_series_number = PaperSeriesNumber.new
+        paper_series_number.number = paper_series_number_number
+        paper_series_number.oral_evidence_transcript = oral_evidence_transcript
+        paper_series_number.session = session
+        paper_series_number.parliamentary_house = parliamentary_house
+        paper_series_number.save
       end
+    end
+  end
+  
+  # ### A method to associate a publication with its paper series numbers.
+  def associate_publication_with_paper_series_number( publication, publication_paper_series_numbers, house )
+    
+    # We store the returned values.
+    paper_series_number_number = publication_paper_series_numbers['number']
+    paper_series_number_session_id = publication_paper_series_numbers['sessionId']
+    paper_series_number_session_label = publication_paper_series_numbers['sessionDescription']
+      
+    # We attempt to find the session.
+    session = Session.find_by_system_id( paper_series_number_session_id )
+      
+    # Unless we find the session ...
+    unless session
+        
+      # ... we create a new session.
+      puts "creating session #{paper_series_number_session_label}"
+      session = Session.new
+      session.system_id = paper_series_number_session_id
+    end
+      
+    # We create or update the session description.
+    session.label = paper_series_number_session_label
+    session.save
+      
+    # We find the parliamentary House.
+    parliamentary_house = ParliamentaryHouse.find_by_short_label( house )
+      
+    # We attempt to find this paper number.
+    paper_series_number = PaperSeriesNumber
+      .all
+      .where( "session_id = ?", session.id )
+      .where( "publication_id = ?", publication.id )
+      .where( "number = ?", paper_series_number_number )
+      .where( "parliamentary_house_id = ?", parliamentary_house.id )
+      .first
+        
+    # Unless this paper series number exists ...
+    unless paper_series_number
+        
+      # ... we create the paper series number.
+      puts "creating paper series number #{paper_series_number_number}"
+      paper_series_number = PaperSeriesNumber.new
+      paper_series_number.number = paper_series_number_number
+      paper_series_number.publication = publication
+      paper_series_number.session = session
+      paper_series_number.parliamentary_house = parliamentary_house
+      paper_series_number.save
     end
   end
   
@@ -1278,6 +1377,212 @@ module IMPORT
     role
   end
   
+  # ## A method to import or update a written evidence item.
+  def import_or_update_written_evidence( written_evidence_item )
+    
+    # We store the returned variables.
+    written_evidence_publication_system_id = written_evidence_item['id']
+    written_evidence_publication_submission_id = written_evidence_item['submissionId']
+    written_evidence_publication_internal_reference = written_evidence_item['internalReference']
+    written_evidence_publication_legacy_html_url = written_evidence_item['legacyHtmlUrl']
+    written_evidence_publication_legacy_pdf_url = written_evidence_item['legacyPdfUrl']
+    written_evidence_publication_is_anonymous = written_evidence_item['anonymous']
+    written_evidence_publication_anonymous_witness_text = written_evidence_item['anonymousWitnessText']
+    written_evidence_publication_published_at = written_evidence_item['publicationDate']
+    written_evidence_publication_work_package_system_id = written_evidence_item['committeeBusiness']['id']
+    
+    # We try to find the work package.
+    work_package = WorkPackage.find_by_system_id( written_evidence_publication_work_package_system_id )
+    
+    # We try to find the written evidence item.
+    written_evidence_publication = WrittenEvidencePublication.find_by_system_id( written_evidence_publication_system_id )
+    
+    # Unless we find the written evidence item ...
+    unless written_evidence_publication
+    
+      # ... we create a new written evidence publication.
+      puts "creating a new written evidence publication #{written_evidence_publication_system_id} - for work package #{written_evidence_publication_work_package_system_id}"
+      written_evidence_publication = WrittenEvidencePublication.new
+      written_evidence_publication.system_id = written_evidence_publication_system_id
+    end
+    
+    # We update the written evidence item attributes.
+    written_evidence_publication.submission_id = written_evidence_publication_submission_id
+    written_evidence_publication.internal_reference = written_evidence_publication_internal_reference
+    written_evidence_publication.legacy_html_url = written_evidence_publication_legacy_html_url
+    written_evidence_publication.legacy_pdf_url = written_evidence_publication_legacy_pdf_url
+    written_evidence_publication.is_anonymous = written_evidence_publication_is_anonymous
+    written_evidence_publication.anonymous_witness_text = written_evidence_publication_anonymous_witness_text
+    written_evidence_publication.published_at = written_evidence_publication_published_at
+    written_evidence_publication.work_package = work_package
+    written_evidence_publication.save!
+    
+    # For each committee associated with a written evidence publication ...
+    written_evidence_item['committees'].each do |committee|
+      
+      # ... we get the committee ID ...
+      committee_id = committee['id']
+      
+      # ... and find the committee.
+      committee = Committee.find( committee_id )
+      
+      # We attempt to find a committee written evidence publication.
+      committee_written_evidence_publication = CommitteeWrittenEvidencePublication
+        .where( "committee_id = ?", committee.id )
+        .where( "written_evidence_publication_id = ?", written_evidence_publication.id)
+        .first
+        
+      # Unless we've found a committee written evidence publication ...
+      unless committee_written_evidence_publication
+        
+        # ... we create a new committee written evidence publication.
+        puts "creating a new committee written evidence publication"
+        committee_written_evidence_publication = CommitteeWrittenEvidencePublication.new
+        committee_written_evidence_publication.committee = committee
+        committee_written_evidence_publication.written_evidence_publication = written_evidence_publication
+        committee_written_evidence_publication.save!
+      end
+    end
+    
+    
+    
+    
+    #written_evidence_item_house_of_commons_number = written_evidence_item['hcNumber']
+    
+    
+  
+    
+    #puts written_evidence_item_house_of_commons_number if written_evidence_item_house_of_commons_number
+  end
+  
+  # ## A method to import or update a publication.
+  def import_or_update_publication( publication_item )
+    
+    # We store the returned variables.
+    publication_item_system_id = publication_item['id']
+    publication_item_description = publication_item['description']
+    publication_item_start_on = publication_item['start_on']
+    publication_item_end_on = publication_item['end_on']
+    publication_item_additional_content_url = publication_item['additional_content_url']
+    publication_item_additional_content_url_2 = publication_item['additional_content_url_2']
+    publication_item_reponse_to_publication_id = publication_item['response_to_publication_id']
+    publication_item_publication_type_system_id = publication_item['type']['id']
+    publication_item_committee_system_id = publication_item['committee']['id']
+    publication_item_department_system_id = publication_item['respondingDepartment']['id'] if publication_item['respondingDepartment']
+    publication_item_documents = publication_item['documents']
+    publication_item_house_of_commons_paper_number = publication_item['hcNumber']
+    publication_item_house_of_lords_paper_number = publication_item['hlPaper']
+    
+    # We attempt to find the publication type.
+    publication_type = PublicationType.find_by_system_id( publication_item_publication_type_system_id )
+    
+    # We attempt to find the committee.
+    committee = Committee.find_by_system_id( publication_item_committee_system_id )
+    
+    # We attempt to find the publication this publication is in response to.
+    responded_to_publication = Publication.find_by_system_id( publication_item_reponse_to_publication_id )
+    
+    # We attempt to find the publication.
+    publication = Publication.find_by_system_id( publication_item_system_id )
+    
+    # If the publication has a responding department ...
+    if publication_item_department_system_id
+      
+      # ... we attempt to find the department.
+      department = Department.find_by_system_id( publication_item_department_system_id )
+    end
+    
+    # Unless we find the publication ...
+    unless publication
+      
+      # ... we create a new publication.
+      #puts "Creating a new publication: #{publication_item_description}"
+      publication = Publication.new
+      publication.system_id = publication_item_system_id
+    end
+    
+    # We assign or update the publication's attributes.
+    publication.description = publication_item_description
+    publication.start_on = publication_item_start_on
+    publication.end_on = publication_item_end_on
+    publication.additional_content_url = publication_item_additional_content_url
+    publication.additional_content_url_2 = publication_item_additional_content_url_2
+    publication.publication_type = publication_type
+    publication.committee = committee
+    publication.responded_to_publication_id = responded_to_publication.id if publication_item_reponse_to_publication_id
+    publication.department = department if department
+    publication.save!
+    
+    # If the publication item has a House of Commons paper number ...
+    if publication_item_house_of_commons_paper_number
+      
+      # ... we associate the publication with its House of Commons paper series number.
+      associate_publication_with_paper_series_number( publication, publication_item_house_of_commons_paper_number, 'Commons' )
+    end
+    
+    # If the publication item has a House of Lords paper number ...
+    if publication_item_house_of_lords_paper_number
+      
+      # ... we associate the publication with its House of Lords paper series number.
+      associate_publication_with_paper_series_number( publication, publication_item_house_of_lords_paper_number, 'Lords' )
+    end
+    
+    # For each 'business' the publication refers to ...
+    publication_item['businesses'].each do |work_package_item|
+      
+      # ... we attempt to find the work package.
+      work_package = WorkPackage.find_by_system_id( work_package_item['id'] )
+      
+      # We create a work package publication.
+      #puts "Creating a new publication to work package link"
+      work_package_publication = WorkPackagePublication.new
+      work_package_publication.work_package = work_package
+      work_package_publication.publication = publication
+      work_package_publication.save!
+    end
+    
+    # For each document attached to the publication ...
+    publication_item_documents.each do |publication_document_item|
+    
+      # ... we store the returned variables.
+      publication_document_item_system_id = publication_document_item['documentId']
+      
+      # We check if there's a publication document with this ID.
+      publication_document = PublicationDocument.find_by_system_id( publication_document_item_system_id )
+      
+      # Unless we find a publication document ...
+      unless publication_document
+        
+        # ... we create a new publication document.
+        #puts "Creating a new publication document: #{publication_document_item_system_id}"
+        publication_document = PublicationDocument.new
+        publication_document.system_id = publication_document_item_system_id
+        publication_document.publication = publication
+        publication_document.save!
+      end
+      
+      # For each publication document file attached to the publication document ...
+      publication_document_item['files'].each do |publication_document_file_item|
+    
+        # We store the returned variables.
+        publication_document_file_item_name = publication_document_file_item['fileName']
+        publication_document_file_item_size = publication_document_file_item['fileSize']
+        publication_document_file_item_format = publication_document_file_item['fileDataFormat']
+        publication_document_file_item_url = publication_document_file_item['url']
+        
+        # We create a new publication document file.
+        #puts "Creating a new publication document file: #{publication_document_file_item_name}"
+        publication_document_file = PublicationDocumentFile.new
+        publication_document_file.name = publication_document_file_item_name
+        publication_document_file.size = publication_document_file_item_size
+        publication_document_file.format = publication_document_file_item_format
+        publication_document_file.url = publication_document_file_item_url
+        publication_document_file.publication_document = publication_document
+        publication_document_file.save!
+      end
+    end
+  end
+  
   
   
   # ## Mass import methods run a one off set ups.
@@ -1409,7 +1714,7 @@ module IMPORT
     end
   end
   
-  # ## A method to import all memberships.
+  # ### A method to import all memberships.
   def import_all_memberships
     puts "importing all memberships"
     
@@ -1421,6 +1726,62 @@ module IMPORT
       
       # ... we import its memberships.
       get_memberships_for_committee( committee, 0 )
+    end
+  end
+  
+  # ### A method to import all written evidence.
+  def import_all_written_evidence( skip )
+    puts "importing written evidence"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/WrittenEvidence?ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each written evidence transcript item in the feed ....
+    json['items'].each do |written_evidence_item|
+      
+      # ... we import or update the written evidence.
+      import_or_update_written_evidence( written_evidence_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_written_evidence( skip + 30 )
+    end
+  end
+  
+  # ### A method to import all written evidence.
+  def import_all_publications( skip )
+    puts "importing all publications"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/Publications?take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each publication item in the feed ....
+    json['items'].each do |publication_item|
+      
+      # ... we import or update the publication.
+      import_or_update_publication( publication_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_all_publications( skip + 30 )
     end
   end
 end
