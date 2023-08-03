@@ -36,12 +36,12 @@
 				<%= content_tag( 'td', @oral_evidence_transcript.document_id  ) %>
 			</tr>
 		<% end -%>
-		<% unless @oral_evidence_transcript.house_of_commons_numbers.empty? -%>
+		<% unless @oral_evidence_transcript.paper_series_numbers.empty? -%>
 			<tr>
-				<%= content_tag( 'th', 'House of Commons numbers:' ) %>
+				<%= content_tag( 'th', 'Citations:' ) %>
 				<td>
 					<ul>
-						<%= render :partial => 'house_of_commons_number/house_of_commons_number', :collection => @oral_evidence_transcript.house_of_commons_numbers %>
+						<%= render :partial => 'paper_series_number/paper_series_number', :collection => @oral_evidence_transcript.paper_series_numbers %>
 					</ul>
 				</td>
 			</tr>
