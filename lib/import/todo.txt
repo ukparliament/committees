@@ -1,9 +1,1 @@
-push database to heroku
-
-heroku out of maintenance
-
-restart import scripts on heroku
-
-start import_recent_publications on heroku
-
 add views for publications
