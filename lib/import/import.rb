@@ -1492,8 +1492,8 @@ module IMPORT
     # We store the returned variables.
     publication_item_system_id = publication_item['id']
     publication_item_description = publication_item['description']
-    publication_item_start_on = publication_item['start_on']
-    publication_item_end_on = publication_item['end_on']
+    publication_item_start_at = publication_item['publicationStartDate']
+    publication_item_end_at = publication_item['publicationEndDate']
     publication_item_additional_content_url = publication_item['additional_content_url']
     publication_item_additional_content_url_2 = publication_item['additional_content_url_2']
     publication_item_reponse_to_publication_id = publication_item['response_to_publication_id']
@@ -1534,8 +1534,8 @@ module IMPORT
     
     # We assign or update the publication's attributes.
     publication.description = publication_item_description
-    publication.start_on = publication_item_start_on
-    publication.end_on = publication_item_end_on
+    publication.start_at = publication_item_start_at
+    publication.end_at = publication_item_end_at
     publication.additional_content_url = publication_item_additional_content_url
     publication.additional_content_url_2 = publication_item_additional_content_url_2
     publication.publication_type = publication_type
@@ -1718,7 +1718,7 @@ module IMPORT
   end
   
   # ### A method to import all oral evidence sessions.
-  def import_oral_evidence_transcripts( skip )
+  def import_all_oral_evidence_transcripts( skip )
     puts "importing oral evidence transcripts"
     
     # We set the URL to import from.
@@ -1741,7 +1741,7 @@ module IMPORT
     if total_results > skip
       
       # ... we call this method again, incrementing the skip by by 30 results.
-      import_oral_evidence_transcripts( skip + 30 )
+      import_all_oral_evidence_transcripts( skip + 30 )
     end
   end
   
