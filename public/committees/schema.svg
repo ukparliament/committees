@@ -956,7 +956,7 @@
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">end_at</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">additional_content_url</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">additional_content_url_2</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="145">response_to_publication_id</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="145">responded_to_publication_id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="167">committee_id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="189">publication_type_id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="211">department_id</tspan>
@@ -973,13 +973,13 @@
         </g>
       </g>
       <g id="Line_180">
-        <path d="M 2577.3905 -952.6478 C 2622.35 -948.1964 2665.832 -948.8432 2693.3333 -961.3333 C 2772.1393 -997.1242 2764.4946 -1106.0618 2682.6667 -1113.3333 C 2655.7383 -1115.7263 2616.409 -1102.8628 2575.7565 -1084.525" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <path d="M 2577.3905 -952.6478 C 2622.35 -948.1964 2665.832 -948.8432 2693.3333 -961.3333 C 2772.1393 -997.1242 2764.4946 -1106.0618 2682.6667 -1113.3333 C 2655.7383 -1115.7263 2616.409 -1102.8628 2575.7565 -1084.525" marker-end="url(#CrowBall_Marker)" marker-start="url(#BarBall_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4.0,4.0" stroke-width="1"/>
       </g>
       <g id="Line_181">
         <line x1="2404.5" y1="-1194.5" x2="2404.5" y2="-1157.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Line_182">
-        <path d="M 1218.5468 162.52353 C 1363.3929 -24.892422 1592.2948 -308.2264 1822 -540.33333 C 1854.597 -573.27124 1885.8932 -603.8466 1915.8712 -632.2222 C 1912.0963 -636.2223 1920.0972 -643.7729 1923.8721 -639.77285 C 2052.6457 -760.9331 2156.682 -841.1306 2234.593 -893.5797" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <path d="M 1203.0969 142.51361 C 1248.5035 122.92987 1304.4757 88.45458 1370 29 C 1564.2056 -147.21571 1457.921 -172.16212 1751 -460 C 1812.2785 -520.18264 1876.501 -578.23735 1939.7574 -632.423 C 1936.1844 -636.60434 1944.5489 -643.7517 1948.1218 -639.57036 C 2052.8573 -728.84725 2154.4625 -807.275 2235.1115 -866.9154" marker-end="url(#CrowBall_Marker)" marker-start="url(#DoubleBar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
       </g>
       <g id="Group_183">
         <title>Class with Attributes</title>
