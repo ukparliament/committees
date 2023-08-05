@@ -35,4 +35,21 @@ class Publication < ApplicationRecord
       "
     )
   end
+  
+  def publication_document_files
+    PublicationDocumentFile.find_by_sql(
+      "
+        SELECT pdf.*, pd.system_id AS publication_document_system_id
+        FROM publication_document_files pdf, publication_documents pd
+        WHERE pdf.publication_document_id = pd.id
+        AND pd.publication_id = #{self.id}
+      "
+    )
+  end
+  
+  def has_links?
+    has_links = false
+    has_links = true unless self.additional_content_url.blank? && self.additional_content_url_2.blank?
+    has_links
+  end
 end
