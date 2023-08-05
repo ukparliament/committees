@@ -952,8 +952,8 @@
           <text transform="translate(2257 -1106)" fill="#515556">
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="13">id</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="35">description</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">start_on</tspan>
-            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">end_on</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="57">start_at</tspan>
+            <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="79">end_at</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="101">additional_content_url</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="123">additional_content_url_2</tspan>
             <tspan font-family="Avenir" font-size="13" fill="#515556" x="0" y="145">response_to_publication_id</tspan>
