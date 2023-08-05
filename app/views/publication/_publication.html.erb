@@ -1,4 +1,4 @@
 <li>
-	<%= content_tag( 'h2', publication.description ) %>
-	<%= content_tag( 'p', publication.start_at ) %>
+	<%= content_tag( 'h2', link_to( publication.description, publication_show_url( :publication => publication.system_id ) ) ) %>
+	<%= content_tag( 'p', publication.start_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
 </li>

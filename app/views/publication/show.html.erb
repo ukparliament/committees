@@ -1,0 +1,47 @@
+<table>
+	<tr>
+		<%= content_tag( 'th', 'Published:' ) %>
+		<%= content_tag( 'td', @publication.start_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
+	</tr>
+	<tr>
+		<%= content_tag( 'th', 'Publication type:' ) %>
+		<%= content_tag( 'td', link_to( @publication.publication_type_name, publication_type_show_url( :publication_type => @publication.publication_type_system_id) ) ) %>
+	</tr>
+	<% if @publication.committee_id -%>
+		<tr>
+			<%= content_tag( 'th', 'Committee:' ) %>
+			<%= content_tag( 'td', link_to( @publication.committee_name, committee_show_url( :committee => @publication.committee_system_id) ) ) %>
+		</tr>
+	<% end -%>
+	<% if @publication.department_id -%>
+		<tr>
+			<%= content_tag( 'th', 'Answering department:' ) %>
+			<%= content_tag( 'td', link_to( @publication.department_name, department_show_url( :department => @publication.department_system_id) ) ) %>
+		</tr>
+	<% end -%>
+	<% if @publication.responded_to_publication_id -%>
+		<tr>
+			<%= content_tag( 'th', 'In response to:' ) %>
+			<%= content_tag( 'td', link_to( @publication.responded_to_publication_description, publication_show_url( :publication => @publication.responded_to_publication_system_id) ) ) %>
+		</tr>
+	<% end -%>
+	<% unless @publication.paper_series_numbers.empty? -%>
+		<tr>
+			<%= content_tag( 'th', 'Citations:' ) %>
+			<td>
+				<ul>
+					<%= render :partial => 'paper_series_number/paper_series_number', :collection => @publication.paper_series_numbers %>
+				</ul>
+			</td>
+		</tr>
+	<% end -%>
+</table>
+
+
+<% unless @publication.work_packages.empty? -%>
+	<%= content_tag( 'h2', 'Work packages' ) %>
+	<ul>
+		<%= render :partial => 'work_package/work_package', :collection => @publication.work_packages %>
+	</ul>
+	
+<% end -%>
