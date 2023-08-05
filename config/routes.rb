@@ -93,6 +93,11 @@ Rails.application.routes.draw do
   get 'committees/membership-roles/:membership_role' => 'membership_role#show', :as => 'membership_role_show'
   get 'committees/membership-roles/:membership_role/current' => 'membership_role#current', :as => 'membership_role_current'
   
+
+  
+  get 'committees/publication-types' => 'publication_type#index', :as => 'publication_type_list'
+  get 'committees/publication-types/:publication_type' => 'publication_type#show', :as => 'publication_type_show'
+  
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
 end
