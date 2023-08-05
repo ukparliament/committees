@@ -345,8 +345,8 @@ create table publication_types (
 create table publications (
 	id serial not null,
 	description text not null,
-	start_on date,
-	end_on date,
+	start_at timestamp not null,
+	end_at timestamp,
 	additional_content_url varchar(500),
 	additional_content_url_2 varchar(500),
 	system_id int not null,
