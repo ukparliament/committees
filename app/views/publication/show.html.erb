@@ -1,4 +1,4 @@
-<table>
+<%= %><table>
 	<tr>
 		<%= content_tag( 'th', 'Published:' ) %>
 		<%= content_tag( 'td', @publication.start_at.strftime( '%A %-d %B %Y @ %H:%M') ) %>
@@ -43,5 +43,23 @@
 	<ul>
 		<%= render :partial => 'work_package/work_package', :collection => @publication.work_packages %>
 	</ul>
-	
+<% end -%>
+
+<% unless @publication.publication_document_files.empty? -%>
+	<%= content_tag( 'h2', 'Files' ) %>
+	<ul>
+		<%= render :partial => 'publication_document_file/publication_document_file', :collection => @publication.publication_document_files, :locals => { :publication => @publication } %>
+	</ul>
+<% end -%>
+
+<% if @publication.has_links? -%>
+	<%= content_tag( 'h2', 'Links' ) %>
+	<ul>
+		<% unless @publication.additional_content_url.blank? -%>
+			<%= content_tag( 'li', link_to( @publication.additional_content_url, @publication.additional_content_url ) ) %>
+		<% end -%>
+		<% unless @publication.additional_content_url_2.blank? -%>
+			<%= content_tag( 'li', link_to( @publication.additional_content_url_2, @publication.additional_content_url_2 ) ) %>
+		<% end -%>
+	</ul>
 <% end -%>
