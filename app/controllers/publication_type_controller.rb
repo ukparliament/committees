@@ -4,9 +4,6 @@ class PublicationTypeController < ApplicationController
     @page_title = 'Publication types'
     @publication_types = PublicationType.all.order( 'name' )
     
-    
-    
-    
     @publication_types = PublicationType.find_by_sql(
       "
         SELECT pt.*, count(p.id) AS publication_count
