@@ -1,3 +1,4 @@
+<%= content_tag( 'p', link_to( 'RSS', publication_list_url( :format => 'rss' ) ) ) %>
 <ul>
 	<%= render :partial => 'publication', :collection => @publications %>
 </ul>
