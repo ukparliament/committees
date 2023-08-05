@@ -1,1 +1,5 @@
 add views for publications
+- committee > publications
+- committee > publications rss
+- work package > publications
+- work package > publications rss
