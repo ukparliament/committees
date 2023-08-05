@@ -1565,7 +1565,7 @@ module IMPORT
       work_package = WorkPackage.find_by_system_id( work_package_item['id'] )
       
       # We create a work package publication.
-      #puts "Creating a new publication to work package link"
+      puts "Creating a new publication to work package link"
       work_package_publication = WorkPackagePublication.new
       work_package_publication.work_package = work_package
       work_package_publication.publication = publication
