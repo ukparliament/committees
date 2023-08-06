@@ -30,7 +30,6 @@ class Publication < ApplicationRecord
           WHERE wpp.publication_id = #{self.id}
         ) work_package_publication
         ON work_package_publication.work_package_id = wp.id
-        GROUP BY wp.id
         ORDER BY wp.open_on desc, wp.close_on desc
       "
     )
