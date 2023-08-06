@@ -1527,7 +1527,7 @@ module IMPORT
     unless publication
       
       # ... we create a new publication.
-      #puts "Creating a new publication: #{publication_item_description}"
+      puts "Creating a new publication: #{publication_item_description}"
       publication = Publication.new
       publication.system_id = publication_item_system_id
     end
@@ -1596,7 +1596,7 @@ module IMPORT
       unless publication_document
         
         # ... we create a new publication document.
-        #puts "Creating a new publication document: #{publication_document_item_system_id}"
+        puts "Creating a new publication document: #{publication_document_item_system_id}"
         publication_document = PublicationDocument.new
         publication_document.system_id = publication_document_item_system_id
         publication_document.publication = publication
