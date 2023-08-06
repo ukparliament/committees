@@ -1618,7 +1618,6 @@ module IMPORT
           .where( "name = ?", publication_document_file_item_name )
           .where( "size =? ", publication_document_file_item_size )
           .where( "format =?", publication_document_file_item_format )
-          .where( "url = ?", publication_document_file_item_url )
           .where( "publication_document_id = ?", publication_document.id )
           .first
           
