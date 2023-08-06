@@ -1564,12 +1564,23 @@ module IMPORT
       # ... we attempt to find the work package.
       work_package = WorkPackage.find_by_system_id( work_package_item['id'] )
       
-      # We create a work package publication.
-      puts "Creating a new publication to work package link"
-      work_package_publication = WorkPackagePublication.new
-      work_package_publication.work_package = work_package
-      work_package_publication.publication = publication
-      work_package_publication.save!
+      # We check if the work package publication link exists.
+      work_package_publication = WorkPackagePublication
+        .all
+        .where( "work_package_id = ?", work_package.id )
+        .where( "publication_id = ?", publication.id )
+        .first
+        
+      # If the work package publication link does not exist ...
+      unless work_package_publication
+      
+        # ... we create a work package publication.
+        puts "Creating a new publication to work package link"
+        work_package_publication = WorkPackagePublication.new
+        work_package_publication.work_package = work_package
+        work_package_publication.publication = publication
+        work_package_publication.save!
+      end
     end
     
     # For each document attached to the publication ...
@@ -1601,15 +1612,29 @@ module IMPORT
         publication_document_file_item_format = publication_document_file_item['fileDataFormat']
         publication_document_file_item_url = publication_document_file_item['url']
         
-        # We create a new publication document file.
-        #puts "Creating a new publication document file: #{publication_document_file_item_name}"
-        publication_document_file = PublicationDocumentFile.new
-        publication_document_file.name = publication_document_file_item_name
-        publication_document_file.size = publication_document_file_item_size
-        publication_document_file.format = publication_document_file_item_format
-        publication_document_file.url = publication_document_file_item_url
-        publication_document_file.publication_document = publication_document
-        publication_document_file.save!
+        # We attempt to find this publication document file ...
+        publication_document_file = PublicationDocumentFile
+          .all
+          .where( "name = ?", publication_document_file_item_name )
+          .where( "size =? ", publication_document_file_item_size )
+          .where( "format =?", publication_document_file_item_format )
+          .where( "url = ?", publication_document_file_item_url )
+          .where( "publication_document_id = ?", publication_document.id )
+          .first
+          
+        # Unless the publication document file exists ...
+        unless publication_document_file
+        
+          # ... we create a new publication document file.
+          puts "Creating a new publication document file: #{publication_document_file_item_name}"
+          publication_document_file = PublicationDocumentFile.new
+          publication_document_file.name = publication_document_file_item_name
+          publication_document_file.size = publication_document_file_item_size
+          publication_document_file.format = publication_document_file_item_format
+          publication_document_file.url = publication_document_file_item_url
+          publication_document_file.publication_document = publication_document
+          publication_document_file.save!
+        end
       end
     end
   end
