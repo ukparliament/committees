@@ -1,5 +1,7 @@
 class Committee < ApplicationRecord
   
+  has_many :publications
+  
   def parent_committee
     Committee.find( self.parent_committee_id ) if self.parent_committee_id
   end
