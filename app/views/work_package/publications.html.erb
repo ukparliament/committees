@@ -1,0 +1,15 @@
+<%= content_tag( 'p', @work_package.dates ) %>
+
+<%= render :partial => 'work_package_nav', :object => @work_package %>
+
+<%= content_tag( 'h2', 'Publications' ) %>
+
+<%= content_tag( 'p', link_to( 'RSS', work_package_publication_list_url( :format => 'rss' ) ) ) %>
+
+<ul>
+	<%= render :partial => 'publication/publication', :collection => @work_package.publications %>
+</ul>
+
+
+
+
