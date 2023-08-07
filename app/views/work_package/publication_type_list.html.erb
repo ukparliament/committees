@@ -1,0 +1,9 @@
+<%= content_tag( 'p', @work_package.dates ) %>
+
+<%= render :partial => 'work_package_nav', :object => @work_package %>
+
+<%= content_tag( 'h2', 'Publication types' ) %>
+
+<ul>
+	<%= render :partial => 'publication_type/work_package_publication_type', :collection => @work_package.publication_types %>
+</ul>
