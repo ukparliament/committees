@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   get 'committees/work-packages/:work_package' => 'work_package#show', :as => 'work_package_show'
   get 'committees/work-packages/:work_package/oral_evidence_transcripts' => 'work_package#oral_evidence_transcripts', :as => 'work_package_oral_evidence_transcript_list'
   get 'committees/work-packages/:work_package/publications' => 'work_package#publications', :as => 'work_package_publication_list'
+  get 'committees/work-packages/:work_package/publication-types' => 'work_package#publication_type_list', :as => 'work_package_publication_type_list'
+  get 'committees/work-packages/:work_package/publication-types/:publication_type' => 'work_package#publication_type_show', :as => 'work_package_publication_type_show'
   
   get 'committees/events' => 'event#index', :as => 'event_list'
   get 'committees/events/upcoming' => 'event#upcoming', :as => 'event_upcoming'
