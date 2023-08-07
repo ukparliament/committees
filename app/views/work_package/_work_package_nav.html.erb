@@ -4,4 +4,8 @@
 		-
 		<%= link_to( "Oral evidence transcripts", work_package_oral_evidence_transcript_list_url ) %>
 	<% end -%>
+	<% unless work_package_nav.publications.empty? -%>
+		-
+		<%= link_to( "Publications", work_package_publication_list_url ) %>
+	<% end -%>
 </nav>
