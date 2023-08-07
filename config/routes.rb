@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'committees/committees/:committee/events/upcoming' => 'committee#event_upcoming', :as => 'committee_event_upcoming'
   get 'committees/committees/:committee/oral-evidence-transcripts' => 'committee#oral_evidence_transcripts', :as => 'committee_oral_evidence_transcripts'
   get 'committees/committees/:committee/publications' => 'committee#publications', :as => 'committee_publications'
+  get 'committees/committees/:committee/publication-types' => 'committee#publication_type_list', :as => 'committee_publication_type_list'
+  get 'committees/committees/:committee/publication-types/:publication_type' => 'committee#publication_type_show', :as => 'committee_publication_type_show'
   
   get 'committees/houses' => 'house#index', :as => 'house_list'
   get 'committees/houses/:house' => 'house#show', :as => 'house_show'
