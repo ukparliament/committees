@@ -1,0 +1,9 @@
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', "Publication types - #{@publication_type.name}" ) %>
+
+<%= content_tag( 'p', link_to( 'RSS', committee_publication_type_show_url( :format => 'rss' ) ) ) %>
+
+<ul>
+	<%= render :partial => 'publication/publication', :collection => @publications %>
+</ul>
