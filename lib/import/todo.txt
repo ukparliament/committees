@@ -1,3 +1,0 @@
-add views for publications
-- work package > publications by type
-- work package > publications by type rss
