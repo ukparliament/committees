@@ -1,6 +1,6 @@
 class Committee < ApplicationRecord
   
-  has_many :publications
+  has_many :publications, -> { order( 'start_at desc' ) }
   
   def parent_committee
     Committee.find( self.parent_committee_id ) if self.parent_committee_id
