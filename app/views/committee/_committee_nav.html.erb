@@ -24,4 +24,8 @@
 		-
 		<%= link_to( "All publications", committee_publications_url ) %>
 	<% end -%>
+	<% unless committee_nav.publication_types.empty? -%>
+		-
+		<%= link_to( "Publication types", committee_publication_type_list_url ) %>
+	<% end -%>
 </nav>
