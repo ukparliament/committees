@@ -63,4 +63,31 @@ class WorkPackage < ApplicationRecord
       "
     )
   end
+  
+  def publication_types
+    PublicationType.find_by_sql(
+      "
+        SELECT pt.*, count(p.id) AS publication_count
+        FROM publication_types pt, publications p, work_package_publications wpp
+        WHERE p.publication_type_id = pt.id
+        AND p.id = wpp.publication_id
+        AND wpp.work_package_id = #{self.id}
+        GROUP BY pt.id
+        ORDER BY pt.name
+      "
+    )
+  end
+  
+  def publications_of_type( publication_type )
+    Publication.find_by_sql(
+      "
+        SELECT p.*
+        FROM publications p, work_package_publications wpp
+        WHERE p.publication_type_id = #{publication_type.id}
+        AND p.id = wpp.publication_id
+        AND wpp.work_package_id = #{self.id}
+        ORDER BY start_at desc
+      "
+    )
+  end
 end
