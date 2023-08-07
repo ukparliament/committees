@@ -1,0 +1,7 @@
+<%= render :partial => 'committee_nav', :object => @committee %>
+
+<%= content_tag( 'h2', 'Publication types' ) %>
+
+<ul>
+	<%= render :partial => 'publication_type/committee_publication_type', :collection => @publication_types %>
+</ul>
