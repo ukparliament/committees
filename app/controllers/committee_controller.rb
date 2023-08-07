@@ -86,6 +86,22 @@ class CommitteeController < ApplicationController
     @publications = @committee.publications
   end
   
+  def publication_type_list
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    @page_title = @committee.name
+    @publication_types = @committee.publication_types
+  end
+  
+  def publication_type_show
+    committee = params[:committee]
+    @committee = Committee.find_by_system_id( committee )
+    publication_type = params[:publication_type]
+    @publication_type = PublicationType.find_by_system_id( publication_type )
+    @page_title = @committee.name
+    @publications = @committee.publications_of_type( @publication_type )
+  end
+  
   def all_committees
     Committee.find_by_sql(
       "
