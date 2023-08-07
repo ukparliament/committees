@@ -20,4 +20,8 @@
 		-
 		<%= link_to( "Oral evidence transcripts", committee_oral_evidence_transcripts_url ) %>
 	<% end -%>
+	<% unless committee_nav.publications.empty? -%>
+		-
+		<%= link_to( "Publications", committee_publications_url ) %>
+	<% end -%>
 </nav>
