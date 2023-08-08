@@ -28,12 +28,14 @@ class WorkPackageController < ApplicationController
     work_package = params[:work_package]
     @work_package = WorkPackage.find_by_system_id( work_package )
     @page_title = @work_package.title
+    @rss_link = work_package_oral_evidence_transcript_list_url( :format => 'rss' )
   end
   
   def publications
     work_package = params[:work_package]
     @work_package = WorkPackage.find_by_system_id( work_package )
     @page_title = @work_package.title
+    @rss_link = work_package_publication_list_url( :format => 'rss' )
   end
   
   def publication_type_list
@@ -49,5 +51,6 @@ class WorkPackageController < ApplicationController
     @publication_type = PublicationType.find_by_system_id( publication_type )
     @page_title = @work_package.title
     @publications = @work_package.publications_of_type( @publication_type )
+    @rss_link = work_package_publication_type_show_url( :format => 'rss' )
   end
 end

@@ -4,6 +4,7 @@ class OralEvidenceTranscriptController < ApplicationController
     @page_title = 'Oral evidence transcripts'
     @all_oral_evidence_transcripts = all_oral_evidence_transcripts
     #@upcoming_oral_evidence_transcripts = upcoming_oral_evidence_transcripts
+    @rss_link = oral_evidence_transcript_list_url( :format => 'rss' )
   end
   
   def upcoming

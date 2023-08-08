@@ -38,6 +38,7 @@ class PositionController < ApplicationController
       "
     ).first
     @page_title = "#{@position.name} - #{@position.organisation_name}"
+    @rss_link = position_oral_evidence_transcripts_url( :format => 'rss' )
   end
   
   def oral_evidence_transcripts
@@ -51,5 +52,6 @@ class PositionController < ApplicationController
       "
     ).first
     @page_title = "#{@position.name} - #{@position.organisation_name} - oral evidence transcripts"
+    @rss_link = position_oral_evidence_transcripts_url( :format => 'rss' )
   end
 end

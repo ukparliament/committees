@@ -26,5 +26,6 @@ class HouseController < ApplicationController
     @house = ParliamentaryHouse.find( house )
     @page_title = @house.label
     @oral_evidence_transcripts = @house.oral_evidence_transcripts
+    @rss_link = house_oral_evidence_transcripts_url( :format => 'rss' )
   end
 end

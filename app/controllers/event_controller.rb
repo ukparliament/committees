@@ -10,12 +10,14 @@ class EventController < ApplicationController
     @page_title = 'Events'
     @all_events = all_events
     @upcoming_events = upcoming_events
+    @ics_link = event_upcoming_url( :format => 'ics' )
   end
   
   def show
     event = params[:event]
     @event = get_event( event )
     @page_title = @event.display_name
+    @ics_link = event_show_url( :format => 'ics' )
   end
   
   def all_events

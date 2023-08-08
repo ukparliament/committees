@@ -10,6 +10,7 @@ class EventSegmentController < ApplicationController
     @all_event_segments = all_event_segments
     @upcoming_event_segments = upcoming_event_segments
     @page_title = 'Event segments'
+    @ics_link = event_segment_upcoming_url( :format => 'ics' )
   end
   
   def show

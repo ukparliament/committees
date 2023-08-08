@@ -19,5 +19,6 @@ class PublicationTypeController < ApplicationController
     publication_type = params[:publication_type]
     @publication_type = PublicationType.find_by_system_id( publication_type )
     @page_title = @publication_type.name
+    @rss_link = publication_type_show_url( :format => 'rss' )
   end
 end

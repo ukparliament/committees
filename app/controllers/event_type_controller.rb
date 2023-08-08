@@ -19,5 +19,6 @@ class EventTypeController < ApplicationController
     @page_title = @event_type.name
     @all_events = @event_type.all_events
     @upcoming_events = @event_type.upcoming_events
+    @ics_link = event_type_upcoming_url( :format => 'ics' )
   end
 end

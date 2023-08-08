@@ -3,6 +3,7 @@ class PublicationController < ApplicationController
   def index
     @page_title = 'Publications'
     @publications = Publication.all.order( 'start_at desc' ) 
+    @rss_link = publication_list_url( :format => 'rss' )
   end
   
   def show
