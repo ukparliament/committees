@@ -12,12 +12,12 @@
 		footer {line-height:1.4;padding-top:2rem;}
 	</style>
 	
-	<%# Rel alternate links to RSS and ICS %>
-	<% if @rss_link -%>
-		<link rel="alternate" type="application/rss+xml" title="<%= @page_title %>" href="<%= @rss_link %>" />
+	<%# Add rel alternate links to RSS and ICS where applicable %>
+	<% if @rss_url -%>
+		<link rel="alternate" type="application/rss+xml" title="UK Parliament Committees - <%= @alternate_title %>" href="<%= @rss_url %>" />
 	<% end -%>
-	<% if @ics_link -%>
-		<link rel="alternate" type="text/calendar" title="<%= @page_title %>" href="<%= @ics_link %>" />
+	<% if @ics_url -%>
+		<link rel="alternate" type="text/calendar" title="UK Parliament Committees - <%= @alternate_title %>" href="<%= @ics_url %>" />
 	<% end -%>
 </head>
 <body>
