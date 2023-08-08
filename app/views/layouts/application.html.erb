@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-	<title><%= @page_title || 'Committees' %>
-	</title>
+	<title><%= @page_title || 'Committees' %></title>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<style>		body {font-family: system-ui;padding:1rem;font-size:1.2rem;max-width:44rem;margin:0.5rem auto;}
 		h1, h2, h3, h4 {font-weight:normal;}
@@ -12,8 +11,18 @@
 		main {line-height:1.4;}
 		footer {line-height:1.4;padding-top:2rem;}
 	</style>
+	
+	<%# Rel alternate links to RSS and ICS %>
+	<% if @rss_link -%>
+		<link rel="alternate" type="application/rss+xml" title="<%= @page_title %>" href="<%= @rss_link %>" />
+	<% end -%>
+	<% if @ics_link -%>
+		<link rel="alternate" type="text/calendar" title="<%= @page_title %>" href="<%= @ics_link %>" />
+	<% end -%>
 </head>
 <body>
+	
+	
 <header>
 
 <%= content_tag( 'span', link_to( 'Committees', home_url ) ) %>
