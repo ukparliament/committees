@@ -19,6 +19,7 @@ class LocationController < ApplicationController
     @page_title = @location.name
     @all_events = @location.all_events
     @upcoming_events = @location.upcoming_events
-    @ics_link = location_upcoming_url( :format => 'ics' )
+    @alternate_title = "Upcoming events in #{@location.name}"
+    @ics_url = location_upcoming_url( :format => 'ics' )
   end
 end

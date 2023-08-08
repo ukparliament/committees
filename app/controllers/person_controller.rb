@@ -99,14 +99,16 @@ class PersonController < ApplicationController
     person = params[:person]
     @person = Person.find( person )
     @page_title = @person.name
-    @rss_link = person_oral_evidence_transcripts_url( :format => 'rss' )
+    @alternate_title = "Oral evidence transcripts from #{@person.name}"
+    @rss_url = person_oral_evidence_transcripts_url( :format => 'rss' )
   end
   
   def oral_evidence_transcripts
     person = params[:person]
     @person = Person.find( person )
     @page_title = "#{@person.name} - oral evidence transcripts"
-    @rss_link = person_oral_evidence_transcripts_url( :format => 'rss' )
+    @alternate_title = "Oral evidence transcripts from #{@person.name}"
+    @rss_url = person_oral_evidence_transcripts_url( :format => 'rss' )
   end
   
   def committee_memberships

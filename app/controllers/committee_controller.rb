@@ -54,7 +54,8 @@ class CommitteeController < ApplicationController
     @page_title = @committee.name
     @all_work_packages = @committee.all_work_packages
     @current_work_packages = @committee.current_work_packages
-    @rss_link = committee_work_package_current_url( :format => 'rss' )
+    @alternate_title = "Current work packages for the #{@committee.name}"
+    @rss_url = committee_work_package_current_url( :format => 'rss' )
   end
   
   def event_list
@@ -71,7 +72,8 @@ class CommitteeController < ApplicationController
     @page_title = @committee.name
     @all_events = @committee.all_events
     @upcoming_events = @committee.upcoming_events
-    @ics_link = committee_event_upcoming_url( :format => 'ics' )
+    @alternate_title = "Upcoming events for the #{@committee.name}"
+    @ics_url = committee_event_upcoming_url( :format => 'ics' )
   end
   
   def oral_evidence_transcripts
@@ -79,7 +81,8 @@ class CommitteeController < ApplicationController
     @committee = Committee.find_by_system_id( committee )
     @page_title = @committee.name
     @oral_evidence_transcripts = @committee.oral_evidence_transcripts
-    @rss_link = committee_oral_evidence_transcripts_url( :format => 'rss' )
+    @alternate_title = "Oral evidence transcripts for the #{@committee.name}"
+    @rss_url = committee_oral_evidence_transcripts_url( :format => 'rss' )
   end
   
   def publications
@@ -87,7 +90,8 @@ class CommitteeController < ApplicationController
     @committee = Committee.find_by_system_id( committee )
     @page_title = @committee.name
     @publications = @committee.publications
-    @rss_link = committee_publications_url( :format => 'rss' )
+    @alternate_title = "Publications for the #{@committee.name}"
+    @rss_url = committee_publications_url( :format => 'rss' )
   end
   
   def publication_type_list
@@ -104,7 +108,8 @@ class CommitteeController < ApplicationController
     @publication_type = PublicationType.find_by_system_id( publication_type )
     @page_title = @committee.name
     @publications = @committee.publications_of_type( @publication_type )
-    @rss_link = committee_publication_type_show_url( :format => 'rss' )
+    @alternate_title = "Publications for the #{@committee.name} - #{@publication_type.name}"
+    @rss_url = committee_publication_type_show_url( :format => 'rss' )
   end
   
   def all_committees

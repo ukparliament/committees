@@ -19,6 +19,7 @@ class WorkPackageTypeController < ApplicationController
     @page_title = @work_package_type.name
     @all_work_packages = @work_package_type.work_packages
     @current_work_packages = @work_package_type.current_work_packages
-    @rss_link = work_package_type_current_url( :format => 'rss' )
+    @alternate_title = "Work packages - #{@work_package_type.name}"
+    @rss_url = work_package_type_current_url( :format => 'rss' )
   end
 end

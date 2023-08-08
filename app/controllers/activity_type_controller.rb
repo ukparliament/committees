@@ -19,6 +19,7 @@ class ActivityTypeController < ApplicationController
     @page_title = @activity_type.name
     @all_event_segments = @activity_type.all_event_segments
     @upcoming_event_segments = @activity_type.upcoming_event_segments
-    @ics_link = activity_type_upcoming_url( :format => 'ics' )
+    @alternate_title = "Upcoming events of type #{@activity_type.name}"
+    @ics_url = activity_type_upcoming_url( :format => 'ics' )
   end
 end
