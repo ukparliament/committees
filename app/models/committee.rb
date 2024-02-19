@@ -191,6 +191,19 @@ class Committee < ApplicationRecord
     )
   end
   
+  def oral_evidence_transcripts_limited
+    OralEvidenceTranscript.find_by_sql(
+      "
+        SELECT oet.*
+        FROM oral_evidence_transcripts oet, committee_oral_evidence_transcripts coet
+        WHERE oet.id = coet.oral_evidence_transcript_id
+        AND coet.committee_id = #{self.id}
+        ORDER BY oet.published_on desc
+        LIMIT 20
+      "
+    )
+  end
+  
   def all_memberships
     Membership.find_by_sql(
       "

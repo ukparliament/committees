@@ -88,9 +88,18 @@ class CommitteeController < ApplicationController
     committee = params[:committee]
     @committee = Committee.find_by_system_id( committee )
     @page_title = @committee.name
-    @oral_evidence_transcripts = @committee.oral_evidence_transcripts
     @alternate_title = "Oral evidence transcripts for the #{@committee.name}"
     @rss_url = committee_oral_evidence_transcripts_url( :format => 'rss' )
+    
+
+    respond_to do |format|
+      format.html {
+        @oral_evidence_transcripts = @committee.oral_evidence_transcripts
+      }
+      format.rss {
+        @oral_evidence_transcripts = @committee.oral_evidence_transcripts_limited
+      }
+    end
   end
   
   def publications
