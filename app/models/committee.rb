@@ -267,4 +267,17 @@ class Committee < ApplicationRecord
       "
     )
   end
+  
+  def publications_of_type_limited( publication_type )
+    Publication.find_by_sql(
+      "
+        SELECT p.*
+        FROM publications p
+        WHERE p.publication_type_id = #{publication_type.id}
+        AND p.committee_id = #{self.id}
+        ORDER BY start_at desc
+        LIMIT 20
+      "
+    )
+  end
 end

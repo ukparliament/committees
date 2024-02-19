@@ -129,9 +129,16 @@ class CommitteeController < ApplicationController
     publication_type = params[:publication_type]
     @publication_type = PublicationType.find_by_system_id( publication_type )
     @page_title = @committee.name
-    @publications = @committee.publications_of_type( @publication_type )
     @alternate_title = "Publications for the #{@committee.name} - #{@publication_type.name}"
     @rss_url = committee_publication_type_show_url( :format => 'rss' )
+    respond_to do |format|
+      format.html {
+        @publications = @committee.publications_of_type( @publication_type )
+      }
+      format.rss {
+        @publications = @committee.publications_of_type_limited( @publication_type )
+      }
+    end
   end
   
   def all_committees
