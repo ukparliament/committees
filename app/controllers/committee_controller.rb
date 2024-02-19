@@ -52,8 +52,16 @@ class CommitteeController < ApplicationController
     committee = params[:committee]
     @committee = Committee.find_by_system_id( committee )
     @page_title = @committee.name
-    @all_work_packages = @committee.all_work_packages
-    @current_work_packages = @committee.current_work_packages
+    respond_to do |format|
+      format.html {
+        @all_work_packages = @committee.all_work_packages
+        @current_work_packages = @committee.current_work_packages
+      }
+      format.rss {
+        @current_work_packages = @committee.current_work_packages_limited
+      }
+    end
+    
     @alternate_title = "Current work packages for the #{@committee.name}"
     @rss_url = committee_work_package_current_url( :format => 'rss' )
   end

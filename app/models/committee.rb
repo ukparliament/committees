@@ -105,6 +105,27 @@ class Committee < ApplicationRecord
     )
   end
   
+  def current_work_packages_limited
+    WorkPackage.find_by_sql(
+      "
+        SELECT wp.*
+        FROM work_packages wp
+      
+        -- We only want work packages associated with this committee, so we inner join to committee_work_packages.
+        INNER JOIN (
+          SELECT cwp.work_package_id AS work_package_id
+          FROM committee_work_packages cwp
+          WHERE cwp.committee_id = #{self.id}
+        ) committee_work_packages
+        ON wp.id = committee_work_packages.work_package_id
+        
+        WHERE ( wp.close_on is NULL or wp.close_on >= '#{Date.today}' )
+        ORDER BY open_on desc, close_on desc
+        LIMIT 20;
+      "
+    )
+  end
+  
   def all_events
     Event.find_by_sql(
       "
