@@ -90,8 +90,6 @@ class CommitteeController < ApplicationController
     @page_title = @committee.name
     @alternate_title = "Oral evidence transcripts for the #{@committee.name}"
     @rss_url = committee_oral_evidence_transcripts_url( :format => 'rss' )
-    
-
     respond_to do |format|
       format.html {
         @oral_evidence_transcripts = @committee.oral_evidence_transcripts
@@ -106,9 +104,16 @@ class CommitteeController < ApplicationController
     committee = params[:committee]
     @committee = Committee.find_by_system_id( committee )
     @page_title = @committee.name
-    @publications = @committee.publications
     @alternate_title = "Publications for the #{@committee.name}"
     @rss_url = committee_publications_url( :format => 'rss' )
+    respond_to do |format|
+      format.html {
+        @publications = @committee.publications
+      }
+      format.rss {
+        @publications = @committee.publications_limited
+      }
+    end
   end
   
   def publication_type_list

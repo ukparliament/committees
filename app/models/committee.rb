@@ -2,6 +2,18 @@ class Committee < ApplicationRecord
   
   has_many :publications, -> { order( 'start_at desc' ) }
   
+  def publications_limited
+    Publication.find_by_sql(
+      "
+        SELECT *
+        FROM publications
+        WHERE committee_id = #{self.id}
+        ORDER BY start_at DESC
+        LIMIT 20
+      "
+    )
+  end
+  
   def parent_committee
     Committee.find( self.parent_committee_id ) if self.parent_committee_id
   end
