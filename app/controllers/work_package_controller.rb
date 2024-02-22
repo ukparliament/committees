@@ -38,6 +38,14 @@ class WorkPackageController < ApplicationController
     @page_title = @work_package.title
     @alternate_title = "#{@work_package.title} - Publications"
     @rss_url = work_package_publication_list_url( :format => 'rss' )
+    respond_to do |format|
+      format.html {
+        @publications = @work_package.publications
+      }
+      format.rss {
+        @publications = @work_package.publications_limited
+      }
+    end
   end
   
   def publication_type_list

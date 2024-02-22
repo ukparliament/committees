@@ -64,6 +64,19 @@ class WorkPackage < ApplicationRecord
     )
   end
   
+  def publications_limited
+    Publication.find_by_sql(
+      "
+        SELECT p.*
+        FROM publications p, work_package_publications wpp
+        WHERE p.id = wpp.publication_id
+        AND wpp.work_package_id = #{self.id}
+        ORDER BY p.start_at desc
+        LIMIT 20
+      "
+    )
+  end
+  
   def publication_types
     PublicationType.find_by_sql(
       "
