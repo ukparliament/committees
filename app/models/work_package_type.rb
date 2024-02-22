@@ -8,4 +8,12 @@ class WorkPackageType < ApplicationRecord
       .where( "close_on is NULL or close_on >= ?", Date.today )
       .order( 'open_on desc, close_on desc' )
   end
+  
+  def current_work_packages_limited
+    WorkPackage.all
+      .where( "work_package_type_id = ?", self )
+      .where( "close_on is NULL or close_on >= ?", Date.today )
+      .order( 'open_on desc, close_on desc' )
+      .limit( 20 )
+  end
 end
