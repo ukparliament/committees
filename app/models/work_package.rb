@@ -52,6 +52,25 @@ class WorkPackage < ApplicationRecord
     )
   end
   
+  def oral_evidence_transcripts_limited
+    OralEvidenceTranscript.find_by_sql(
+      "
+        SELECT oet.*
+        FROM oral_evidence_transcripts oet
+        
+        -- We only want oral evidence transcripts associated with this work package, so we inner join to work_package_oral_evidence_transcripts.
+        INNER JOIN (
+          SELECT wpoet.oral_evidence_transcript_id AS oral_evidence_transcript_id
+          FROM work_package_oral_evidence_transcripts wpoet
+          WHERE wpoet.work_package_id = #{self.id}
+        ) work_package_oral_evidence_transcript
+        ON oet.id = work_package_oral_evidence_transcript.oral_evidence_transcript_id
+        ORDER BY oet.published_on desc, oet.start_on desc
+        LIMIT 20;
+      "
+    )
+  end
+  
   def publications
     Publication.find_by_sql(
       "

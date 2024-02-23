@@ -7,7 +7,7 @@
 <%= content_tag( 'p', link_to( 'RSS', work_package_oral_evidence_transcript_list_url( :format => 'rss' ) ) ) %>
 
 <ul>
-	<%= render :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @work_package.oral_evidence_transcripts %>
+	<%= render :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @oral_evidence_transcripts %>
 </ul>
 
 

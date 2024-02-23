@@ -30,6 +30,15 @@ class WorkPackageController < ApplicationController
     @page_title = @work_package.title
     @alternate_title = "#{@work_package.title} - Oral evidence transcripts"
     @rss_url = work_package_oral_evidence_transcript_list_url( :format => 'rss' )
+
+    respond_to do |format|
+      format.html {
+        @oral_evidence_transcripts = @work_package.oral_evidence_transcripts
+      }
+      format.rss {
+        @oral_evidence_transcripts = @work_package.oral_evidence_transcripts_limited
+      }
+    end
   end
   
   def publications

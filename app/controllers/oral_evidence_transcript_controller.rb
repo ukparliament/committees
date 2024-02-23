@@ -2,15 +2,23 @@ class OralEvidenceTranscriptController < ApplicationController
   
   def index
     @page_title = 'Oral evidence transcripts'
-    @all_oral_evidence_transcripts = all_oral_evidence_transcripts
-    #@upcoming_oral_evidence_transcripts = upcoming_oral_evidence_transcripts
+    
     @alternate_title = 'Oral evidence transcripts'
     @rss_url = oral_evidence_transcript_list_url( :format => 'rss' )
+    
+
+    respond_to do |format|
+      format.html {
+        @all_oral_evidence_transcripts = all_oral_evidence_transcripts
+      }
+      format.rss {
+        @all_oral_evidence_transcripts = all_oral_evidence_transcripts_limited
+      }
+    end
   end
   
   def upcoming
     @page_title = 'Oral evidence transcripts'
-    #@all_oral_evidence_transcripts = all_oral_evidence_transcripts
     @upcoming_oral_evidence_transcripts = upcoming_oral_evidence_transcripts
   end
   
@@ -26,6 +34,17 @@ class OralEvidenceTranscriptController < ApplicationController
         SELECT oet.*
         FROM oral_evidence_transcripts oet
         ORDER BY oet.published_on desc, oet.start_on desc;
+      "
+    )
+  end
+  
+  def all_oral_evidence_transcripts_limited
+    OralEvidenceTranscript.find_by_sql(
+      "
+        SELECT oet.*
+        FROM oral_evidence_transcripts oet
+        ORDER BY oet.published_on desc, oet.start_on desc
+        LIMIT 20;
       "
     )
   end
