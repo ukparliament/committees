@@ -21,5 +21,13 @@ class PublicationTypeController < ApplicationController
     @page_title = @publication_type.name
     @alternate_title = "Publications of type #{@publication_type.name}"
     @rss_url = publication_type_show_url( :format => 'rss' )
+    respond_to do |format|
+      format.html {
+        @publications = @publication_type.publications
+      }
+      format.rss {
+        @publications = @publication_type.publications_limited
+      }
+    end
   end
 end
