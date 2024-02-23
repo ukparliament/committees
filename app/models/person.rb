@@ -19,6 +19,7 @@ class Person < ApplicationRecord
         WHERE oet.id = w.oral_evidence_transcript_id
         AND w.person_id = #{self.id}
         ORDER BY oet.published_on desc
+        LIMIT 20
       "
     )
   end

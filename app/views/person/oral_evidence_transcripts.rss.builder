@@ -8,6 +8,6 @@ xml.rss( :version => '2.0', 'xmlns:atom' => 'http://www.w3.org/2005/Atom' ) do
 		xml.managingEditor( 'somervillea@parliament.uk (Anya Somerville)' )
 		xml.pubDate( @person.oral_evidence_transcripts.first.published_on.rfc822 )
 		xml.tag!( 'atom:link', { :href => person_oral_evidence_transcripts_url( :format => 'rss' ), :rel => 'self', :type => 'application/rss+xml' } )
-		xml << render( :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @person.oral_evidence_transcripts )
+		xml << render( :partial => 'oral_evidence_transcript/oral_evidence_transcript', :collection => @oral_evidence_transcripts )
 	end
 end

@@ -109,6 +109,16 @@ class PersonController < ApplicationController
     @page_title = "#{@person.name} - oral evidence transcripts"
     @alternate_title = "Oral evidence transcripts from #{@person.name}"
     @rss_url = person_oral_evidence_transcripts_url( :format => 'rss' )
+    
+
+    respond_to do |format|
+      format.html {
+        @witnesses = @person.witnesses
+      }
+      format.rss {
+        @oral_evidence_transcripts = @person.oral_evidence_transcripts
+      }
+    end
   end
   
   def committee_memberships
