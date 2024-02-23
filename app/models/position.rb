@@ -26,4 +26,18 @@ class Position < ApplicationRecord
       "
     )
   end
+  
+  def oral_evidence_transcripts_limited
+    OralEvidenceTranscript.find_by_sql(
+      "
+        SELECT oet.*
+        FROM oral_evidence_transcripts oet, witnesses w, witness_positions wp
+        WHERE oet.id = w.oral_evidence_transcript_id
+        AND w.id = wp.witness_id
+        AND wp.position_id = #{self.id}
+        ORDER BY oet.published_on desc
+        LIMIT 20
+      "
+    )
+  end
 end

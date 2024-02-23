@@ -40,6 +40,7 @@ class PositionController < ApplicationController
     @page_title = "#{@position.name} - #{@position.organisation_name}"
     @alternate_title = "Oral evidence transcripts for #{@position.name} - #{@position.organisation_name}"
     @rss_url = position_oral_evidence_transcripts_url( :format => 'rss' )
+    @witnesses = @position.witnesses
   end
   
   def oral_evidence_transcripts
@@ -54,5 +55,15 @@ class PositionController < ApplicationController
     ).first
     @alternate_title = "Oral evidence transcripts for #{@position.name} - #{@position.organisation_name}"
     @rss_url = position_oral_evidence_transcripts_url( :format => 'rss' )
+    
+
+    respond_to do |format|
+      format.html {
+        @witnesses = @position.witnesses
+      }
+      format.rss {
+        @oral_evidence_transcripts = @position.oral_evidence_transcripts_limited
+      }
+    end
   end
 end
