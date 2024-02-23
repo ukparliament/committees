@@ -2,9 +2,23 @@ class PublicationController < ApplicationController
   
   def index
     @page_title = 'Publications'
-    @publications = Publication.all.order( 'start_at desc' ) 
     @alternate_title = 'Publications'
     @rss_url = publication_list_url( :format => 'rss' )
+    respond_to do |format|
+      format.html {
+        @publications = Publication.all.order( 'start_at desc' )
+      }
+      format.rss {
+        @publications = Publication.find_by_sql(
+          "
+            SELECT *
+            FROM publications
+            ORDER BY start_at DESC
+            LIMIT 20
+          "
+        )
+      }
+    end
   end
   
   def show
