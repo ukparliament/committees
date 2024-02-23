@@ -60,8 +60,17 @@ class WorkPackageController < ApplicationController
     publication_type = params[:publication_type]
     @publication_type = PublicationType.find_by_system_id( publication_type )
     @page_title = @work_package.title
-    @publications = @work_package.publications_of_type( @publication_type )
+    
     @alternate_title = "#{@work_package.title} - Publications - #{@publication_type.name}"
     @rss_url = work_package_publication_type_show_url( :format => 'rss' )
+
+    respond_to do |format|
+      format.html {
+        @publications = @work_package.publications_of_type( @publication_type )
+      }
+      format.rss {
+        @publications = @work_package.publications_of_type_limited( @publication_type )
+      }
+    end
   end
 end
