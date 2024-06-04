@@ -1421,6 +1421,9 @@ module IMPORT
     written_evidence_publication_anonymous_witness_text = written_evidence_item['anonymousWitnessText']
     written_evidence_publication_published_at = written_evidence_item['publicationDate']
     written_evidence_publication_work_package_system_id = written_evidence_item['committeeBusiness']['id']
+    written_evidence_publication_house_of_commons_number = written_evidence_item['hcNumber']
+    written_evidence_publication_document_item = written_evidence_item['document']
+    written_evidence_publication_witnesses = written_evidence_item['witnesses']
     
     # We try to find the work package.
     work_package = WorkPackage.find_by_system_id( written_evidence_publication_work_package_system_id )
@@ -1452,15 +1455,15 @@ module IMPORT
     written_evidence_item['committees'].each do |committee|
       
       # ... we get the committee ID ...
-      committee_id = committee['id']
+      committee_system_id = committee['id']
       
       # ... and find the committee.
-      committee = Committee.find( committee_id )
+      committee = Committee.find_by_system_id( committee_system_id )
       
       # We attempt to find a committee written evidence publication.
       committee_written_evidence_publication = CommitteeWrittenEvidencePublication
         .where( "committee_id = ?", committee.id )
-        .where( "written_evidence_publication_id = ?", written_evidence_publication.id)
+        .where( "written_evidence_publication_id = ?", written_evidence_publication.id )
         .first
         
       # Unless we've found a committee written evidence publication ...
@@ -1475,15 +1478,122 @@ module IMPORT
       end
     end
     
+    # If the written evidence publication has a House of Commons number ...
+    if written_evidence_publication_house_of_commons_number
+      
+      # ... we attempt to associate the oral evidence transcript with its paper series numbers.
+      associate_written_evidence_publication_with_paper_series_numbers( written_evidence_publication, written_evidence_publication_house_of_commons_number, 'Commons' )
+    end
     
+    # If the written evidence publication has an associated document ...
+    if written_evidence_publication_document_item
+      
+      # ... we store the returned variables.
+      written_evidence_publication_document_system_id = written_evidence_publication_document_item['documentId']
+      
+      # We check if there's a written evidence publication document with this ID.
+      written_evidence_publication_document = WrittenEvidencePublicationDocument.find_by_system_id( written_evidence_publication_document_system_id )
+      
+      # Unless we find a written evidence publication document ...
+      unless written_evidence_publication_document
+        
+        # ... we create a new written evidence publication document.
+        puts "Creating a new written evidence publication document: #{written_evidence_publication_document_system_id}"
+        written_evidence_publication_document = WrittenEvidencePublicationDocument.new
+        written_evidence_publication_document.system_id = written_evidence_publication_document_system_id
+        written_evidence_publication_document.written_evidence_publication = written_evidence_publication
+        written_evidence_publication_document.save!
+      end
+      
+      # For each written evidence publication document file attached to the written evidence publication document ...
+      written_evidence_publication_document_item['files'].each do |written_evidence_publication_document_file_item|
+        
+        # We store the returned variables.
+        written_evidence_publication_document_file_item_name = written_evidence_publication_document_file_item['fileName']
+        written_evidence_publication_document_file_item_size = written_evidence_publication_document_file_item['fileSize']
+        written_evidence_publication_document_file_item_format = written_evidence_publication_document_file_item['fileDataFormat']
+        written_evidence_publication_document_file_item_url = written_evidence_publication_document_file_item['url']
+        
+        # We attempt to find this written evidence publication document file ...
+        written_evidence_publication_document_file = WrittenEvidencePublicationDocumentFile
+          .all
+          .where( "name = ?", written_evidence_publication_document_file_item_name )
+          .where( "size =? ", written_evidence_publication_document_file_item_size )
+          .where( "format =?", written_evidence_publication_document_file_item_format )
+          .where( "written_evidence_publication_document_id = ?", written_evidence_publication_document.id )
+          .first
+        
+        # Unless the written evidence publication document file exists ...
+        unless written_evidence_publication_document_file
+        
+          # ... we create a new written evidence publication document file.
+          puts "Creating a new written evidence publication document file: #{written_evidence_publication_document_file_item_name}"
+          written_evidence_publication_document_file = WrittenEvidencePublicationDocumentFile.new
+          written_evidence_publication_document_file.name = written_evidence_publication_document_file_item_name
+          written_evidence_publication_document_file.size = written_evidence_publication_document_file_item_size
+          written_evidence_publication_document_file.format = written_evidence_publication_document_file_item_format
+          written_evidence_publication_document_file.url = written_evidence_publication_document_file_item_url
+          written_evidence_publication_document_file.written_evidence_publication_document = written_evidence_publication_document
+          written_evidence_publication_document_file.save!
+        end
+      end
+    end
     
-    
-    #written_evidence_item_house_of_commons_number = written_evidence_item['hcNumber']
-    
-    
+    # For each witness associated with the written evidence publication ...
+    written_evidence_publication_witnesses.each do |witness|
+      
+      puts "lalala"
+    end
+  end
   
+  # ## A method to associate a written evidence publication with its House of Commons number.
+  def associate_written_evidence_publication_with_paper_series_numbers( written_evidence_publication, written_evidence_item_house_of_commons_number, house )
     
-    #puts written_evidence_item_house_of_commons_number if written_evidence_item_house_of_commons_number
+    # We store the returned values.
+    paper_series_number_number = written_evidence_item_house_of_commons_number['number']
+    paper_series_number_session_id = written_evidence_item_house_of_commons_number['sessionId']
+    paper_series_number_session_label = written_evidence_item_house_of_commons_number['sessionDescription']
+      
+    # We attempt to find the session.
+    session = Session.find_by_system_id( paper_series_number_session_id )
+      
+    # Unless we find the session ...
+    unless session
+        
+      # ... we create a new session.
+      puts "creating session #{paper_series_number_session_label}"
+      session = Session.new
+      session.system_id = paper_series_number_session_id
+    end
+      
+    # We create or update the session description.
+    session.label = paper_series_number_session_label
+    session.save
+      
+    # We find the parliamentary House.
+    parliamentary_house = ParliamentaryHouse.find_by_short_label( house )
+      
+    # We attempt to find this paper number.
+    paper_series_number = PaperSeriesNumber
+      .all
+      .where( "session_id = ?", session.id )
+      .where( "written_evidence_publication_id = ?", written_evidence_publication.id )
+      .where( "number = ?", paper_series_number_number )
+      .where( "parliamentary_house_id = ?", parliamentary_house.id )
+      .first
+        
+    # Unless this paper series number exists ...
+    unless paper_series_number
+        
+      # ... we create the paper series number.
+      puts "creating paper series number #{paper_series_number_number}"
+      paper_series_number = PaperSeriesNumber.new
+      paper_series_number.number = paper_series_number_number
+      paper_series_number.written_evidence_publication = written_evidence_publication
+      paper_series_number.session = session
+      paper_series_number.parliamentary_house = parliamentary_house
+      paper_series_number.save
+    end
   end
   
   # ## A method to import or update a publication.
@@ -1755,7 +1865,7 @@ module IMPORT
     json['items'].each do |oral_evidence_transcript_item|
       
       # ... we import or update the oral evidence transcript.
-      import_or_update_oral_evidence_transcript( oral_evidence_transcript_item )
+      #import_or_update_oral_evidence_transcript( oral_evidence_transcript_item )
     end
     
     # We get the total results count from the API.
@@ -1785,34 +1895,6 @@ module IMPORT
   end
   
   # ### A method to import all written evidence.
-  def import_all_written_evidence( skip )
-    puts "importing written evidence"
-    
-    # We set the URL to import from.
-    url = "https://committees-api.parliament.uk/api/WrittenEvidence?ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
-    
-    # We get the JSON.
-    json = JSON.load( URI.open( url ) )
-    
-    # For each written evidence transcript item in the feed ....
-    json['items'].each do |written_evidence_item|
-      
-      # ... we import or update the written evidence.
-      import_or_update_written_evidence( written_evidence_item )
-    end
-    
-    # We get the total results count from the API.
-    total_results = json['totalResults']
-    
-    # If the total results count is greater than the number of results skipped ...
-    if total_results > skip
-      
-      # ... we call this method again, incrementing the skip by by 30 results.
-      import_written_evidence( skip + 30 )
-    end
-  end
-  
-  # ### A method to import all written evidence.
   def import_all_publications( skip )
     puts "importing all publications"
     
@@ -1837,6 +1919,34 @@ module IMPORT
       
       # ... we call this method again, incrementing the skip by by 30 results.
       import_all_publications( skip + 30 )
+    end
+  end
+  
+  # ### A method to import all written evidence.
+  def import_all_written_evidence( skip )
+    puts "importing written evidence"
+    
+    # We set the URL to import from.
+    url = "https://committees-api.parliament.uk/api/WrittenEvidence?ShowOnWebsiteOnly=false&take=30&skip=#{skip}"
+    
+    # We get the JSON.
+    json = JSON.load( URI.open( url ) )
+    
+    # For each written evidence transcript item in the feed ....
+    json['items'].each do |written_evidence_item|
+      
+      # ... we import or update the written evidence.
+      import_or_update_written_evidence( written_evidence_item )
+    end
+    
+    # We get the total results count from the API.
+    total_results = json['totalResults']
+    
+    # If the total results count is greater than the number of results skipped ...
+    if total_results > skip
+      
+      # ... we call this method again, incrementing the skip by by 30 results.
+      import_all_written_evidence( skip + 30 )
     end
   end
 end

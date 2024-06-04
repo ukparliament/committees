@@ -1,0 +1,23 @@
+{
+	"witnesses"=>
+		[
+			{
+				"organisations"=>
+					[
+						{
+							"name"=>"Scope", 
+							"role"=>"Lead Public Affairs Adviser", 
+							"idmsId"=>"https://id.parliament.uk/upOqIrzC",
+							"cisId"=>72633
+						}
+					],
+					"submitterType"=>"Organisation",
+					"additionalContext"=>nil,
+					"id"=>127264,
+					"personId"=>nil,
+					"name"=>nil,
+					"photoUrl"=>nil,
+					"memberInfo"=>nil
+				}
+		],
+}

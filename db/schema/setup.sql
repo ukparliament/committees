@@ -1,4 +1,6 @@
 drop table if exists paper_series_numbers;
+drop table if exists written_evidence_publication_documents
+drop table if exists written_evidence_publication_document_files
 drop table if exists committee_written_evidence_publications;
 drop table if exists written_evidence_publications;
 drop table if exists publication_document_files;
@@ -393,11 +395,11 @@ create table written_evidence_publications (
 	id serial not null,
 	submission_id varchar(255) not null,
 	internal_reference varchar(255) not null,
-	published_at timestamp not null,
 	legacy_html_url varchar(255),
 	legacy_pdf_url varchar(255),
 	is_anonymous boolean default false,
 	anonymous_witness_text varchar(255),
+	published_at timestamp not null,
 	work_package_id int not null,
 	system_id int not null,
 	constraint fk_work_package foreign key (work_package_id) references work_packages(id),
@@ -410,6 +412,25 @@ create table committee_written_evidence_publications (
 	written_evidence_publication_id int not null,
 	constraint fk_committee foreign key (committee_id) references committees(id),
 	constraint fk_written_evidence_publication foreign key (written_evidence_publication_id) references written_evidence_publications(id),
+	primary key (id)
+);
+
+create table written_evidence_publication_documents (
+	id serial not null,
+	written_evidence_publication_id int not null,
+	system_id int not null,
+	constraint fK_written_evidence_publication foreign key (written_evidence_publication_id) references written_evidence_publications(id),
+	primary key (id)
+);
+
+create table written_evidence_publication_document_files (
+	id serial not null,
+	name text not null,
+	size int not null,
+	format varchar(255) not null,
+	url varchar(1000),
+	written_evidence_publication_document_id int not null,
+	constraint fk_written_evidence_publication_document foreign key (written_evidence_publication_document_id) references written_evidence_publication_documents(id),
 	primary key (id)
 );
 
@@ -428,3 +449,14 @@ create table paper_series_numbers (
 	constraint fk_publication foreign key (publication_id) references publications(id),
 	primary key (id)
 );
+
+/* The database was set up in the expectation that a witness would always be connected to an oral evidence transcript */
+/* For that reason, the oral_evidence_transcript_id was created as not nullable. */
+/* Given a witness may also be connected to a written evidence publication, we remove the not null constraint. */
+ALTER TABLE witnesses ALTER COLUMN oral_evidence_transcript_id DROP NOT NULL;
+
+/* We add a written_evidence_publication_id to the witnesses table. */
+ALTER TABLE witnesses ADD COLUMN written_evidence_publication_id int;
+
+/* We make written_evidence_publication_id a foreign key to the written_evidence_publications table. */
+ALTER TABLE witnesses ADD CONSTRAINT fk_written_evidence_publication FOREIGN KEY (written_evidence_publication_id) REFERENCES written_evidence_publications(id);
