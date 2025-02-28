@@ -1,0 +1,8 @@
+---
+checks:
+  - All
+url_safe_methods:
+  - legacy_url
+  - additional_content_url_2
+  - additional_content_url
+  - link

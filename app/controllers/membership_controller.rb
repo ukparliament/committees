@@ -13,17 +13,18 @@ class MembershipController < ApplicationController
   end
   
   def show
-    membership = params[:membership]
-    @membership = Membership.find_by_sql(
+    membership_id = params[:membership]
+    @membership = Membership.find_by_sql([
       "
         SELECT m.*, p.name AS person_name, c.name AS committee_name, c.system_id AS committee_system_id, r.name AS role_name
         FROM memberships m, people p, committees c, roles r
-        WHERE m.id = '#{membership}'
+        WHERE m.id = ?
         AND m.person_id = p.id
         AND m.committee_id = c.id
         AND m.role_id = r.id
-      "
-    ).first
+      ",
+      membership_id
+    ]).first
     @page_title = "#{@membership.person_name} - #{@membership.committee_name}"
   end
   

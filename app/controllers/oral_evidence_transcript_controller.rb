@@ -54,20 +54,20 @@ class OralEvidenceTranscriptController < ApplicationController
       "
         SELECT oet.*
         FROM oral_evidence_transcripts oet
-        WHERE oet.published_on >= '#{Date.today}'
+        WHERE oet.published_on >= CURRENT_DATE
         ORDER BY oet.published_on desc, oet.start_on desc;
       "
     )
   end
   
   def get_oral_evidence_transcript( oral_evidence_transcript )
-    OralEvidenceTranscript.find_by_sql(
+    OralEvidenceTranscript.find_by_sql([
       "
         SELECT oet.*
         FROM oral_evidence_transcripts oet
-        WHERE oet.system_id = #{oral_evidence_transcript}
+        WHERE oet.system_id = ?
         LIMIT 1;
-      "
-    ).first
+      ", oral_evidence_transcript
+    ]).first
   end
 end
