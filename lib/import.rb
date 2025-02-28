@@ -1,5 +1,5 @@
 # # A module for importing for the committee system API.
-module IMPORT
+module Import
   
   # ## Import top up methods run as rake tasks on Heroku.
   

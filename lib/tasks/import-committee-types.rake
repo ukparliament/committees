@@ -1,7 +1,7 @@
-require 'import/import'
+require 'import'
 
 # We include code from module.
-include IMPORT
+include Import
 
 task :import_committee_types => :environment do
   import_committee_types
