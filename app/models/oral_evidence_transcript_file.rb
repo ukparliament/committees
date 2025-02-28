@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: oral_evidence_transcript_files
+#
+#  id                          :integer          not null, primary key
+#  format                      :string(255)      not null
+#  name                        :string(255)      not null
+#  size                        :integer          not null
+#  url                         :string(1000)
+#  oral_evidence_transcript_id :integer          not null
+#
+# Foreign Keys
+#
+#  fk_oral_evidence_transcript  (oral_evidence_transcript_id => oral_evidence_transcripts.id)
+#
 class OralEvidenceTranscriptFile < ApplicationRecord
   
   belongs_to :oral_evidence_transcript

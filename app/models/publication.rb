@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: publications
+#
+#  id                          :integer          not null, primary key
+#  additional_content_url      :string(500)
+#  additional_content_url_2    :string(500)
+#  description                 :text             not null
+#  end_at                      :datetime
+#  start_at                    :datetime         not null
+#  committee_id                :integer          not null
+#  department_id               :integer
+#  publication_type_id         :integer          not null
+#  responded_to_publication_id :integer
+#  system_id                   :integer          not null
+#
+# Foreign Keys
+#
+#  fk_committee                      (committee_id => committees.id)
+#  fk_department                     (department_id => departments.id)
+#  fk_publication_type               (publication_type_id => publication_types.id)
+#  fk_responded_to_publication_type  (responded_to_publication_id => publication_types.id)
+#
 class Publication < ApplicationRecord
   
   belongs_to :publication_type

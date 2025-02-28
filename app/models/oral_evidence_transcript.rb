@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: oral_evidence_transcripts
+#
+#  id               :integer          not null, primary key
+#  legacy_html_url  :string(255)
+#  legacy_pdf_url   :string(255)
+#  meeting_on       :date
+#  published_on     :date             not null
+#  start_on         :date             not null
+#  document_id      :integer
+#  event_segment_id :integer
+#  system_id        :integer          not null
+#
+# Foreign Keys
+#
+#  fk_event_segment  (event_segment_id => event_segments.id)
+#
 class OralEvidenceTranscript < ApplicationRecord
   
   belongs_to :event_segment, optional: true

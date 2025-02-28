@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: roles
+#
+#  id        :integer          not null, primary key
+#  is_chair  :boolean          default(FALSE)
+#  name      :string(255)
+#  system_id :integer          not null
+#
 class Role < ApplicationRecord
   
   def all_memberships

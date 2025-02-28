@@ -59,23 +59,23 @@ class EventSegmentController < ApplicationController
         ON e.location_id = l.id
         
         
-        WHERE es.start_at >= '#{Time.now}'
+        WHERE es.start_at >= NOW()
         ORDER BY es.start_at;
       "
     )
   end
   
   def get_event( event_segment )
-    EventSegment.find_by_sql(
+    EventSegment.find_by_sql([
       "
         SELECT es.*, e.location_name as location_name, l.name as normalised_location_name
         FROM event_segments es, events e
         LEFT JOIN locations l
         ON e.location_id = l.id
         WHERE es.event_id = e.id
-        AND es.system_id = #{event_segment}
+        AND es.system_id = ?
         LIMIT 1;
-      "
-    ).first
+      ", event_segment
+    ]).first
   end
 end

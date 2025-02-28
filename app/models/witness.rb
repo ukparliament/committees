@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: witnesses
+#
+#  id                          :integer          not null, primary key
+#  person_name                 :string(3000)
+#  oral_evidence_transcript_id :integer          not null
+#  person_id                   :integer
+#  system_id                   :integer
+#
+# Foreign Keys
+#
+#  fk_oral_evidence_transcript  (oral_evidence_transcript_id => oral_evidence_transcripts.id)
+#  fk_person                    (person_id => people.id)
+#
 class Witness < ApplicationRecord
   
   belongs_to :oral_evidence_transcript

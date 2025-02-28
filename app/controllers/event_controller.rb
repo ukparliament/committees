@@ -49,7 +49,7 @@ class EventController < ApplicationController
         ) location
         ON e.location_id = location.location_id
         
-        WHERE e.start_at >= '#{Time.now}'
+        WHERE e.start_at >= NOW()
         AND e.cancelled_at is NULL
     
         ORDER BY e.start_at
@@ -58,7 +58,7 @@ class EventController < ApplicationController
   end
   
   def get_event( event_id )
-    Event.find_by_sql(
+    Event.find_by_sql([
         "
           SELECT e.*, event_type.event_type_name as event_type_name, location.normalised_location_name
           FROM events e
@@ -75,9 +75,9 @@ class EventController < ApplicationController
           ) location
           ON e.location_id = location.location_id
       
-          WHERE e.system_id = #{event_id}
+          WHERE e.system_id = ?
           LIMIT 1
-        "
-      ).first
+        ", event_id
+      ]).first
   end
 end

@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: positions
+#
+#  id              :integer          not null, primary key
+#  name            :string(255)      not null
+#  organisation_id :integer          not null
+#
+# Foreign Keys
+#
+#  fk_organisation  (organisation_id => organisations.id)
+#
 class Position < ApplicationRecord
   
   belongs_to :organisation

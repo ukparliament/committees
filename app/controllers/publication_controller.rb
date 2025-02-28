@@ -22,10 +22,9 @@ class PublicationController < ApplicationController
   end
   
   def show
-    publication = params[:publication]
-    @publication = Publication.find_by_system_id( publication )
-    
-    @publication = Publication.find_by_sql(
+    publication_id = params[:publication]
+
+    @publication = Publication.find_by_sql([
       "
         SELECT p.*,
           publication_type.publication_type_name,
@@ -61,11 +60,10 @@ class PublicationController < ApplicationController
           FROM publication_types pt
         ) as publication_type
         ON publication_type.publication_type_id = p.publication_type_id
-        WHERE p.system_id = #{publication}
-      "
-    ).first
-    
-    
+        WHERE p.system_id = ?
+      ", publication_id
+    ]).first
+
     @page_title = @publication.description
   end
 end

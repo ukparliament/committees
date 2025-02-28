@@ -28,15 +28,7 @@ class PositionController < ApplicationController
   end
   
   def show
-    position = params[:position]
-    @position = Position.find_by_sql(
-      "
-        SELECT p.*, o.name AS organisation_name
-        FROM positions p, organisations o
-        WHERE p.organisation_id = o.id
-        AND p.id = #{position}
-      "
-    ).first
+    @position = get_position(params[:position])
     @page_title = "#{@position.name} - #{@position.organisation_name}"
     @alternate_title = "Oral evidence transcripts for #{@position.name} - #{@position.organisation_name}"
     @rss_url = position_oral_evidence_transcripts_url( :format => 'rss' )
@@ -44,15 +36,7 @@ class PositionController < ApplicationController
   end
   
   def oral_evidence_transcripts
-    position = params[:position]
-    @position = Position.find_by_sql(
-      "
-        SELECT p.*, o.name AS organisation_name
-        FROM positions p, organisations o
-        WHERE p.organisation_id = o.id
-        AND p.id = #{position}
-      "
-    ).first
+    @position = get_position(params[:position])
     @alternate_title = "Oral evidence transcripts for #{@position.name} - #{@position.organisation_name}"
     @rss_url = position_oral_evidence_transcripts_url( :format => 'rss' )
     
@@ -65,5 +49,18 @@ class PositionController < ApplicationController
         @oral_evidence_transcripts = @position.oral_evidence_transcripts_limited
       }
     end
+  end
+
+  private
+
+  def get_position(position_id)
+    Position.find_by_sql([
+      "
+        SELECT p.*, o.name AS organisation_name
+        FROM positions p, organisations o
+        WHERE p.organisation_id = o.id
+        AND p.id = ?
+      ", position_id
+    ]).first
   end
 end
