@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id                 :integer          not null, primary key
+#  cancelled_at       :datetime
+#  end_at             :datetime         not null
+#  location_name      :string(255)
+#  name               :string(255)
+#  originating_system :string(255)      not null
+#  start_at           :datetime         not null
+#  event_type_id      :integer          not null
+#  location_id        :integer
+#  system_id          :integer          not null
+#
+# Foreign Keys
+#
+#  fk_event_type  (event_type_id => event_types.id)
+#  fk_location    (location_id => locations.id)
+#
 class Event < ApplicationRecord
   
   belongs_to :location, optional: true

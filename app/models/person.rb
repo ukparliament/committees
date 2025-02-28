@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: people
+#
+#  id        :integer          not null, primary key
+#  name      :string(1000)     not null
+#  mnis_id   :integer
+#  system_id :integer
+#
 class Person < ApplicationRecord
   
   def witnesses

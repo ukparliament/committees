@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: event_types
+#
+#  id          :integer          not null, primary key
+#  description :string(5000)     not null
+#  is_visit    :boolean          default(FALSE)
+#  name        :string(255)
+#  system_id   :integer          not null
+#
 class EventType < ApplicationRecord
   
   def all_events

@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: committee_types
+#
+#  id          :integer          not null, primary key
+#  name        :string(255)      not null
+#  category_id :integer          not null
+#  system_id   :integer          not null
+#
+# Foreign Keys
+#
+#  fk_category  (category_id => categories.id)
+#
 class CommitteeType < ApplicationRecord
   
   belongs_to :category

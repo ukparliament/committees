@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: work_packages
+#
+#  id                   :integer          not null, primary key
+#  close_on             :date
+#  open_on              :date             not null
+#  title                :string(1000)     not null
+#  system_id            :integer          not null
+#  work_package_type_id :integer          not null
+#
+# Foreign Keys
+#
+#  fk_work_package_type  (work_package_type_id => work_packages.id)
+#
 class WorkPackage < ApplicationRecord
   
   belongs_to :work_package_type

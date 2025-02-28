@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: event_segments
+#
+#  id               :integer          not null, primary key
+#  end_at           :datetime
+#  is_private       :boolean          default(FALSE)
+#  name             :string(255)
+#  start_at         :datetime         not null
+#  activity_type_id :integer          not null
+#  event_id         :integer          not null
+#  system_id        :integer          not null
+#
+# Foreign Keys
+#
+#  fk_activity_type  (activity_type_id => activity_types.id)
+#  fk_event          (event_id => events.id)
+#
 class EventSegment < ApplicationRecord
   
   belongs_to :event

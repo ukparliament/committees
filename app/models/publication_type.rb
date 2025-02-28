@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: publication_types
+#
+#  id                     :integer          not null, primary key
+#  can_be_response        :boolean          default(FALSE)
+#  description            :text             not null
+#  government_can_respond :boolean          default(FALSE)
+#  icon_key               :string(255)
+#  name                   :string(255)      not null
+#  plural_name            :string(255)      not null
+#  system_id              :integer          not null
+#
 class PublicationType < ApplicationRecord
   
   has_many :publications, -> { order( 'start_at desc' ) }

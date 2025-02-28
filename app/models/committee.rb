@@ -1,3 +1,30 @@
+# == Schema Information
+#
+# Table name: committees
+#
+#  id                          :integer          not null, primary key
+#  address                     :string(500)
+#  commons_appointed_on        :date
+#  contact_disclaimer          :string(500)
+#  email                       :string(500)
+#  end_on                      :date
+#  is_lead_committee           :boolean          default(FALSE)
+#  is_redirect_enabled         :boolean          default(FALSE)
+#  is_shown_on_website         :boolean          default(FALSE)
+#  legacy_url                  :string(500)
+#  lords_appointed_on          :date
+#  name                        :string(255)      not null
+#  phone                       :string(500)
+#  start_on                    :date
+#  lead_parliamentary_house_id :integer
+#  parent_committee_id         :integer
+#  system_id                   :integer          not null
+#
+# Foreign Keys
+#
+#  fk_lead_parliamentary_house  (lead_parliamentary_house_id => parliamentary_houses.id)
+#  fk_parent_committee          (parent_committee_id => committees.id)
+#
 class Committee < ApplicationRecord
   
   has_many :publications, -> { order( 'start_at desc' ) }

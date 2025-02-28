@@ -1,3 +1,11 @@
+# == Schema Information
+#
+# Table name: locations
+#
+#  id        :integer          not null, primary key
+#  name      :string(255)
+#  system_id :integer          not null
+#
 class Location < ApplicationRecord
   
   def all_events

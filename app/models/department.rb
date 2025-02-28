@@ -1,3 +1,11 @@
+# == Schema Information
+#
+# Table name: departments
+#
+#  id        :integer          not null, primary key
+#  name      :string(255)      not null
+#  system_id :integer          not null
+#
 class Department < ApplicationRecord
   
   def all_committees

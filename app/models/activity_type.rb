@@ -1,3 +1,10 @@
+# == Schema Information
+#
+# Table name: activity_types
+#
+#  id   :integer          not null, primary key
+#  name :string(255)
+#
 class ActivityType < ApplicationRecord
   
   def all_event_segments

@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: work_package_types
+#
+#  id          :integer          not null, primary key
+#  description :string(1000)     not null
+#  is_inquiry  :boolean          default(FALSE)
+#  name        :string(255)      not null
+#  system_id   :integer          not null
+#
 class WorkPackageType < ApplicationRecord
   
   has_many :work_packages, -> { order( 'open_on desc, close_on desc' ) }
