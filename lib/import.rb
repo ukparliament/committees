@@ -1,3 +1,5 @@
+require 'open-uri'
+
 # # A module for importing for the committee system API.
 module Import
   
