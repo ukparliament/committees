@@ -1,0 +1,60 @@
+<%= content_tag( 'p', "Cookies are small text files which are placed on your device when you visit our website. Some cookies are essential for the site to work properly, whilst others can provide useful feedback by letting us see how our services are being used." ) %>
+
+<%= content_tag( 'h2', 'Essential cookies' ) %>
+
+<%= content_tag( 'p', "Essential (or 'strictly necessary’) cookies allow you to move around our website and use its features and/or services. These cookies always need to be on as they help to make our website work. Essential cookies are a site's basic form of memory, so they do things like remember if you are logged in to a part of the website." ) %>
+
+<%= content_tag( 'p', "You may be able to block these cookies by changing the preferences on your browser, but this may limit you from accessing our online services." ) %>
+
+<%= content_tag( 'h2', 'Cloudflare' ) %>
+ 
+<%= content_tag( 'p', "In addition, we use cookies to support our Content Delivery Network, Cloudflare. These cookies are used to identify individual clients behind a shared IP address and apply security settings on a per-client basis." ) %>
+
+<div class="table-wrapper">
+	<table class="multibody">
+		<tbody>
+			<tr>
+				<%= content_tag( 'th', 'Name:' ) %>
+				<%= content_tag( 'td', '_cf_bm' ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Purpose:' ) %>
+				<%= content_tag( 'td', 'Bot management.' ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Expires:' ) %>
+				<%= content_tag( 'td', 'After 30 minutes of continuous inactivity.' ) %>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<%= content_tag( 'th', 'Name:' ) %>
+				<%= content_tag( 'td', '_cfuvid' ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Purpose:' ) %>
+				<%= content_tag( 'td', 'Rate limiting.' ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Expires:' ) %>
+				<%= content_tag( 'td', 'When user exits browser.' ) %>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<%= content_tag( 'th', 'Name:' ) %>
+				<%= content_tag( 'td', 'cf_clearance' ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Purpose:' ) %>
+				<%= content_tag( 'td', 'Clearance Cookie stores the proof of challenge passed. It is used to no longer issue a challenge if present. It is required to reach an origin server.' ) %>
+			</tr>
+			<tr>
+				<%= content_tag( 'th', 'Expires:' ) %>
+				<%= content_tag( 'td', 'After 30 minutes of continuous inactivity.' ) %>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<%= content_tag( 'p', "For more details on cookies in use across the Parliament website, please visit the #{link_to( 'UK Parliament Cookie Policy page', 'https://www.parliament.uk/site-information/privacy/' )}.".html_safe ) %>

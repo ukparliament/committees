@@ -107,4 +107,5 @@ Rails.application.routes.draw do
   
   get 'committees/meta' => 'meta#index', :as => 'meta_list'
   get 'committees/meta/schema' => 'meta#schema', :as => 'meta_schema'
+  get 'committees/meta/cookies' => 'meta#cookies', :as => 'meta_cookies'
 end

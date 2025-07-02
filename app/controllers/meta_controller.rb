@@ -7,4 +7,8 @@ class MetaController < ApplicationController
   def schema
     @page_title = 'Database schema'
   end
+  
+  def cookies
+    @page_title = 'Cookies'
+  end
 end
